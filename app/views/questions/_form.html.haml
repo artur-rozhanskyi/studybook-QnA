@@ -1,0 +1,6 @@
+= form_for question do |f|
+  - %i[title body].each do |field|
+    .field
+      = f.label field
+      = f.text_field field
+  = f.submit

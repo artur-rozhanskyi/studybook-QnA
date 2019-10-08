@@ -1,0 +1,13 @@
+%h1 Question
+
+= link_to "Back", questions_path
+
+.field
+  %p
+    %strong Title:
+    = @question.title
+
+.field
+  %p
+    %strong Body:
+    = @question.body
