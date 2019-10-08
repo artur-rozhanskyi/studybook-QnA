@@ -1,0 +1,52 @@
+require: 
+  - rubocop-rails 
+  - rubocop-rspec
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+AllCops:
+ Exclude:
+ - db/schema.rb
+ - db/migrate/**/*
+ - node_modules/**/*
+ - bin/**/*
+ - 'config/environments/**/*'
+
+Metrics/LineLength:
+  Max: 120
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+
+# Offense count: 29
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, ConsistentQuotesInMultiline.
+# SupportedStyles: single_quotes, double_quotes
+Style/StringLiterals:
+  Exclude:
+    - 'app/views/railway_stations/index.json.jbuilder'
+    - 'app/views/railway_stations/show.json.jbuilder'
+    - 'app/views/trains/index.json.jbuilder'
+    - 'app/views/trains/show.json.jbuilder'
+    - 'config/application.rb'
+    - 'config/environments/production.rb'
+    - 'config/puma.rb'
+    - 'config/spring.rb'
+    - 'spec/rails_helper.rb'
+    - 'test/application_system_test_case.rb'
+    - 'test/channels/application_cable/connection_test.rb'
+
+# Offense count: 4
+# Cop supports --auto-correct.
+# Configuration parameters: MinSize.
+# SupportedStyles: percent, brackets
+Style/SymbolArray:
+  EnforcedStyle: brackets
+
+Rails/HasAndBelongsToMany:
+  Enabled: false
