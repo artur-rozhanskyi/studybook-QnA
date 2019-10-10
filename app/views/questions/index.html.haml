@@ -1,0 +1,13 @@
+%h1 Questions
+
+= link_to "New question", new_question_path
+
+%table
+  %tr
+    %th Title
+    - @questions.each do |question|
+      %tr.question
+        %td
+          = question.title
+        %td
+          = link_to "Show", question
