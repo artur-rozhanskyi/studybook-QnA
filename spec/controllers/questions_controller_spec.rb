@@ -2,6 +2,7 @@ RSpec.describe QuestionsController, type: :controller do
   let(:valid_params) { {} }
   let(:valid_session) { {} }
   let(:question) { create(:question) }
+  let(:user) { create(:user) }
 
   describe 'GET #index' do
     before { get :index }
@@ -30,7 +31,10 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
-    before { get :new }
+    before do
+      sign_in_user(user)
+      get :new
+    end
 
     it 'assigns a new Question to @question' do
       expect(assigns(:question)).to be_a_new Question
@@ -42,7 +46,10 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #edit' do
-    before { get :edit, params: { id: question } }
+    before do
+      sign_in_user(user)
+      get :edit, params: { id: question }
+    end
 
     it 'assigns a requested question to @question' do
       expect(assigns(:question)).to eq question
@@ -54,6 +61,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
+    before { sign_in_user(user) }
+
     context 'with valid attributes' do
       it 'save valid question' do
         expect do
@@ -84,6 +93,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
+    before { sign_in_user(user) }
+
     context 'with valid attributes' do
       let(:new_attributes) { { title: Faker::Lorem.question, body: Faker::Lorem.question } }
 
@@ -123,7 +134,10 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    before { question }
+    before do
+      sign_in_user(user)
+      question
+    end
 
     it 'deletes question' do
       expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)

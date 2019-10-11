@@ -1,0 +1,16 @@
+language: ruby
+rvm:
+  - 2.6.3
+
+services:
+  - postgresql
+before_install:
+  - cp config/database.sample.yml config/database.yml
+install:
+  - gem install bundler
+  - bundle install
+  - bundle exec rake db:create
+  - bundle exec rake db:schema:load
+script:
+  - bundle exec rubocop .
+  - bundle exec rspec
