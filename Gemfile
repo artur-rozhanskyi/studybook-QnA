@@ -37,6 +37,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'devise'
 gem 'haml-rails'
+gem 'jquery-rails'
 
 group :development, :test do
   gem 'pry-rails'
@@ -54,6 +55,7 @@ group :test do
   gem 'rails-controller-testing'
   gem 'rspec-rails'
   gem 'shoulda-matchers'
+  gem 'webdrivers'
 end
 
 group :development do
