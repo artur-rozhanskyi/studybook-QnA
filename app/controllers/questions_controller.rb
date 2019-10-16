@@ -22,11 +22,15 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    @question.update(question_params) ? redirect_to(@question) : render(:edit)
+    if current_user == @question.user
+      @question.update(question_params) ? redirect_to(@question) : render(:edit)
+    else
+      redirect_to(questions_path) { flash[:error] = "You have't permission" }
+    end
   end
 
   def destroy
-    @question.destroy
+    @question.destroy if current_user == @question.user
     redirect_to questions_path
   end
 
@@ -37,6 +41,6 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, :user_id)
   end
 end

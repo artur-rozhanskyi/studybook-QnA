@@ -1,7 +1,7 @@
 RSpec.describe 'EditQuestions', type: :feature do
   describe 'User edits question' do
     let(:user) { create(:user) }
-    let!(:question) { create(:question) }
+    let!(:question) { create(:question, user: user) }
     let(:new_attribute) { build(:question) }
 
     context 'when registered user' do
