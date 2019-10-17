@@ -6,6 +6,7 @@
           = answer.body
           - if answer.user == current_user
             = link_to "Edit", '', class: 'edit-answer-link', data: { answer_id: answer.id }
+            = link_to "Delete", [@question, answer], method: :delete, data: { confirm: "Are you sure?" }, remote: true
             = form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}", style: "display: none;" } do |f|
               = f.label :body, "Edit your answer"
               = f.text_area :body

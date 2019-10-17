@@ -19,4 +19,11 @@ module AcceptanceHelper
       click_on 'Save'
     end
   end
+
+  def delete_answer
+    within '.answers' do
+      click_on 'Delete'
+      page.driver.browser.switch_to.alert.accept
+    end
+  end
 end

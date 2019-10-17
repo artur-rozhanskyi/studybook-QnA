@@ -1,5 +1,5 @@
 class AnswersController < ApplicationController
-  before_action :set_answer, only: [:update]
+  before_action :set_answer, only: [:update, :destroy]
 
   def create
     @question = Question.find(params[:question_id])
@@ -9,6 +9,10 @@ class AnswersController < ApplicationController
   def update
     @question = @answer.question
     @answer.update(answer_params) if current_user == @answer.user
+  end
+
+  def destroy
+    @answer.destroy if current_user == @answer.user
   end
 
   private

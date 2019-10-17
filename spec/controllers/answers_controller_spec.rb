@@ -96,4 +96,34 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
   # rubocop:enable RSpec/NestedGroups
+
+  describe 'DELETE #destroy' do
+    before do
+      sign_in_user(answer.user)
+    end
+
+    describe 'belongs to current user' do
+      it 'deletes question' do
+        expect do
+          delete :destroy, params: { id: answer, question_id: answer.question.id }, format: :js
+        end
+          .to change(Answer, :count).by(-1)
+      end
+
+      it 'redirect to the delete template' do
+        delete :destroy, params: { id: answer, question_id: answer.question.id }, format: :js
+        expect(response).to render_template :destroy
+      end
+    end
+
+    describe 'not belongs to current user' do
+      it 'has not change answer count' do
+        sign_in_user(create(:user))
+        expect do
+          delete :destroy, params: { id: answer, question_id: answer.question.id }, format: :js
+        end
+          .not_to change(Answer, :count)
+      end
+    end
+  end
 end
