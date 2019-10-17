@@ -10,4 +10,6 @@ RSpec.describe Answer, type: :model do
   it 'is invalid with invalid attributes' do
     expect(build(:answer, body: nil)).not_to be_valid
   end
+
+  it { is_expected.to belong_to :user }
 end

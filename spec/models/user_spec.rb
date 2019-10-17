@@ -10,4 +10,6 @@ RSpec.describe User, type: :model do
   end
 
   it { is_expected.to have_many :questions }
+
+  it { is_expected.to have_many :answers }
 end
