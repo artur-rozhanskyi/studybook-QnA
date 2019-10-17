@@ -69,13 +69,13 @@ RSpec.describe QuestionsController, type: :controller do
     context 'with valid attributes' do
       it 'save valid question' do
         expect do
-          post :create, params: { question: attributes_for(:question).merge(user_id: user) }
+          post :create, params: { question: attributes_for(:question) }
         end
           .to change(Question, :count).by(1)
       end
 
       it 'redirects to show view ' do
-        post :create, params: { user_id: user, question: attributes_for(:question).merge(user_id: user) }
+        post :create, params: { user_id: user, question: attributes_for(:question) }
         expect(response).to redirect_to question_path(assigns(:question))
       end
     end

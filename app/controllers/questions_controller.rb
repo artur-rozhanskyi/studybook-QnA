@@ -17,7 +17,7 @@ class QuestionsController < ApplicationController
   def edit; end
 
   def create
-    @question = Question.new(question_params)
+    @question = current_user.questions.build(question_params)
     @question.save ? redirect_to(@question) : render(:new)
   end
 
@@ -25,7 +25,7 @@ class QuestionsController < ApplicationController
     if current_user == @question.user
       @question.update(question_params) ? redirect_to(@question) : render(:edit)
     else
-      redirect_to(questions_path) { flash[:error] = "You have't permission" }
+      redirect_to(questions_path) { flash[:error] = 'You don`t have permission' }
     end
   end
 
@@ -41,6 +41,6 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body, :user_id)
+    params.require(:question).permit(:title, :body)
   end
 end
