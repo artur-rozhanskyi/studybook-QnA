@@ -5,6 +5,7 @@ RSpec.describe 'CreateQuestions', type: :feature do
 
     context 'when registered user' do
       before do
+        visit questions_path
         sign_in(user)
         click_on 'Ask question'
       end
@@ -22,12 +23,12 @@ RSpec.describe 'CreateQuestions', type: :feature do
       end
 
       it 'shows asked question title' do
-        ask_question(question)
+        fill_in_question(question)
         expect(page).to have_content question.title
       end
 
       it 'shows asked question body' do
-        ask_question(question)
+        fill_in_question(question)
         expect(page).to have_content question.body
       end
     end

@@ -6,7 +6,7 @@ module AcceptanceHelper
     click_button 'Log in'
   end
 
-  def ask_question(question)
+  def fill_in_question(question)
     fill_in 'Title', with: question.title
     fill_in 'Body', with: question.body
     click_on 'Ask'
