@@ -50,3 +50,6 @@ Style/SymbolArray:
 
 Rails/HasAndBelongsToMany:
   Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
