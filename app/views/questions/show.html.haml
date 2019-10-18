@@ -2,6 +2,8 @@
 
 = link_to "Edit", edit_question_path(@question)
 = link_to "Back", questions_path
+- if user_signed_in?
+  = link_to "Delete", question_path(@question), method: :delete, data: { confirm: "Are you sure?" }
 
 .field
   %p
