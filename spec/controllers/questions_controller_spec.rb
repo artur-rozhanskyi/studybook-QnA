@@ -1,8 +1,7 @@
 RSpec.describe QuestionsController, type: :controller do
-  let(:valid_params) { {} }
   let(:valid_session) { {} }
-  let(:question) { create(:question) }
   let(:user) { create(:user) }
+  let(:question) { create(:question, user: user) }
 
   describe 'GET #index' do
     before { get :index }
@@ -76,7 +75,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       it 'redirects to show view ' do
-        post :create, params: { question: attributes_for(:question) }
+        post :create, params: { user_id: user, question: attributes_for(:question) }
         expect(response).to redirect_to question_path(assigns(:question))
       end
     end
@@ -84,13 +83,13 @@ RSpec.describe QuestionsController, type: :controller do
     context 'with invalid attributes' do
       it 'not save invalid question' do
         expect do
-          post :create, params: { question: attributes_for(:question_invalid) }
+          post :create, params: { user_id: user, question: attributes_for(:question_invalid) }
         end
           .not_to change(Question, :count)
       end
 
       it 're-render new template' do
-        post :create, params: { question: attributes_for(:question_invalid) }
+        post :create, params: { user_id: user, question: attributes_for(:question_invalid) }
         expect(response).to render_template :new
       end
     end
@@ -99,43 +98,66 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'PATCH #update' do
     before { sign_in_user(user) }
 
-    context 'with valid attributes' do
-      let(:new_attributes) { { title: Faker::Lorem.question, body: Faker::Lorem.question } }
+    let(:new_attributes) { { title: Faker::Lorem.question, body: Faker::Lorem.question } }
 
-      before { patch :update, params: { id: question, question: new_attributes } }
+    # rubocop:disable RSpec/NestedGroups
+    describe 'belongs to current user' do
+      context 'with valid attributes' do
+        before { patch :update, params: { id: question, question: new_attributes } }
 
-      it 'assigns a requested question to @question' do
-        expect(assigns(:question)).to eq question
+        it 'assigns a requested question to @question' do
+          expect(assigns(:question)).to eq question
+        end
+
+        it 'changes question title' do
+          question.reload
+          expect(question.title).to eq new_attributes[:title]
+        end
+
+        it 'changes question body' do
+          question.reload
+          expect(question.body).to eq new_attributes[:body]
+        end
+
+        it 'redirect to the updated question' do
+          expect(response).to redirect_to question
+        end
       end
 
-      it 'changes question title' do
-        question.reload
-        expect(question.title).to eq new_attributes[:title]
-      end
+      context 'with invalid attributes' do
+        before do
+          patch :update,
+                params: { id: question, question: attributes_for(:question_invalid) }
+        end
 
-      it 'changes question body' do
-        question.reload
-        expect(question.body).to eq new_attributes[:body]
-      end
+        it 'do not changes question' do
+          reloaded_question = question.reload
+          expect(reloaded_question).to eq question
+        end
 
-      it 'redirect to the updated question' do
-        expect(response).to redirect_to question
+        it 'redirect to the updated question' do
+          expect(response).to render_template :edit
+        end
       end
     end
 
-    context 'with invalid attributes' do
-      before { patch :update, params: { id: question, question: attributes_for(:question_invalid) } }
-
-      it 'do not changes question' do
-        reloaded_question = question.reload
-        expect(reloaded_question).to eq question
+    describe 'not belongs to current user' do
+      before do
+        sign_in_user(create(:user))
+        patch :update, params: { id: question, question: new_attributes }
+        question.reload
       end
 
-      it 'redirect to the updated question' do
-        expect(response).to render_template :edit
+      it 'not changes question title' do
+        expect(question.title).not_to eq new_attributes[:title]
+      end
+
+      it 'not changes question body' do
+        expect(question.body).not_to eq new_attributes[:body]
       end
     end
   end
+  # rubocop:enable RSpec/NestedGroups
 
   describe 'DELETE #destroy' do
     before do
@@ -143,13 +165,28 @@ RSpec.describe QuestionsController, type: :controller do
       question
     end
 
-    it 'deletes question' do
-      expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+    describe 'belongs to current user' do
+      it 'deletes question' do
+        expect do
+          delete :destroy, params: { id: question, question: { user_id: question.user } }
+        end
+          .to change(Question, :count).by(-1)
+      end
+
+      it 'redirect to the index template' do
+        delete :destroy, params: { id: question, question: { user_id: question.user } }
+        expect(response).to redirect_to questions_path
+      end
     end
 
-    it 'redirect to the index template' do
-      delete :destroy, params: { id: question }
-      expect(response).to redirect_to questions_path
+    describe 'not belongs to current user' do
+      it 'redirect to the index template' do
+        sign_in_user(create(:user))
+        expect do
+          delete :destroy, params: { id: question }
+        end
+          .not_to change(Question, :count)
+      end
     end
   end
 end

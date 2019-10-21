@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :question do
+    user
     title { Faker::Lorem.question }
     body  { Faker::Lorem.paragraph }
 

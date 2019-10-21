@@ -11,4 +11,12 @@ module AcceptanceHelper
     fill_in 'Body', with: question.body
     click_on 'Ask'
   end
+
+  def edit_answer(body)
+    within '.answer' do
+      click_on 'Edit'
+      fill_in 'Edit your answer', with: body
+      click_on 'Save'
+    end
+  end
 end
