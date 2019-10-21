@@ -3,4 +3,10 @@
     .field
       = f.label field
       = f.text_field field
+    = f.hidden_field :user_id, value: current_user.id
+
+  = f.fields_for :attachments do |attachment|
+    = attachment.label :file
+    = attachment.file_field :file
+
   = f.submit "Ask"

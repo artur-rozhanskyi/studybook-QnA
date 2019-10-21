@@ -35,10 +35,10 @@ gem 'jbuilder', '~> 2.5'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
+gem 'carrierwave'
 gem 'devise'
 gem 'haml-rails'
 gem 'jquery-rails'
-gem 'carrierwave'
 
 group :development, :test do
   gem 'pry-rails'
