@@ -10,4 +10,8 @@ RSpec.describe Question, type: :model do
   end
 
   it { is_expected.to belong_to :user }
+
+  it { is_expected.to have_many :attachments }
+  it { is_expected.to accept_nested_attributes_for :attachments }
+
 end
