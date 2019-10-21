@@ -14,3 +14,14 @@
   %p
     %strong Body:
     = @question.body
+
+%h2 Answers
+
+= render 'answers'
+
+- if user_signed_in?
+  = form_for [@question, @answer], remote: true do |f|
+    = f.label :body, "Your answer"
+    .answers-errors
+    = f.text_field :body
+    = f.submit "Answer"
