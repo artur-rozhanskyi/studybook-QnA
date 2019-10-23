@@ -75,7 +75,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       it 'redirects to show view ' do
-        post :create, params: { user_id: user, question: attributes_for(:question) }
+        post :create, params: { question: attributes_for(:question) }
         expect(response).to redirect_to question_path(assigns(:question))
       end
     end
@@ -83,13 +83,13 @@ RSpec.describe QuestionsController, type: :controller do
     context 'with invalid attributes' do
       it 'not save invalid question' do
         expect do
-          post :create, params: { user_id: user, question: attributes_for(:question_invalid) }
+          post :create, params: { question: attributes_for(:question_invalid) }
         end
           .not_to change(Question, :count)
       end
 
       it 're-render new template' do
-        post :create, params: { user_id: user, question: attributes_for(:question_invalid) }
+        post :create, params: { question: attributes_for(:question_invalid) }
         expect(response).to render_template :new
       end
     end
@@ -168,13 +168,13 @@ RSpec.describe QuestionsController, type: :controller do
     describe 'belongs to current user' do
       it 'deletes question' do
         expect do
-          delete :destroy, params: { id: question, question: { user_id: question.user } }
+          delete :destroy, params: { id: question }
         end
           .to change(Question, :count).by(-1)
       end
 
       it 'redirect to the index template' do
-        delete :destroy, params: { id: question, question: { user_id: question.user } }
+        delete :destroy, params: { id: question }
         expect(response).to redirect_to questions_path
       end
     end
