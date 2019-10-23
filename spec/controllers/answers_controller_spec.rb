@@ -50,7 +50,6 @@ RSpec.describe AnswersController, type: :controller do
 
     let(:new_attributes) { { body: Faker::Lorem.sentence } }
 
-    # rubocop:disable RSpec/NestedGroups
     describe 'belongs to current user' do
       context 'with valid attributes' do
         before do
@@ -95,7 +94,6 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
-  # rubocop:enable RSpec/NestedGroups
 
   describe 'DELETE #destroy' do
     before do

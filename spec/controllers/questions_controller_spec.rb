@@ -104,7 +104,6 @@ RSpec.describe QuestionsController, type: :controller do
 
     let(:new_attributes) { { title: Faker::Lorem.question, body: Faker::Lorem.question } }
 
-    # rubocop:disable RSpec/NestedGroups
     describe 'belongs to current user' do
       context 'with valid attributes' do
         before { patch :update, params: { id: question, question: new_attributes } }
@@ -161,7 +160,6 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
-  # rubocop:enable RSpec/NestedGroups
 
   describe 'DELETE #destroy' do
     before do

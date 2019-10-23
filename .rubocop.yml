@@ -53,3 +53,6 @@ Rails/HasAndBelongsToMany:
 
 RSpec/ExampleLength:
   Enabled: false
+
+RSpec/NestedGroups:
+  Enabled: false
