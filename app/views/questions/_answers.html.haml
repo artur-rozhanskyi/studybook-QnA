@@ -1,13 +1,28 @@
-.answers
-  - @question.answers.each do |answer|
-    - if answer.persisted?
-      .answer
-        %p
-          = answer.body
-          - if answer.user == current_user
-            = link_to "Edit", '', class: 'edit-answer-link', data: { answer_id: answer.id }
-            = link_to "Delete", [@question, answer], method: :delete, data: { confirm: "Are you sure?" }, remote: true
-            = form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}", style: "display: none;" } do |f|
-              = f.label :body, "Edit your answer"
-              = f.text_area :body
-              = f.submit "Save"
+- @question.answers.each do |answer|
+  - if answer.persisted?
+    .answer
+      %p
+        = answer.body
+        - if answer.user == current_user
+          - answer.attachments.each do |attachment|
+            - if attachment.file.file.present?
+              = link_to attachment.file.identifier, attachment.file.url
+          = link_to "Edit", '', class: 'edit-answer-link', data: { answer_id: answer.id }
+          = link_to "Delete", [@question, answer], method: :delete, data: { confirm: "Are you sure?" }, remote: true
+          = form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}", style: "display: none;" } do |f|
+            = f.label :body, "Edit your answer"
+            = f.text_area :body
+            = f.button 'Add file', type: :button, class: 'add_file'
+            .files
+              = f.fields_for :attachments do |attachment|
+                - if attachment.object.file.file.present?
+                  %p
+                    = link_to attachment.object.file.identifier, attachment.object.file.url
+                  = attachment.label :_destroy do
+                    = attachment.check_box :_destroy
+                    Remove file
+                - else
+                  .file
+                    = attachment.label :file
+                    = attachment.file_field :file
+            = f.submit "Save"

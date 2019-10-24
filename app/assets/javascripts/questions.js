@@ -4,12 +4,12 @@ $(document).on('turbolinks:load', function() {
     $(this).parent().remove();
   });
 
-  $('.add_file').click(function () {
-    if ($(".files").children().size() < 10) {
-      div_clone = $(".files").children('.file').last().clone();
+  $(document).on('click', '.add_file', function () {
+    if ($(this).closest('form').children('.files').children().size() < 10) {
+      div_clone = $(this).closest('form').children('.files').children('.file').last().clone();
       new_attributes(div_clone);
       button_for_delete(div_clone);
-      $('.files').append(div_clone);
+      $(this).closest('form').children('.files').append(div_clone);
     }
   });
 
@@ -36,6 +36,7 @@ $(document).on('turbolinks:load', function() {
     var new_array = [input_attr_id, input_attr_name, label_attr_for].map(function (attr) {
       return incrementString(attr);
     });
+    input.val('');
     input.attr('id', new_array[0]);
     input.attr('name', new_array[1]);
     label.attr('for', new_array[2]);

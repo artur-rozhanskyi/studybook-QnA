@@ -5,8 +5,8 @@ FactoryBot.define do
     body  { Faker::Lorem.paragraph }
 
     trait :with_file do
-      before(:create) do |question|
-        question.attachments << create(:attachment, attachmentable: question)
+      before(:create) do |answer|
+        answer.attachments << create(:attachment, attachmentable: answer)
       end
     end
 
