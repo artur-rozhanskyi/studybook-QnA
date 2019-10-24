@@ -65,6 +65,9 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+  config.after do
+    FileUtils.rm_rf(Dir[Rails.root.join('spec', 'support', 'uploads')])
+  end
 end
 
 Shoulda::Matchers.configure do |config|

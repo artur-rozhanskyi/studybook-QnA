@@ -16,6 +16,13 @@
     %strong Body:
     = @question.body
 
+.field
+  %h2 Attachments
+  %ul
+  - @question.attachments.each do |attachment|
+    %li
+      = link_to attachment.file.identifier, attachment.file.url
+
 %h2 Answers
 
 = render 'answers'

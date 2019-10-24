@@ -43,6 +43,10 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:question)).to be_a_new Question
     end
 
+    it 'build new attachment for Question' do
+      expect(assigns(:question).attachments.first).to be_a_new Attachment
+    end
+
     it 'render new template' do
       expect(response).to render_template :new
     end
@@ -100,7 +104,6 @@ RSpec.describe QuestionsController, type: :controller do
 
     let(:new_attributes) { { title: Faker::Lorem.question, body: Faker::Lorem.question } }
 
-    # rubocop:disable RSpec/NestedGroups
     describe 'belongs to current user' do
       context 'with valid attributes' do
         before { patch :update, params: { id: question, question: new_attributes } }
@@ -157,7 +160,6 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
-  # rubocop:enable RSpec/NestedGroups
 
   describe 'DELETE #destroy' do
     before do

@@ -9,6 +9,7 @@ module AcceptanceHelper
   def fill_in_question(question)
     fill_in 'Title', with: question.title
     fill_in 'Body', with: question.body
+    yield if block_given?
     click_on 'Ask'
   end
 

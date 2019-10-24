@@ -33,3 +33,6 @@
 .idea
 .env
 config/database.yml
+
+/public/uploads/*
+/spec/support/uploads/*

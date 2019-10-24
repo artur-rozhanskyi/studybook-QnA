@@ -6,7 +6,6 @@ RSpec.describe 'DeleteQuestions', type: :feature do
     let(:questions) { create_list(:question, 5, user: user) }
     let(:question_to_delete) { questions.last }
 
-    # rubocop:disable RSpec/NestedGroups
     context 'when registered user' do
       before do
         sign_in(user)
@@ -36,7 +35,6 @@ RSpec.describe 'DeleteQuestions', type: :feature do
         end
       end
     end
-    # rubocop:enable RSpec/NestedGroups
 
     context 'when non-registered user' do
       it 'has not button to delete question' do
