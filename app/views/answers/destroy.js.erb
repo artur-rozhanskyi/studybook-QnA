@@ -3,5 +3,5 @@
     $('.answers-errors').html('<%= j message %>');
   <% end %>
 <% else %>
-  $('*[data-answer-id="<%= "#{@answer.id}" %>"]').parent().remove();
+  $('*[data-answer-id="<%= "#{@answer.id}" %>"]').parents('.answer').remove();
 <% end %>

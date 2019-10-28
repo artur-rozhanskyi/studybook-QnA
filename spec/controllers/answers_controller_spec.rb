@@ -3,6 +3,7 @@ RSpec.describe AnswersController, type: :controller do
   let(:user) { create(:user) }
   let(:answer) { create(:answer, user: user, question: question) }
   let(:valid_session) { {} }
+  let(:valid_attributes) { attributes_for(:answer) }
 
   describe 'POST #create' do
     before { sign_in_user(user) }
@@ -10,18 +11,18 @@ RSpec.describe AnswersController, type: :controller do
     context 'with valid attributes' do
       it 'saves valid answer' do
         expect do
-          post :create, params: { question_id: question, answer: attributes_for(:answer) },
-                        format: :js,
+          post :create, params: { question_id: question, answer: valid_attributes },
+                        format: :json,
                         session: valid_session
         end
           .to change(question.answers, :count).by(1)
       end
 
       it 'render template create' do
-        post :create, params: { question_id: question, answer: attributes_for(:answer) },
-                      format: :js,
+        post :create, params: { question_id: question, answer: valid_attributes },
+                      format: :json,
                       session: valid_session
-        expect(response).to render_template :create
+        expect(response.body).to include valid_attributes[:body]
       end
     end
 
@@ -30,17 +31,17 @@ RSpec.describe AnswersController, type: :controller do
         expect do
           post :create, params: { question_id: question,
                                   answer: attributes_for(:invalid_answer) },
-                        format: :js,
+                        format: :json,
                         session: valid_session
         end
           .not_to change(Answer, :count)
       end
 
       it 'render template create' do
-        post :create, params: { question_id: question, answer: attributes_for(:invalid_answer) },
-                      format: :js,
+        post :create, params: { question_id: question, answer: valid_attributes },
+                      format: :json,
                       session: valid_session
-        expect(response).to render_template :create
+        expect(response).not_to render_template :create
       end
     end
   end
@@ -56,7 +57,7 @@ RSpec.describe AnswersController, type: :controller do
           patch :update, params: { id: answer,
                                    question_id: answer.question.id,
                                    answer: new_attributes },
-                         format: :js
+                         format: :json
         end
 
         it 'assigns a requested question to @question' do
@@ -74,7 +75,7 @@ RSpec.describe AnswersController, type: :controller do
           patch :update, params: { id: answer,
                                    question_id: answer.question.id,
                                    answer: attributes_for(:invalid_answer) },
-                         format: :js
+                         format: :json
         end
 
         it 'do not changes question' do
@@ -88,7 +89,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'not changes question body' do
         sign_in_user(create(:user))
         patch :update, params: { id: answer, question_id: question.id, answer: new_attributes },
-                       format: :js
+                       format: :json
         answer.reload
         expect(answer.body).not_to eq new_attributes[:body]
       end

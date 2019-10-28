@@ -1,0 +1,14 @@
+%template#tmpl
+  .answer
+    %p#ans_body
+      %a{ class: 'edit-answer-link', href:""} Edit
+      %a{ data: { confirm: "Are you sure?", method: "delete", remote: "true"}, rel: 'nofollow', href: ""} Delete
+    %form.edit_answer{ style: "display: none;", enctype: "multipart/form-data", 'accept-charset': "UTF-8", 'data-remote': true, method: "post" }
+      %p.answer-errors
+      %input{ name: "utf8", type: 'hidden', value: "✓" }
+      %input{ name:"_method", type:"hidden", value: "patch" }
+      %label{ for: "answer_body", title: 'Edit your answer' }
+      %textarea{ name: "answer[body]", id: "answer_body" }
+      %button{ name: "button", type: "button", class: "add_file" } Add file
+      .files
+      %input{ type: "submit", name:"commit", value: "Save", data: { 'disable-with': "Save" } }
