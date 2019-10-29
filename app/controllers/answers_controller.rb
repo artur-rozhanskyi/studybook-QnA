@@ -4,11 +4,13 @@ class AnswersController < ApplicationController
   def create
     @question = Question.find(params[:question_id])
     @answer = @question.answers.create(answer_params.merge(user: current_user))
+    @answer.attachments.build
   end
 
   def update
     @question = @answer.question
     @answer.update(answer_params) if current_user == @answer.user
+    @question.answers.map(&:attachments).map(&:build)
   end
 
   def destroy
@@ -22,6 +24,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, attachments_attributes: [:file, :remove_file, :id, :_destroy])
   end
 end

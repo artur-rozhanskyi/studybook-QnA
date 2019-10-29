@@ -1,8 +1,9 @@
 RSpec.describe 'UserAttachFiles', type: :feature do
+  let(:file) { Tempfile.new('foo') }
+  let(:user) { create(:user) }
+
   describe 'User attach file to question' do
     context 'with registered user' do
-      let(:user) { create(:user) }
-      let(:file) { Tempfile.new('foo') }
       let(:question) { create(:question, :with_file, user: user) }
 
       before do
@@ -41,6 +42,62 @@ RSpec.describe 'UserAttachFiles', type: :feature do
             click_on 'Ask'
           end
             .to change(question.attachments, :count).by(-1)
+        end
+      end
+    end
+  end
+
+  describe 'User attach file to answer', js: true do
+    context 'with registered user' do
+      let(:answer) { create(:answer, :with_file, question: create(:question), user: user) }
+
+      before do
+        sign_in(answer.user)
+        visit question_path(answer.question)
+        fill_in 'Your answer', with: answer.body
+        attach_file 'File', file.path
+        click_on 'Answer'
+      end
+
+      after do
+        file.unlink
+      end
+
+      it 'has file name' do
+        within '.answers' do
+          expect(page).to have_link File.basename(file.path)
+        end
+      end
+
+      context 'with edit form' do
+        before do
+          within '.answer', match: :first do
+            click_on 'Edit'
+          end
+        end
+
+        it 'has file name in edit question' do
+          within '.answer form' do
+            expect(page).to have_link File.basename(answer.attachments.first.file.identifier)
+          end
+        end
+
+        it 'has delete checkbox' do
+          within '.answer form' do
+            expect(page).to have_field 'Remove file'
+          end
+        end
+
+        it 'has remove file' do
+          within '.answer', match: :first do
+            expect do
+              fill_in 'Edit your answer', with: build(:answer).body
+              check 'Remove file'
+              click_on 'Save'
+              2.times { find('p') }
+            end
+              .to change(Attachment, :count).by(-1)
+          end
         end
       end
     end

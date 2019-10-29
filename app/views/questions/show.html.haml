@@ -24,12 +24,19 @@
       = link_to attachment.file.identifier, attachment.file.url
 
 %h2 Answers
+.answers
+  = render 'answers'
 
-= render 'answers'
-
+%h2 New Answer
 - if user_signed_in?
   = form_for [@question, @answer], remote: true do |f|
     = f.label :body, "Your answer"
     .answers-errors
     = f.text_field :body
+    = f.button 'Add file', type: :button, class: 'add_file'
+    .files
+      = f.fields_for :attachments do |attachment|
+        .file
+          = attachment.label :file
+          = attachment.file_field :file
     = f.submit "Answer"
