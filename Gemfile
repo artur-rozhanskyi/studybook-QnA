@@ -40,6 +40,9 @@ gem 'carrierwave'
 gem 'devise'
 gem 'haml-rails'
 gem 'jquery-rails'
+gem "private_pub"
+gem "thin"
+
 
 group :development, :test do
   gem 'pry-rails'
