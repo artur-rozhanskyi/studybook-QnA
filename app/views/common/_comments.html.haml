@@ -1,14 +1,14 @@
 - if comment.persisted?
-  .comment
+  .comment{ data: { comment_id: comment.id } }
     %p
       = comment.body
     - if comment.user == current_user
       .edit_cmt
-        = button_to 'Edit', {}, class: 'edit_comment_button', data: { comment_id: comment.id }
+        = button_to 'Edit', {}, class: 'edit_comment_button'
         = button_to 'Delete', { controller: :comments,  action: :destroy, id: comment.id },
                                 method: :delete, remote: true, class: 'del_cmt', data: { confirm: "Are you sure?" }
         = form_for comment, remote: true, html: { class: 'form_comment edit_comment', style: 'display:none;' } do |f|
           %div{class: "#{comment.commentable.class.to_s.downcase}-edit-comment-errors"}
-          = f.label :body, 'Edit your comment', for: 'question_comment_body'
-          = f.text_field :body, id: 'question_comment_body'
+          = f.label :body, 'Edit your comment', for: "#{comment.commentable.class.to_s.downcase}_comment_body"
+          = f.text_field :body, id: "#{comment.commentable.class.to_s.downcase}_comment_body"
           = f.submit 'Save'

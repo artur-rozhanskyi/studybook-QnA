@@ -174,11 +174,6 @@ RSpec.describe QuestionsController, type: :controller do
         end
           .to change(Question, :count).by(-1)
       end
-
-      it 'redirect to the index template' do
-        delete :destroy, params: { id: question }
-        expect(response).to redirect_to questions_path
-      end
     end
 
     describe 'not belongs to current user' do

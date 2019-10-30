@@ -11,4 +11,8 @@ class Answer < ApplicationRecord
   validates :body, presence: true
 
   default_scope -> { order(:created_at) }
+
+  def error_messages
+    errors.full_messages
+  end
 end

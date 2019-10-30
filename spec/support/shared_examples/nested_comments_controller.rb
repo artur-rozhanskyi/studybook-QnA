@@ -8,17 +8,10 @@ RSpec.shared_examples 'nested comments controller' do
       it 'saves valid comment' do
         expect do
           post :create, params: { comment: attributes_for(:comment), "#{commenter}": commentable, user: comment_user },
-                        format: :json,
+                        format: :js,
                         session: valid_session
         end
           .to change(Comment, :count).by(1)
-      end
-
-      it 'render template create' do
-        post :create, params: { "#{commenter}": commentable, comment: valid_attributes },
-                      format: :json,
-                      session: valid_session
-        expect(response.body).to include valid_attributes[:body]
       end
     end
 
@@ -26,7 +19,7 @@ RSpec.shared_examples 'nested comments controller' do
       it 'does not save invalid comments' do
         expect do
           post :create, params: { "#{commenter}": commentable, comment: attributes_for(:invalid_comment) },
-                        format: :json,
+                        format: :js,
                         session: valid_session
         end
           .not_to change(Comment, :count)
@@ -34,7 +27,7 @@ RSpec.shared_examples 'nested comments controller' do
 
       it 'render template create' do
         post :create, params: { "#{commenter}": commentable, comment: valid_attributes },
-                      format: :json,
+                      format: :js,
                       session: valid_session
         expect(response).not_to render_template :create
       end
@@ -47,7 +40,7 @@ RSpec.shared_examples 'nested comments controller' do
     describe 'belongs to current user' do
       context 'with valid attributes' do
         before do
-          patch :update, params: { id: comment, comment: new_attributes }, format: :json
+          patch :update, params: { id: comment, comment: new_attributes }, format: :js
         end
 
         it 'assigns a requested question to @question' do
@@ -62,7 +55,7 @@ RSpec.shared_examples 'nested comments controller' do
 
       context 'with invalid attributes' do
         before do
-          patch :update, params: { id: comment, comment: new_attributes }, format: :json
+          patch :update, params: { id: comment, comment: new_attributes }, format: :js
         end
 
         it 'do not changes question' do
@@ -75,7 +68,7 @@ RSpec.shared_examples 'nested comments controller' do
     describe 'not belongs to current user' do
       it 'not changes question body' do
         sign_in_user(create(:user))
-        patch :update, params: { id: comment, comment: new_attributes }, format: :json
+        patch :update, params: { id: comment, comment: new_attributes }, format: :js
         comment.reload
         expect(comment.body).not_to eq new_attributes[:body]
       end
