@@ -2,7 +2,7 @@ $(document).on('turbolinks:load', function() {
   $(document).on('click', '.add_comment, .edit_comment_button', function (e) {
     e.preventDefault();
     $(this).toggle();
-    $(this).parent().next().toggle();
+    $(this).closest('.comment').find('.form_comment').toggle();
   });
 
   $(document).on('ajax:success', '#new_comment_question', function (e) {
@@ -41,6 +41,7 @@ $(document).on('turbolinks:load', function() {
     block = comment_form.content.cloneNode(true);
     $(block).find('.edit_comment').attr({ 'id': 'edit_comment_' + comment.id,
                     'action': '/comments/' + comment.id + '.json'});
+    $(block).find('.del_cmt').attr({ 'action': '/comments/' + comment.id });
     $(block).find('#question_comment_body').val(comment.body);
     return block;
   }

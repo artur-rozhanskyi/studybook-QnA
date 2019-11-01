@@ -22,10 +22,10 @@ RSpec.describe 'UserCommentQuestions', type: :feature do
       end
 
       it 'adds comment to question' do
-        within '.question' do
+        within '.question_comments' do
           expect do
             fill_in_comment(attributes[:body])
-            find('h2')
+            find('.new_comment')
           end
             .to change(Comment, :count).by(1)
         end

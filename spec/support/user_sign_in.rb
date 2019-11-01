@@ -14,15 +14,15 @@ module AcceptanceHelper
   end
 
   def edit_subject(body, subject)
-    within ".#{subject}" do
+    within ".#{subject}", match: :first do
       click_on 'Edit'
-      fill_in "Edit your #{subject}", with: body
+      fill_in "#{subject}[body]", with: body
       click_on 'Save'
     end
   end
 
-  def delete_answer
-    within '.answers' do
+  def delete_subject(subject)
+    within ".#{subject}", match: :first do
       click_on 'Delete'
       page.driver.browser.switch_to.alert.accept
     end

@@ -2,7 +2,11 @@
   %form.button_to{ method: "post" }
     %input.edit_comment_button{ type:"submit", value: "Edit" }
 
-  %form.edit_comment{style: "display:none;", 'accept-charset': "UTF-8", data: { remote: "true" }, method: "post"}
+  %form.del_cmt{ method: "post", data: { remote: "true" } }
+    %input{ type: "hidden", name:"_method", value: "delete" }
+    %input{ data: { confirm: "Are you sure?" }, type: "submit", value: "Delete" }
+
+  %form.edit_comment{ style: "display:none;", 'accept-charset': "UTF-8", data: { remote: "true" }, method: "post" }
     %input{ name: "utf8", type: "hidden", value: "✓" }
     %input{ type: "hidden", name: "_method", value: "patch" }
     .question-edit-comment-errors

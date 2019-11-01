@@ -4,8 +4,10 @@
       = comment.body
     - if comment.user == current_user
       .edit_cmt
-        = button_to 'Edit', {}, class: 'edit_comment_button'
-        = form_for comment, remote: true, html: { style: 'display:none;' } do |f|
+        = button_to 'Edit', {}, class: 'edit_comment_button', data: { comment_id: comment.id }
+        = button_to 'Delete', { controller: :comments,  action: :destroy, id: comment.id },
+                                method: :delete, remote: true, class: 'del_cmt', data: { confirm: "Are you sure?" }
+        = form_for comment, remote: true, html: { class: 'form_comment edit_comment', style: 'display:none;' } do |f|
           .question-edit-comment-errors
           = f.label :body, 'Edit your comment', for: 'question_comment_body'
           = f.text_field :body, id: 'question_comment_body'
