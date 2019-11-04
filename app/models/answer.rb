@@ -1,10 +1,10 @@
 class Answer < ApplicationRecord
-  include ActiveModel::Serializers::JSON
+  include Commentable
 
   belongs_to :question
   belongs_to :user
 
-  has_many :attachments, as: :attachmentable, autosave: true, dependent: :destroy
+  has_many :attachments, as: :attachmentable, dependent: :destroy
 
   accepts_nested_attributes_for :attachments, allow_destroy: true
 

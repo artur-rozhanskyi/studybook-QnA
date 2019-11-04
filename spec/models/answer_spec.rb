@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe Answer, type: :model do
   let(:answer) { create(:answer) }
 
@@ -15,4 +13,6 @@ RSpec.describe Answer, type: :model do
 
   it { is_expected.to have_many :attachments }
   it { is_expected.to accept_nested_attributes_for :attachments }
+
+  it_behaves_like 'commentable'
 end
