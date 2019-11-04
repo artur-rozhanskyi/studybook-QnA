@@ -77,13 +77,13 @@ RSpec.describe 'UserAttachFiles', type: :feature do
         end
 
         it 'has file name in edit question' do
-          within '.answer form' do
+          within '.answer .files', match: :first do
             expect(page).to have_link File.basename(answer.attachments.first.file.identifier)
           end
         end
 
         it 'has delete checkbox' do
-          within '.answer form' do
+          within '.answer .files', match: :first do
             expect(page).to have_field 'Remove file'
           end
         end
