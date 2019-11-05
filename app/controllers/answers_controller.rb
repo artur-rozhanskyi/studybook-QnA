@@ -3,14 +3,22 @@ class AnswersController < ApplicationController
 
   def create
     @question = Question.find(params[:question_id])
-    @answer = @question.answers.create(answer_params.merge(user: current_user))
-    @answer.attachments.build
+    @answer = @question.answers.build(answer_params.merge(user: current_user))
+    if @answer.save
+      render json: @answer
+    else
+      render json: @answer.errors.full_messages, status: :unprocessable_entity
+    end
   end
 
   def update
     @question = @answer.question
     @answer.update(answer_params) if current_user == @answer.user
-    @question.answers.map(&:attachments).map(&:build)
+    if @answer.errors.empty?
+      render json: @answer
+    else
+      render json: @answer.errors.full_messages, status: :unprocessable_entity
+    end
   end
 
   def destroy
