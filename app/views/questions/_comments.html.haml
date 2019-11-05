@@ -8,7 +8,7 @@
         = button_to 'Delete', { controller: :comments,  action: :destroy, id: comment.id },
                                 method: :delete, remote: true, class: 'del_cmt', data: { confirm: "Are you sure?" }
         = form_for comment, remote: true, html: { class: 'form_comment edit_comment', style: 'display:none;' } do |f|
-          .question-edit-comment-errors
+          %div{class: "#{comment.commentable.class.to_s.downcase}-edit-comment-errors"}
           = f.label :body, 'Edit your comment', for: 'question_comment_body'
           = f.text_field :body, id: 'question_comment_body'
           = f.submit 'Save'

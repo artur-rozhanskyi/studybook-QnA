@@ -3,6 +3,11 @@
     .answer
       %p
         = answer.body
+        .answer_comments
+          .comments
+            = render partial: 'questions/comments', collection: answer.comments, as: :comment
+          .comment.new_comment
+            = render partial: 'answers/new_comment', locals: { commenter: answer }
         - if answer.user == current_user
           - answer.attachments.each do |attachment|
             - if attachment.file.file.present?

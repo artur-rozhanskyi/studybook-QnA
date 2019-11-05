@@ -5,14 +5,16 @@ $(document).on('turbolinks:load', function() {
     $(this).closest('.comment').find('.form_comment').toggle();
   });
 
-  $(document).on('ajax:success', '#new_comment_question', function (e) {
-    comment_block($.parseJSON(e.detail[2].responseText)).appendTo('.question_comments .comments');
+  $(document).on('ajax:success', '.form_comment', function (e) {
+    append_block_class = block_name(this.id, '.answer_comments .comments', '.question_comments .comments');
+    comment_block($.parseJSON(e.detail[2].responseText)).appendTo(append_block_class);
     $(this).find('#question_comment_body').val('');
     $(this).toggle();
     $(this).closest('.question_comments').find('.add_comment').toggle();
   })
-    .on('ajax:error', '#new_comment_question', function(e){
-      $(this).find('.question-comment-errors').text(e.detail[0]);
+    .on('ajax:error', '.form_comment', function(e){
+      append_block_class = block_name(this.id, '.answer-comment-errors', '.question-comment-errors');
+      $(this).find(append_block_class).text(e.detail[0]);
     });
 
   $(document).on('ajax:success', '.edit_comment', function (e) {
@@ -44,5 +46,9 @@ $(document).on('turbolinks:load', function() {
     $(block).find('.del_cmt').attr({ 'action': '/comments/' + comment.id });
     $(block).find('#question_comment_body').val(comment.body);
     return block;
+  }
+
+  function block_name(check, first, second) {
+    return  check === 'new_comment_answer' ? first : second;
   }
 });
