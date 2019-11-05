@@ -24,6 +24,7 @@
         = link_to attachment.file.identifier, attachment.file.url
 
   .question_comments
+    = render 'comment_template'
     .comments
       = render partial: 'comments', collection: @question.comments, as: :comment
     - if user_signed_in?

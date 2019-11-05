@@ -17,12 +17,12 @@ RSpec.describe 'UserEditAnswers', type: :feature do
       end
 
       it 'has update answer', js: true do
-        edit_answer(new_answer_body)
+        edit_subject(new_answer_body, 'answer')
         expect(page).to have_content(new_answer_body)
       end
 
       it 'has not old answer body', js: true do
-        edit_answer(new_answer_body)
+        edit_subject(new_answer_body, 'answer')
         expect(page).not_to have_content(answer.body)
       end
     end

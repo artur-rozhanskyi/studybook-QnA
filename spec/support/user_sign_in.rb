@@ -13,10 +13,10 @@ module AcceptanceHelper
     click_on 'Ask'
   end
 
-  def edit_answer(body)
-    within '.answer' do
+  def edit_subject(body, subject)
+    within ".#{subject}" do
       click_on 'Edit'
-      fill_in 'Edit your answer', with: body
+      fill_in "Edit your #{subject}", with: body
       click_on 'Save'
     end
   end
