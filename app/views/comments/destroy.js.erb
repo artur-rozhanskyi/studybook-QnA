@@ -1,0 +1,7 @@
+<% if @comment.errors.present? %>
+  <%  @comment.errors.full_messages.each do |message| %>
+    $('.question-edit-comment-errors').html('<%= j message %>');
+  <% end %>
+<% else %>
+  $('*[data-comment-id="<%= "#{@comment.id}" %>"]').closest('.comment').remove();
+<% end %>

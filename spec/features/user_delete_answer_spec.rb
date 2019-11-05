@@ -14,12 +14,12 @@ RSpec.describe 'UserDeleteAnswers', type: :feature do
       end
 
       it 'has delete current answer' do
-        delete_answer
+        delete_subject('answer')
         expect(page).not_to have_content answer.body
       end
 
       it 'has not Edit link ' do
-        delete_answer
+        delete_subject('answer')
         within '.answers' do
           expect(page).not_to have_link 'Edit'
         end
@@ -27,7 +27,7 @@ RSpec.describe 'UserDeleteAnswers', type: :feature do
 
       it 'has delete answer from database ' do
         expect do
-          delete_answer
+          delete_subject('answer')
           find('.answers')
         end
           .to change(Answer, :count).from(1).to(0)

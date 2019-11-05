@@ -28,7 +28,8 @@
     .comments
       = render partial: 'comments', collection: @question.comments, as: :comment
     - if user_signed_in?
-      = render partial: 'new_comment', locals: { commenter: @question }
+      .comment.new_comment
+        = render partial: 'new_comment', locals: { commenter: @question }
 
 
 

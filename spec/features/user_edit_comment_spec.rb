@@ -13,7 +13,7 @@ RSpec.describe 'UserEditComments', type: :feature do
 
       context 'with valid attribute' do
         it 'has edit comment link' do
-          within '.comment' do
+          within '.comment', match: :first do
             expect(page).to have_button 'Edit'
           end
         end
@@ -44,7 +44,6 @@ RSpec.describe 'UserEditComments', type: :feature do
         it 'has not updated comment' do
           old_body = comment.body
           edit_subject(invalid_comment, 'comment')
-          find '.comments'
           expect(comment.body).to eq old_body
         end
       end
@@ -54,7 +53,7 @@ RSpec.describe 'UserEditComments', type: :feature do
       it 'has not comment link' do
         sign_in(create(:user))
         visit question_path(question)
-        within '.comment' do
+        within '.comment', match: :first do
           expect(page).not_to have_button 'Edit'
         end
       end
