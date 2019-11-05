@@ -27,4 +27,10 @@ module AcceptanceHelper
       page.driver.browser.switch_to.alert.accept
     end
   end
+
+  def fill_in_comment(body)
+    click_on 'Add comment'
+    fill_in 'comment[body]', with: body
+    click_on 'Comment'
+  end
 end

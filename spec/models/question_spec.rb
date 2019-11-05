@@ -13,4 +13,6 @@ RSpec.describe Question, type: :model do
 
   it { is_expected.to have_many :attachments }
   it { is_expected.to accept_nested_attributes_for :attachments }
+
+  it_behaves_like 'commentable'
 end

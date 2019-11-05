@@ -5,23 +5,31 @@
   = link_to "Edit", edit_question_path(@question)
   = link_to "Delete", question_path(@question, question: { user_id: current_user }),
             method: :delete, data: { confirm: "Are you sure?" }
+.question
+  .field
+    %p
+      %strong Title:
+      = @question.title
 
-.field
-  %p
-    %strong Title:
-    = @question.title
+  .field
+    %p
+      %strong Body:
+      = @question.body
 
-.field
-  %p
-    %strong Body:
-    = @question.body
+  .field
+    %h2 Attachments
+    %ul
+    - @question.attachments.each do |attachment|
+      %li
+        = link_to attachment.file.identifier, attachment.file.url
 
-.field
-  %h2 Attachments
-  %ul
-  - @question.attachments.each do |attachment|
-    %li
-      = link_to attachment.file.identifier, attachment.file.url
+  .question_comments
+    .comments
+      = render partial: 'comments', collection: @question.comments, as: :comment
+    - if user_signed_in?
+      = render partial: 'new_comment', locals: { commenter: @question }
+
+
 
 %h2 Answers
 .answers

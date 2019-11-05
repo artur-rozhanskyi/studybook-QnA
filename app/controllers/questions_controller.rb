@@ -9,6 +9,7 @@ class QuestionsController < ApplicationController
   def show
     @question.answers.map(&:attachments).map(&:build)
     @answer = @question.answers.build
+    @comment = @question.comments.build
     @answer.attachments.build
   end
 
