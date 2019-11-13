@@ -1,0 +1,14 @@
+%template#new_comment_form
+  .comment.new_comment
+    %form.button_to{ method: "post", action: "" }
+      %input.add_comment{ type: "submit", value: "Add comment" }
+
+    %form.form_comment#new_comment_answer{ style: "display:none;",
+                                           action: "",
+                                           'accept-charset': "UTF-8",
+                                           data: { remote: "true" }, method: "post" }
+      %input{ name: "utf8", type: "hidden", value: "✓" }
+      .answer-comment-errors
+      %label{ for: "comment_body" } Your comment
+      %input#answer_comment_body{ type: "text", name: "comment[body]" }
+      %input{ type: "submit", name: "commit", value: "Comment", data: { 'disable-with': "Comment" } }

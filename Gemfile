@@ -38,8 +38,11 @@ gem 'active_model_serializers'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'carrierwave'
 gem 'devise'
+gem 'gon'
 gem 'haml-rails'
 gem 'jquery-rails'
+gem 'private_pub'
+gem 'thin'
 
 group :development, :test do
   gem 'pry-rails'

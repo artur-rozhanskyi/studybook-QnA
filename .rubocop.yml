@@ -56,3 +56,7 @@ RSpec/ExampleLength:
 
 RSpec/NestedGroups:
   Enabled: false
+
+RSpec/MultipleExpectations:
+  Exclude:
+    - 'spec/features/*'

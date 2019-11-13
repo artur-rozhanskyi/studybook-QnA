@@ -7,6 +7,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
+    gon.user_id = current_user.id if current_user
     @question.answers.map(&:attachments).map(&:build)
     @answer = @question.answers.build
     @comment = @question.comments.build
@@ -18,30 +19,45 @@ class QuestionsController < ApplicationController
     @question.attachments.build
   end
 
-  def edit; end
+  def edit
+    @question.attachments.build
+  end
 
   def create
     @question = current_user.questions.build(question_params)
-    @question.save ? redirect_to(@question) : render(:new)
+    if @question.save
+      PrivatePub.publish_to '/questions', { question: QuestionSerializer.new(@question), action: 'create' }.as_json
+      redirect_to(@question)
+    else
+      render :new
+    end
   end
 
   def update
     if current_user == @question.user
-      @question.update(question_params) ? redirect_to(@question) : render(:edit)
+      if @question.update(question_params)
+        PrivatePub.publish_to '/questions', { question: QuestionSerializer.new(@question), action: 'update' }.as_json
+        redirect_to(@question)
+      else
+        render(:edit)
+      end
     else
-      redirect_to(questions_path) { flash[:error] = 'You don`t have permission' }
+      redirect_to questions_path, alert: 'You don`t have permission'
     end
   end
 
   def destroy
     @question.destroy if current_user == @question.user
-    redirect_to questions_path
+    return unless @question.destroyed?
+
+    PrivatePub.publish_to '/questions', { question: @question, action: 'destroy' }.as_json
+    redirect_to questions_path, notice: 'Your question was deleted successfully'
   end
 
   private
 
   def set_question
-    @question = Question.find params[:id]
+    @question = Question.find(params[:id])
   end
 
   def question_params

@@ -1,4 +1,4 @@
-$(document).on('turbolinks:load', function() {
+$(document).on('turbolinks:load', function(){
   $(document).on('click', '.del_file', function (e) {
     e.preventDefault();
     $(this).parent().remove();
@@ -12,6 +12,17 @@ $(document).on('turbolinks:load', function() {
       $(this).closest('form').children('.files').append(div_clone);
     }
   });
+
+  PrivatePub.subscribe('/questions', function (data, chanel) {
+    action = data['action'];
+    question = data['question'];
+    switch(action){
+      case 'create': $('table tr:last').after(question_block(question)); break;
+      case 'update': update_question(question); break;
+      case 'destroy' : $('.field').first().css('text-decoration', 'line-through'); break;
+    }
+  });
+
 
   function incrementString(str) {
     return str.replace(/\d/, function (s) {
@@ -40,5 +51,22 @@ $(document).on('turbolinks:load', function() {
     input.attr('id', new_array[0]);
     input.attr('name', new_array[1]);
     label.attr('for', new_array[2]);
+  }
+
+  function update_question(question){
+    title = $('.field').first();
+    $(title).find('.inline').text(question.title);
+    $(title).next().find('.inline').text(question.body);
+    $('.question ul').text("");
+    question.attachments.forEach(function(attachment){
+      $('.question ul').append($('<li>').append($('<a>').attr("href", attachment.url).text(attachment.filename)));
+    });
+  }
+
+
+  function question_block(question) {
+    return $('<tr>').addClass('question')
+                    .append($('<td>').append(question.title))
+                    .append($('<a>').attr('href', '/questions/' + question.id).text("Show"));
   }
 });

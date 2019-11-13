@@ -94,7 +94,7 @@ RSpec.describe 'UserAttachFiles', type: :feature do
               fill_in 'Edit your answer', with: build(:answer).body
               check 'Remove file'
               click_on 'Save'
-              2.times { find('p') }
+              find('p')
             end
               .to change(Attachment, :count).by(-1)
           end

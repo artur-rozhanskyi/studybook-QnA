@@ -1,5 +1,5 @@
-class AnswerSerializer < ActiveModel::Serializer
-  attributes :id, :body, :question_id, :user_id, :attachments, :comments
+class QuestionSerializer < ActiveModel::Serializer
+  attributes :id, :body, :title, :attachments, :comments
 
   has_many :comments
   has_many :attachments, serializer: AttachmentSerializer

@@ -16,11 +16,6 @@ RSpec.describe 'DeleteQuestions', type: :feature do
         expect(page).to have_link 'Delete'
       end
 
-      it 'redirect to questions' do
-        click_on 'Delete'
-        expect(page).to have_current_path(questions_path)
-      end
-
       it 'deletes question form list of questions' do
         click_on 'Delete'
         expect(page).not_to have_content question_to_delete.title

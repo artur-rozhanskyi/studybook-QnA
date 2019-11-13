@@ -1,20 +1,15 @@
 - @question.answers.each do |answer|
   - if answer.persisted?
-    .answer
+    .answer{ data: { answer_id: answer.id } }
       %p
         = answer.body
-        .answer_comments
-          .comments
-            = render partial: 'questions/comments', collection: answer.comments, as: :comment
-          .comment.new_comment
-            = render partial: 'answers/new_comment', locals: { commenter: answer }
+        - answer.attachments.each do |attachment|
+          - if attachment.file.file.present?
+            = link_to attachment.file.identifier, attachment.file.url
         - if answer.user == current_user
-          - answer.attachments.each do |attachment|
-            - if attachment.file.file.present?
-              = link_to attachment.file.identifier, attachment.file.url
-          = link_to "Edit", '', class: 'edit-answer-link', data: { answer_id: answer.id }
+          = link_to "Edit", '', class: 'edit-answer-link'
           = link_to "Delete", [@question, answer], method: :delete, data: { confirm: "Are you sure?" }, remote: true
-          = form_for [@question, answer], remote: true, format: :json,
+          = form_for [@question, answer], remote: true, format: :js,
                       html: { id: "edit-answer-#{answer.id}", style: "display: none;" } do |f|
             %p.answer-errors
             = f.label :body, "Edit your answer"
@@ -33,3 +28,9 @@
                     = attachment.label :file
                     = attachment.file_field :file
             = f.submit "Save"
+        .answer_comments
+          .comments
+            = render partial: 'common/comments', collection: answer.comments, as: :comment
+        - if user_signed_in?
+          .comment.new_comment
+            = render partial: 'answers/new_comment', locals: { commenter: answer }

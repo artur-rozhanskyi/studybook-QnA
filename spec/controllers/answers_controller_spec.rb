@@ -12,17 +12,10 @@ RSpec.describe AnswersController, type: :controller do
       it 'saves valid answer' do
         expect do
           post :create, params: { question_id: question, answer: valid_attributes },
-                        format: :json,
+                        format: :js,
                         session: valid_session
         end
           .to change(question.answers, :count).by(1)
-      end
-
-      it 'render template create' do
-        post :create, params: { question_id: question, answer: valid_attributes },
-                      format: :json,
-                      session: valid_session
-        expect(response.body).to include valid_attributes[:body]
       end
     end
 
@@ -31,7 +24,7 @@ RSpec.describe AnswersController, type: :controller do
         expect do
           post :create, params: { question_id: question,
                                   answer: attributes_for(:invalid_answer) },
-                        format: :json,
+                        format: :js,
                         session: valid_session
         end
           .not_to change(Answer, :count)
@@ -39,7 +32,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'render template create' do
         post :create, params: { question_id: question, answer: valid_attributes },
-                      format: :json,
+                      format: :js,
                       session: valid_session
         expect(response).not_to render_template :create
       end
@@ -57,7 +50,7 @@ RSpec.describe AnswersController, type: :controller do
           patch :update, params: { id: answer,
                                    question_id: answer.question.id,
                                    answer: new_attributes },
-                         format: :json
+                         format: :js
         end
 
         it 'assigns a requested question to @question' do
@@ -75,7 +68,7 @@ RSpec.describe AnswersController, type: :controller do
           patch :update, params: { id: answer,
                                    question_id: answer.question.id,
                                    answer: attributes_for(:invalid_answer) },
-                         format: :json
+                         format: :js
         end
 
         it 'do not changes question' do
@@ -89,7 +82,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'not changes question body' do
         sign_in_user(create(:user))
         patch :update, params: { id: answer, question_id: question.id, answer: new_attributes },
-                       format: :json
+                       format: :js
         answer.reload
         expect(answer.body).not_to eq new_attributes[:body]
       end
@@ -107,11 +100,6 @@ RSpec.describe AnswersController, type: :controller do
           delete :destroy, params: { id: answer, question_id: answer.question.id }, format: :js
         end
           .to change(Answer, :count).by(-1)
-      end
-
-      it 'redirect to the delete template' do
-        delete :destroy, params: { id: answer, question_id: answer.question.id }, format: :js
-        expect(response).to render_template :destroy
       end
     end
 

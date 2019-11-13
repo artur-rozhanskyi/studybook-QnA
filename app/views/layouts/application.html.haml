@@ -5,8 +5,11 @@
     %title StudybookQna
     = csrf_meta_tags
     = csp_meta_tag
+    %script
+      = include_gon init: true, :need_tag => false
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+
   %body
     = render "common/header"
     %p.notice
