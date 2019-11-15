@@ -9,8 +9,12 @@ before_install:
 install:
   - gem install bundler
   - bundle install
+  - nvm install node
+  - yarn
+  - bundle exec rails webpacker:binstubs
   - bundle exec rake db:create
   - bundle exec rake db:schema:load
+  - ./bin/webpack
 before_script:
   - bundle exec rackup private_pub.ru -s thin -E production &
   - sleep 3

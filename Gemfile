@@ -43,6 +43,7 @@ gem 'haml-rails'
 gem 'jquery-rails'
 gem 'private_pub'
 gem 'thin'
+gem 'webpacker'
 
 group :development, :test do
   gem 'pry-rails'
