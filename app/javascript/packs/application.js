@@ -1,16 +1,15 @@
-import 'core-js/stable'
-import 'regenerator-runtime/runtime'
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 
-import Rails from 'rails-ujs'
-import Turbolinks from 'turbolinks'
-import * as ActiveStorage from 'activestorage'
-import 'jquery'
-window.PrivatePub = require('exports-loader?PrivatePub!private_pub')
+import Rails from 'rails-ujs';
+import Turbolinks from 'turbolinks';
+import * as ActiveStorage from 'activestorage';
+import 'jquery';
+import './answers';
+import './cable';
+import './comments';
+import './questions';
 
-Rails.start()
-Turbolinks.start()
-ActiveStorage.start()
-
-// JavaScript
-const webpackContext = require.context('/', true, /\.js$/)
-for (const key of webpackContext.keys()) { webpackContext(key) }
+Rails.start();
+Turbolinks.start();
+ActiveStorage.start();

@@ -26,7 +26,7 @@ class QuestionsController < ApplicationController
   def create
     @question = current_user.questions.build(question_params)
     if @question.save
-      PrivatePub.publish_to '/questions', { question: QuestionSerializer.new(@question), action: 'create' }.as_json
+      question_cable @question, 'create'
       redirect_to(@question)
     else
       render :new
@@ -36,7 +36,7 @@ class QuestionsController < ApplicationController
   def update
     if current_user == @question.user
       if @question.update(question_params)
-        PrivatePub.publish_to '/questions', { question: QuestionSerializer.new(@question), action: 'update' }.as_json
+        question_cable @question, 'update'
         redirect_to(@question)
       else
         render(:edit)
@@ -50,7 +50,7 @@ class QuestionsController < ApplicationController
     @question.destroy if current_user == @question.user
     return unless @question.destroyed?
 
-    PrivatePub.publish_to '/questions', { question: @question, action: 'destroy' }.as_json
+    question_cable @question, 'destroy'
     redirect_to questions_path, notice: 'Your question was deleted successfully'
   end
 
@@ -62,5 +62,12 @@ class QuestionsController < ApplicationController
 
   def question_params
     params.require(:question).permit(:title, :body, attachments_attributes: [:file, :remove_file, :id, :_destroy])
+  end
+
+  def question_cable(question, action)
+    ActionCable.server.broadcast(
+      'questions',
+      { question: QuestionSerializer.new(question), action: action }.as_json
+    )
   end
 end

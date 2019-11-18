@@ -15,9 +15,7 @@ install:
   - bundle exec rake db:create
   - bundle exec rake db:schema:load
   - ./bin/webpack
-before_script:
-  - bundle exec rackup private_pub.ru -s thin -E production &
-  - sleep 3
 script:
+  - npm run es-lint
   - bundle exec rubocop .
   - bundle exec rspec

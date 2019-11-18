@@ -7,7 +7,7 @@ class CommentsController < ApplicationController
   def create
     @comment = @commenter.comments.build(comments_params)
     if @comment.save
-      PrivatePub.publish_to '/question/comments', { comment: @comment, action: 'create' }.as_json
+      comment_cable @comment, 'create'
       render body: nil
     else
       render json: @comment.errors.full_messages, status: :unprocessable_entity
@@ -17,7 +17,7 @@ class CommentsController < ApplicationController
   def update
     @comment.update(comments_params) if current_user == @comment.user
     if @comment.errors.empty?
-      PrivatePub.publish_to '/question/comments', { comment: @comment, action: 'update' }.as_json
+      comment_cable @comment, 'update'
       render body: nil
     else
       render json: @comment.errors.full_messages
@@ -28,7 +28,7 @@ class CommentsController < ApplicationController
     @comment.destroy if current_user == @comment.user
     return unless @comment.destroyed?
 
-    PrivatePub.publish_to '/question/comments', { comment: @comment, action: 'destroy' }.as_json
+    comment_cable @comment, 'destroy'
     render body: nil
   end
 
@@ -47,5 +47,12 @@ class CommentsController < ApplicationController
 
   def comments_params
     params.require(:comment).permit(:body).merge(user: current_user)
+  end
+
+  def comment_cable(comment, action)
+    ActionCable.server.broadcast(
+      'question/comments',
+      { comment: comment, action: action }.as_json
+    )
   end
 end

@@ -5,8 +5,7 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.build(answer_params.merge(user: current_user))
     if @answer.save
-      PrivatePub.publish_to "/question/#{@question.id}/answers",
-                            { answer: AnswerSerializer.new(@answer), action: 'create' }.as_json
+      answer_cable @answer, 'create'
       render body: nil
     else
       render json: @answer.error_messages, status: :unprocessable_entity
@@ -17,8 +16,7 @@ class AnswersController < ApplicationController
     @question = @answer.question
     @answer.update(answer_params) if current_user == @answer.user
     if @answer.errors.empty?
-      PrivatePub.publish_to "/question/#{@question.id}/answers",
-                            { answer: AnswerSerializer.new(@answer), action: 'update' }.as_json
+      answer_cable @answer, 'update'
       render body: nil
     else
       render json: @answer.error_messages, status: :unprocessable_entity
@@ -27,9 +25,7 @@ class AnswersController < ApplicationController
 
   def destroy
     @answer.destroy if current_user == @answer.user
-    if @answer.destroyed?
-      PrivatePub.publish_to "/question/#{@answer.question.id}/answers", { answer: @answer, action: 'destroy' }.as_json
-    end
+    answer_cable @answer, 'destroy' if @answer.destroyed?
     render body: nil
   end
 
@@ -45,5 +41,12 @@ class AnswersController < ApplicationController
 
   def answer_params
     params.require(:answer).permit(:body, attachments_attributes: [:file, :remove_file, :id, :_destroy])
+  end
+
+  def answer_cable(answer, action)
+    ActionCable.server.broadcast(
+      "question/#{answer.question.id}/answers",
+      { answer: AnswerSerializer.new(answer), action: action }.as_json
+    )
   end
 end
