@@ -39,8 +39,6 @@
       .comment.new_comment
         = render partial: 'common/new_comment', locals: { commenter: @question }
 
-
-
 %h2 Answers
 .answers
   = render 'answers'
@@ -60,9 +58,4 @@
           = attachment.file_field :file
     = f.submit "Answer"
 
-
-
 = render partial: 'common/new_answer_comment_template'
-= subscribe_to "/question/#{@question.id}/answers"
-= subscribe_to "/questions"
-= subscribe_to "/question/comments"
