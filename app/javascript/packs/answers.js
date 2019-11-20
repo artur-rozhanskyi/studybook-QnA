@@ -154,10 +154,23 @@ import commentBlock from './comments';
       },
     );
 
+    function errorsStr(errors) {
+      let str = '';
+      const capitalize = (s) => {
+        if (typeof s !== 'string') return '';
+        return s.charAt(0).toUpperCase() + s.slice(1)
+      };
+      for (const [key, value] of Object.entries(errors)) {
+        str += `${capitalize(key)} ${value}`;
+      }
+      return str;
+    }
+
     $(document).on('ajax:error', '#new_answer', (e) => {
-      $(e.target).find('.answer-new-errors').text(e.detail[0]);
+      errorsStr(e.detail[0].errors);
+      $(e.target).find('.answer-new-errors').text(errorsStr(e.detail[0].errors));
     }).on('ajax:error', 'form.edit_answer', (e) => {
-      $(e.target).find('.answer-errors').text(e.detail[0]);
+      $(e.target).find('.answer-errors').text(errorsStr(e.detail[0].errors));
     });
   });
 })(jQuery);
