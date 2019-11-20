@@ -339,6 +339,7 @@ DEPENDENCIES
   rails (~> 5.2.3)
   rails-controller-testing
   redis
+  responders
   rspec-rails
   rubocop-rails
   rubocop-rspec
