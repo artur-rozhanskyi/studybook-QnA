@@ -1,3 +1,5 @@
+import errorsStr from './helper';
+
 function commentFormBlock(comment) {
   const block = document.getElementById('comment_form').content.cloneNode(true);
   if (gon.user_id !== 'undefined' && gon.user_id === comment.user_id) {
@@ -86,10 +88,11 @@ function commentDestroy(comment) {
 
     $(document).on('ajax:error', '.form_comment', (e) => {
       const appendBlockClass = blockName(e.target.id, '.answer-comment-errors', '.question-comment-errors');
-      $(e.target).find(appendBlockClass).text(e.detail[0]);
+      $(e.target).find(appendBlockClass).text(errorsStr(e.detail[0].errors));
     })
       .on('ajax:error', '.edit_comment', (e) => {
-        $(e.target).find('.question-comment-errors').text($.parseJSON(e.detail[0]));
+        const appendBlockClass = blockName(e.target.id, '.answer-comment-errors', '.question-comment-errors');
+        $(e.target).find(appendBlockClass).text(errorsStr(e.detail[0].errors));
       });
   });
 })(jQuery);

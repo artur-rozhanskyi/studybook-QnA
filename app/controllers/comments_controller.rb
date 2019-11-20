@@ -4,32 +4,24 @@ class CommentsController < ApplicationController
   before_action :find_commenter, only: :create
   before_action :set_comment, except: :create
 
+  respond_to :json, :js
+
   def create
-    @comment = @commenter.comments.build(comments_params)
-    if @comment.save
-      comment_cable @comment, 'create'
-      render body: nil
-    else
-      render json: @comment.errors.full_messages, status: :unprocessable_entity
-    end
+    @comment = @commenter.comments.create(comments_params)
+    comment_cable @comment, 'create' if @comment.valid?
+    respond_with @comment
   end
 
   def update
     @comment.update(comments_params) if current_user == @comment.user
-    if @comment.errors.empty?
-      comment_cable @comment, 'update'
-      render body: nil
-    else
-      render json: @comment.errors.full_messages
-    end
+    comment_cable @comment, 'update' if @comment.valid?
+    respond_with @comment
   end
 
   def destroy
     @comment.destroy if current_user == @comment.user
-    return unless @comment.destroyed?
-
-    comment_cable @comment, 'destroy'
-    render body: nil
+    comment_cable @comment, 'destroy' if @comment.destroyed?
+    respond_with @comment
   end
 
   private

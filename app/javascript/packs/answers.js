@@ -1,5 +1,6 @@
-// eslint-disable-next-line import/named
 import commentBlock from './comments';
+import errorsStr from './helper';
+
 
 (($) => {
   function fileBlock(attachment, index) {
@@ -153,18 +154,6 @@ import commentBlock from './comments';
         },
       },
     );
-
-    function errorsStr(errors) {
-      let str = '';
-      const capitalize = (s) => {
-        if (typeof s !== 'string') return '';
-        return s.charAt(0).toUpperCase() + s.slice(1)
-      };
-      for (const [key, value] of Object.entries(errors)) {
-        str += `${capitalize(key)} ${value}`;
-      }
-      return str;
-    }
 
     $(document).on('ajax:error', '#new_answer', (e) => {
       errorsStr(e.detail[0].errors);

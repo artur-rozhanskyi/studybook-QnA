@@ -1,6 +1,6 @@
 = button_to 'Add comment', {}, class: 'add_comment'
 
-= form_for [commenter.question, commenter, commenter.comments.build], remote: true,
+= form_for [commenter, commenter.comments.build], remote: true, format: :json,
     html: { class: 'form_comment', id: 'new_comment_answer', style: 'display:none;' } do |f|
   .answer-comment-errors
   = f.label :body, "Your comment"
