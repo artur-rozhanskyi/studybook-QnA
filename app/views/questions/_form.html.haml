@@ -5,15 +5,7 @@
       = f.text_field field
   = f.button 'Add file', type: :button, class: 'add_file'
   .files
-    = f.fields_for :attachments do |attachment|
-      .file
-        - if attachment.object.file.file.present?
-          = link_to attachment.object.file.identifier, attachment.object.file.url
-          %label
-            = attachment.check_box :_destroy
-            Remove file
-        - else
-          = attachment.label :file
-          = attachment.file_field :file
+    = render 'common/file_fields', f: f, resource: question
+
 
   = f.submit "Ask"
