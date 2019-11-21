@@ -41,6 +41,7 @@ gem 'devise'
 gem 'gon'
 gem 'haml-rails'
 gem 'jquery-rails'
+gem 'responders'
 gem 'webpacker'
 
 group :development, :test do

@@ -6,7 +6,13 @@ FactoryBot.define do
 
     trait :with_file do
       before(:create) do |answer|
-        answer.attachments << create(:attachment, attachmentable: answer)
+        create(:attachment, attachmentable: answer)
+      end
+    end
+
+    trait :with_comment do
+      before(:create) do |answer|
+        create(:comment, commentable: answer, user: answer.user)
       end
     end
 

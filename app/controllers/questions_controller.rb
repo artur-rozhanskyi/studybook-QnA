@@ -4,19 +4,17 @@ class QuestionsController < ApplicationController
 
   def index
     @questions = Question.all
+    respond_with @questions
   end
 
   def show
     gon.user_id = current_user.id if current_user
-    @question.answers.map(&:attachments).map(&:build)
-    @answer = @question.answers.build
-    @comment = @question.comments.build
-    @answer.attachments.build
+    respond_with @question
   end
 
   def new
     @question = Question.new
-    @question.attachments.build
+    respond_with @question
   end
 
   def edit
@@ -24,34 +22,22 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    @question = current_user.questions.build(question_params)
-    if @question.save
-      question_cable @question, 'create'
-      redirect_to(@question)
-    else
-      render :new
-    end
+    @question = current_user.questions.create(question_params)
+    question_cable @question, 'create' if @question.valid?
+    respond_with @question
   end
 
   def update
     if current_user == @question.user
-      if @question.update(question_params)
-        question_cable @question, 'update'
-        redirect_to(@question)
-      else
-        render(:edit)
-      end
-    else
-      redirect_to questions_path, alert: 'You don`t have permission'
+      question_cable @question, 'update' if @question.update(question_params)
     end
+    respond_with @question
   end
 
   def destroy
     @question.destroy if current_user == @question.user
-    return unless @question.destroyed?
-
-    question_cable @question, 'destroy'
-    redirect_to questions_path, notice: 'Your question was deleted successfully'
+    question_cable @question, 'destroy' if @question.destroyed?
+    respond_with @question
   end
 
   private

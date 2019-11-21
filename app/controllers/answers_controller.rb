@@ -2,31 +2,25 @@ class AnswersController < ApplicationController
   before_action :set_question, only: :create
   before_action :set_answer, only: [:update, :destroy]
 
+  respond_to :json, :js
+
   def create
-    @answer = @question.answers.build(answer_params.merge(user: current_user))
-    if @answer.save
-      answer_cable @answer, 'create'
-      render body: nil
-    else
-      render json: @answer.error_messages, status: :unprocessable_entity
-    end
+    @answer = @question.answers.create(answer_params.merge(user: current_user))
+    answer_cable @answer, 'create' if @answer.valid?
+    respond_with @answer
   end
 
   def update
     @question = @answer.question
     @answer.update(answer_params) if current_user == @answer.user
-    if @answer.errors.empty?
-      answer_cable @answer, 'update'
-      render body: nil
-    else
-      render json: @answer.error_messages, status: :unprocessable_entity
-    end
+    answer_cable @answer, 'update' if @answer.valid?
+    respond_with @answer
   end
 
   def destroy
     @answer.destroy if current_user == @answer.user
     answer_cable @answer, 'destroy' if @answer.destroyed?
-    render body: nil
+    respond_with @answer
   end
 
   private

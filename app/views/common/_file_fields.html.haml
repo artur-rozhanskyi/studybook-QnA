@@ -1,0 +1,11 @@
+= f.fields_for :attachments do |attachment|
+  .file
+    - if attachment.object.file.file.present?
+      = link_to attachment.object.file.identifier, attachment.object.file.url
+      %label
+        = attachment.check_box :_destroy
+        Remove file
+= f.fields_for :attachments, resource.attachments.build do |attachment|
+  .file
+    = attachment.label :file
+    = attachment.file_field :file

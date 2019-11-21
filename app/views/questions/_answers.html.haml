@@ -8,25 +8,15 @@
             = link_to attachment.file.identifier, attachment.file.url
         - if answer.user == current_user
           = link_to "Edit", '', class: 'edit-answer-link'
-          = link_to "Delete", [@question, answer], method: :delete, data: { confirm: "Are you sure?" }, remote: true
-          = form_for [@question, answer], remote: true, format: :js,
+          = link_to "Delete", answer, method: :delete, data: { confirm: "Are you sure?" }, remote: true
+          = form_for answer, remote: true, format: :json,
                       html: { id: "edit-answer-#{answer.id}", style: "display: none;" } do |f|
             %p.answer-errors
             = f.label :body, "Edit your answer"
             = f.text_area :body
             = f.button 'Add file', type: :button, class: 'add_file'
             .files
-              = f.fields_for :attachments do |attachment|
-                - if attachment.object.file.file.present?
-                  %p
-                    = link_to attachment.object.file.identifier, attachment.object.file.url
-                  = attachment.label :_destroy do
-                    = attachment.check_box :_destroy
-                    Remove file
-                - else
-                  .file
-                    = attachment.label :file
-                    = attachment.file_field :file
+              = render 'common/file_fields', f: f, resource: answer
             = f.submit "Save"
         .answer_comments
           .comments

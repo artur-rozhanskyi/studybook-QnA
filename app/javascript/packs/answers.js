@@ -1,5 +1,6 @@
-// eslint-disable-next-line import/named
 import commentBlock from './comments';
+import errorsStr from './helper';
+
 
 (($) => {
   function fileBlock(attachment, index) {
@@ -155,9 +156,10 @@ import commentBlock from './comments';
     );
 
     $(document).on('ajax:error', '#new_answer', (e) => {
-      $(e.target).find('.answer-new-errors').text(e.detail[0]);
+      errorsStr(e.detail[0].errors);
+      $(e.target).find('.answer-new-errors').text(errorsStr(e.detail[0].errors));
     }).on('ajax:error', 'form.edit_answer', (e) => {
-      $(e.target).find('.answer-errors').text(e.detail[0]);
+      $(e.target).find('.answer-errors').text(errorsStr(e.detail[0].errors));
     });
   });
 })(jQuery);

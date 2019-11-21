@@ -11,20 +11,20 @@ RSpec.describe 'UserCommentAnswers', type: :feature do
 
     context 'with valid attribute' do
       it 'has "Add comment" button' do
-        within '.new_comment', match: :first do
+        within '.answer .new_comment', match: :first do
           expect(page).to have_button('Add comment')
         end
       end
 
       it 'has comment form' do
-        within '.new_comment', match: :first do
+        within '.answer .new_comment', match: :first do
           click_on 'Add comment'
           expect(page).to have_field 'comment[body]'
         end
       end
 
-      it 'adds comment to question' do
-        within '.new_comment', match: :first do
+      it 'adds comment to answer' do
+        within '.answer .new_comment', match: :first do
           expect do
             fill_in_comment(attributes[:body])
             find('form')
@@ -33,8 +33,8 @@ RSpec.describe 'UserCommentAnswers', type: :feature do
         end
       end
 
-      it 'adds comment body to question comment list' do
-        within '.question' do
+      it 'adds comment body to answer comment list' do
+        within '.answer' do
           fill_in_comment(attributes[:body])
           expect(page).to have_content attributes[:body]
         end
@@ -45,7 +45,7 @@ RSpec.describe 'UserCommentAnswers', type: :feature do
       let(:invalid_comment) { attributes_for(:invalid_comment) }
 
       it 'has message with errors' do
-        within '.new_comment', match: :first do
+        within '.answer .new_comment', match: :first do
           fill_in_comment(invalid_comment[:body])
           expect(page).to have_content 'Body can\'t be blank'
         end
