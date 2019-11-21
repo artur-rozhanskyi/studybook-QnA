@@ -1,4 +1,4 @@
-= form_for question do |f|
+= form_for question, html: { multipart: true } do |f|
   - %i[title body].each do |field|
     .field
       = f.label field

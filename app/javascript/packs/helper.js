@@ -5,7 +5,8 @@ export default function errorsStr(errors) {
     return s.charAt(0).toUpperCase() + s.slice(1);
   };
   Object.entries(errors).forEach((element) => {
-    str += `${capitalize(element[0])} ${element[1]}`;
+    const name = (element[0].slice(0, 4) === 'form') ? element[0].slice(5) : element[0];
+    str += `${capitalize(name)} ${element[1]}`;
   });
   return str;
 }

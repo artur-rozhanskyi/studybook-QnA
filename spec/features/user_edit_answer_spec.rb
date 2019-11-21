@@ -56,7 +56,6 @@ RSpec.describe 'UserEditAnswers', type: :feature do
         end
 
         Capybara.using_session 'another_user' do
-          sleep 10
           expect(page).not_to have_content(answer.body)
         end
 

@@ -79,7 +79,7 @@ import errorsStr from './helper';
 
       $(block).find('form').attr({
         id: `edit-answer-${answer.id}`,
-        action: `/questions/${answer.question_id}/answers/${answer.id}.js`,
+        action: `/answers/${answer.id}.json`,
       });
       $(block).find('#answer_body').text(answer.body);
       attachmentInputs(answer, block, $(block).find('.files'));
@@ -122,7 +122,6 @@ import errorsStr from './helper';
 
   $(document).on('turbolinks:load', () => {
     const questionId = $('.question').data('questionId');
-
     $(document).on('click', '.edit-answer-link', (e) => {
       e.preventDefault();
       $(e.target).hide();

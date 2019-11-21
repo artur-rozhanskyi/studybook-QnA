@@ -2,6 +2,8 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_question, only: [:show, :edit, :update, :destroy]
 
+  respond_to :html
+
   def index
     @questions = Question.all
     respond_with @questions
@@ -9,6 +11,8 @@ class QuestionsController < ApplicationController
 
   def show
     gon.user_id = current_user.id if current_user
+    @new_answer = AnswerForm.new Answer.new
+    @question_answers = @question.answers.map { |answer| AnswerForm.new answer }
     respond_with @question
   end
 
@@ -18,20 +22,21 @@ class QuestionsController < ApplicationController
   end
 
   def edit
-    @question.attachments.build
+    respond_with @question
   end
 
   def create
-    @question = current_user.questions.create(question_params)
-    question_cable @question, 'create' if @question.valid?
-    respond_with @question
+    @question_form = QuestionForm.new
+    question_cable @question_form, 'create' if @question_form.submit(question_params.merge(user: current_user))
+    respond_with @question_form
   end
 
   def update
-    if current_user == @question.user
-      question_cable @question, 'update' if @question.update(question_params)
-    end
-    respond_with @question
+    @question_form = QuestionForm.new(@question)
+    return unless current_user == @question_form.user
+
+    question_cable @question_form, 'update' if @question_form.submit(question_params.merge(user: current_user))
+    respond_with @question_form
   end
 
   def destroy
@@ -50,10 +55,10 @@ class QuestionsController < ApplicationController
     params.require(:question).permit(:title, :body, attachments_attributes: [:file, :remove_file, :id, :_destroy])
   end
 
-  def question_cable(question, action)
+  def question_cable(question_form, action)
     ActionCable.server.broadcast(
       'questions',
-      { question: QuestionSerializer.new(question), action: action }.as_json
+      { question: QuestionSerializer.new(question_form), action: action }.as_json
     )
   end
 end

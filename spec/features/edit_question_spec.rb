@@ -7,8 +7,7 @@ RSpec.describe 'EditQuestions', type: :feature do
     context 'when registered user' do
       before do
         sign_in(user)
-        visit question_path(question)
-        click_on 'Edit'
+        visit edit_question_path(question)
       end
 
       it 'has button to create question' do
