@@ -22,7 +22,7 @@ RSpec.describe 'UserAttachFiles', type: :feature do
         expect(page).to have_link File.basename(file.path)
       end
 
-      context 'with edit page' do
+      context 'when edit page' do # !!!!!!!!!!!!!
         before do
           visit question_path(question)
           click_on 'Edit'

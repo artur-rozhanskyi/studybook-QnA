@@ -1,20 +1,22 @@
 class AnswersController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_question, only: :create
   before_action :set_answer, only: [:update, :destroy]
 
   respond_to :json, :js
 
   def create
-    @answer = @question.answers.create(answer_params.merge(user: current_user))
-    answer_cable @answer, 'create' if @answer.valid?
-    respond_with @answer
+    answer_form = AnswerForm.new
+    if answer_form.submit(answer_params.merge(user: current_user, question: @question))
+      answer_cable answer_form, 'create'
+    end
+    respond_with answer_form
   end
 
   def update
-    @question = @answer.question
-    @answer.update(answer_params) if current_user == @answer.user
-    answer_cable @answer, 'update' if @answer.valid?
-    respond_with @answer
+    answer_form = AnswerForm.new @answer
+    answer_cable answer_form, 'update' if answer_form.submit(answer_params.merge(user: current_user))
+    respond_with answer_form
   end
 
   def destroy
@@ -22,6 +24,8 @@ class AnswersController < ApplicationController
     answer_cable @answer, 'destroy' if @answer.destroyed?
     respond_with @answer
   end
+
+  def show; end
 
   private
 
@@ -39,7 +43,7 @@ class AnswersController < ApplicationController
 
   def answer_cable(answer, action)
     ActionCable.server.broadcast(
-      "question/#{answer.question.id}/answers",
+      "question/#{answer.question_id}/answers",
       { answer: AnswerSerializer.new(answer), action: action }.as_json
     )
   end

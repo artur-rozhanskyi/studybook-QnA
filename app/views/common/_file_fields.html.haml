@@ -1,11 +1,12 @@
-= f.fields_for :attachments do |attachment|
+- resource.attachments.each do |attachment|
   .file
-    - if attachment.object.file.file.present?
-      = link_to attachment.object.file.identifier, attachment.object.file.url
+    - if attachment.file.file.present?
+      = link_to attachment.file.identifier, attachment.file.url
+      = hidden_field_tag "#{resource.model_name.to_s.downcase}[attachments_attributes][#{attachment.id}][id]", attachment.id
       %label
-        = attachment.check_box :_destroy
+        = check_box_tag "#{resource.model_name.to_s.downcase}[attachments_attributes][#{attachment.id}][_destroy]"
         Remove file
-= f.fields_for :attachments, resource.attachments.build do |attachment|
-  .file
-    = attachment.label :file
-    = attachment.file_field :file
+.file
+  - name = "#{resource.model_name.to_s.downcase}[attachments_attributes][0][file]"
+  = label_tag name, 'File'
+  = file_field_tag name

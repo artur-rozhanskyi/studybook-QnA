@@ -46,7 +46,7 @@
 
 - if user_signed_in?
   %h2 New Answer
-  = form_for [@question, @question.answers.build], remote: true, format: :json do |f|
+  = form_for [@question, @new_answer], remote: true, format: :json do |f|
     = f.label :body, "Your answer"
     .answer-new-errors
     = f.text_field :body
