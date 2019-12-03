@@ -22,4 +22,9 @@ Devise.setup do |config|
   config.reset_password_within = 6.hours
 
   config.sign_out_via = :delete
+
+  config.omniauth :facebook,
+                  ENV['FACEBOOK_APP_ID'], ENV['FACEBOOK_APP_SECRET'],
+                  scope: 'email',
+                  info_fields: 'email,first_name,last_name'
 end

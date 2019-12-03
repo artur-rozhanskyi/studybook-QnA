@@ -1,5 +1,5 @@
-require: 
-  - rubocop-rails 
+require:
+  - rubocop-rails
   - rubocop-rspec
 
 Style/FrozenStringLiteralComment:
@@ -60,3 +60,4 @@ RSpec/NestedGroups:
 RSpec/MultipleExpectations:
   Exclude:
     - 'spec/features/*'
+    - 'spec/models/user_spec.rb'
