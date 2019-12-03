@@ -49,6 +49,7 @@ gem 'responders'
 gem 'webpacker'
 
 group :development, :test do
+  gem 'dotenv-rails'
   gem 'pry-rails'
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
