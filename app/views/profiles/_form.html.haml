@@ -1,0 +1,27 @@
+= form_for @profile, url: user_profile_path(current_user) do |f|
+  %div.field
+    = f.label :first_name
+    = f.text_field :first_name
+  %div.field
+    = f.label :last_name
+    = f.text_field :last_name
+  %div.field
+    %p
+      Email:
+      = @profile.user.email
+  %div.avatar
+    = f.label :avatar
+    = f.file_field :avatar
+
+  = f.submit
+
+%h2 Update password
+
+= form_for @profile.user do |f|
+  %div.field
+    = f.label :password
+    = f.password_field :password
+  %div.field
+    = f.label :password_confirmation
+    = f.password_field :password_confirmation
+  = f.submit 'Update'

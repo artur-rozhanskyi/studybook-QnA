@@ -21,6 +21,21 @@ module AcceptanceHelper
     end
   end
 
+  def update_profile(data)
+    fill_in 'First name', with: data[:first_name]
+    fill_in 'Last name', with: data[:last_name]
+    attach_file 'Avatar', data[:avatar].path
+    click_on 'Update Profile'
+  end
+
+  def update_password(password)
+    within '.edit_user' do
+      fill_in 'Password', with: password[:password]
+      fill_in 'Password confirmation', with: password[:password_confirmation]
+      click_on 'Update'
+    end
+  end
+
   def fill_in_comment(body)
     click_on 'Add comment'
     fill_in 'comment[body]', with: body

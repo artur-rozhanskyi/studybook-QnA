@@ -1,10 +1,15 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
+
   resources :questions, shallow: true do
     resources :answers do
       resources :comments
     end
     resources :comments
+  end
+
+  resources :users, only: :update do
+    resource :profile, only: [:show, :update, :edit]
   end
 
   root 'questions#index'
