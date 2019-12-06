@@ -7,19 +7,22 @@ class CommentsController < ApplicationController
   respond_to :json, :js
 
   def create
-    @comment = @commenter.comments.create(comments_params)
-    comment_cable @comment, 'create' if @comment.valid?
+    @comment = @commenter.comments.build(comments_params)
+    authorize @comment
+    comment_cable @comment, 'create' if @comment.save
     respond_with @comment
   end
 
   def update
-    @comment.update(comments_params) if current_user == @comment.user
+    authorize @comment
+    @comment.update(comments_params)
     comment_cable @comment, 'update' if @comment.valid?
     respond_with @comment
   end
 
   def destroy
-    @comment.destroy if current_user == @comment.user
+    authorize @comment
+    @comment.destroy
     comment_cable @comment, 'destroy' if @comment.destroyed?
     respond_with @comment
   end

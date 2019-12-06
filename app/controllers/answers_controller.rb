@@ -7,6 +7,7 @@ class AnswersController < ApplicationController
 
   def create
     answer_form = AnswerForm.new
+    authorize answer_form
     if answer_form.submit(answer_params.merge(user: current_user, question: @question))
       answer_cable answer_form, 'create'
     end
@@ -15,12 +16,14 @@ class AnswersController < ApplicationController
 
   def update
     answer_form = AnswerForm.new @answer
+    authorize answer_form
     answer_cable answer_form, 'update' if answer_form.submit(answer_params.merge(user: current_user))
     respond_with answer_form
   end
 
   def destroy
-    @answer.destroy if current_user == @answer.user
+    authorize @answer
+    @answer.destroy
     answer_cable @answer, 'destroy' if @answer.destroyed?
     respond_with @answer
   end

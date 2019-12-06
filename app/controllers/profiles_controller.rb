@@ -7,10 +7,9 @@ class ProfilesController < ApplicationController
   def edit; end
 
   def update
-    if current_user == @profile.user && ProfilesUpdater.call(@profile, profile_params)
-      flash[:notice] = 'Profile was successfully update.'
-    end
-    respond_with(@profile.user, :profile)
+    authorize @profile
+    flash[:notice] = 'Profile was successfully update.' if ProfilesUpdater.call(@profile, profile_params)
+    respond_with @profile, location: user_profile_path(current_user)
   end
 
   private
