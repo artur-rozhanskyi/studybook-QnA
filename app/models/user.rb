@@ -9,6 +9,7 @@ class User < ApplicationRecord
   has_many :answers, dependent: :nullify
   has_many :comments, dependent: :nullify
   has_many :authorizations, dependent: :destroy
+  has_one :profile, dependent: :destroy
 
   def self.find_for_oauth(params)
     auth = Authorization.find_by(provider: params.provider, uid: params.uid.to_s)
@@ -28,6 +29,7 @@ class User < ApplicationRecord
     password = Devise.friendly_token[0, 20]
     user = User.create!(email: params.info[:email], password: password, password_confirmation: password)
     user.create_authorization params
+    user.create_profile(first_name: params.info[:first_name], last_name: params.info[:last_name])
     user
   end
 end
