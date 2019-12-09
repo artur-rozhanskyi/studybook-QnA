@@ -16,7 +16,7 @@ class BaseForm
   def submit(attributes)
     self.attachments_attributes = attributes.delete(:attachments_attributes)
     self.body = attributes[:body]
-    if valid? && belong_to_user?(attributes[:user])
+    if valid?
       object.assign_attributes(attributes)
       object.save.tap do |save_result|
         save_attachments if attachments_attributes.present? && save_result
@@ -36,9 +36,5 @@ class BaseForm
         Attachment.create(attachment_param.merge(attachmentable: object))
       end
     end
-  end
-
-  def belong_to_user?(user)
-    object.persisted? ? user == object.user : true
   end
 end

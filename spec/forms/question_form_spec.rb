@@ -70,10 +70,6 @@ RSpec.describe QuestionForm do
         let(:another_user) { create(:user) }
 
         context 'with valid attributes' do
-          it 'to not be valid' do
-            expect(question_form_with_question.submit(valid_attributes.merge(user: another_user))).to be_falsey
-          end
-
           it 'not update question' do
             old_question = question
             question_form_with_question.submit(valid_attributes.merge(user: another_user))

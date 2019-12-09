@@ -11,6 +11,8 @@ class User < ApplicationRecord
   has_many :authorizations, dependent: :destroy
   has_one :profile, dependent: :destroy
 
+  enum role: { user: 0, admin: 1 }
+
   def self.find_for_oauth(params)
     auth = Authorization.find_by(provider: params.provider, uid: params.uid.to_s)
     return auth.user if auth

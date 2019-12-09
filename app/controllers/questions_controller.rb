@@ -27,20 +27,21 @@ class QuestionsController < ApplicationController
 
   def create
     @question_form = QuestionForm.new
+    authorize @question_form
     question_cable @question_form, 'create' if @question_form.submit(question_params.merge(user: current_user))
     respond_with @question_form
   end
 
   def update
     @question_form = QuestionForm.new(@question)
-    return unless current_user == @question_form.user
-
+    authorize @question_form
     question_cable @question_form, 'update' if @question_form.submit(question_params.merge(user: current_user))
     respond_with @question_form
   end
 
   def destroy
-    @question.destroy if current_user == @question.user
+    authorize @question
+    @question.destroy
     question_cable @question, 'destroy' if @question.destroyed?
     respond_with @question
   end
