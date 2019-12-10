@@ -1,4 +1,4 @@
-RSpec.shared_examples_for 'unauthorized_api' do |path|
+RSpec.shared_examples_for 'unauthorized_api' do
   it 'returns 401 status if there in no access token' do
     get path, params: { format: :json }
     expect(response.status).to eq 401
