@@ -57,32 +57,12 @@ RSpec.describe 'Questions API' do
         end
       end
 
-      it 'contains comment' do
-        expect(response.body).to have_json_size(1).at_path('comments')
+      it_behaves_like 'comments' do
+        let(:resource) { question }
       end
 
-      %w[id body user_id].each do |attr|
-        it "contains comment #{attr}" do
-          expect(response.body).to be_json_eql(question.comments.first.public_send(attr.to_sym).to_json)
-            .at_path("comments/0/#{attr}")
-        end
-      end
-
-      it 'contains attachment' do
-        expect(response.body).to have_json_size(1).at_path('attachments')
-      end
-
-      it 'contains attachment id' do
-        expect(response.body).to be_json_eql(question.attachments.first.id.to_json).at_path('attachments/0/id')
-      end
-
-      it 'contains attachment filename' do
-        expect(response.body).to be_json_eql(question.attachments.first.file.identifier.to_json)
-          .at_path('attachments/0/filename')
-      end
-
-      it 'contains attachment url' do
-        expect(response.body).to be_json_eql(question.attachments.first.file.url.to_json).at_path('attachments/0/url')
+      it_behaves_like 'attachments' do
+        let(:resource) { question }
       end
     end
   end
