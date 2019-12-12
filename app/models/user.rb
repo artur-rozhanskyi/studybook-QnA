@@ -11,6 +11,18 @@ class User < ApplicationRecord
   has_many :authorizations, dependent: :destroy
   has_one :profile, dependent: :destroy
 
+  has_many :access_grants,
+           class_name: 'Doorkeeper::AccessGrant',
+           foreign_key: :resource_owner_id,
+           dependent: :delete_all,
+           inverse_of: :users
+
+  has_many :access_tokens,
+           class_name: 'Doorkeeper::AccessToken',
+           foreign_key: :resource_owner_id,
+           dependent: :delete_all,
+           inverse_of: :users
+
   enum role: { user: 0, admin: 1 }
 
   def self.find_for_oauth(params)
