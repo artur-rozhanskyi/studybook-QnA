@@ -66,3 +66,6 @@ RSpec/DescribeClass:
   Exclude:
     - 'spec/features/**/*.rb'
     - 'spec/api/**/*.rb'
+
+RSpec/MessageSpies:
+  EnforcedStyle: receive
