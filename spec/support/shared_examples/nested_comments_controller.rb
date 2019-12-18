@@ -13,6 +13,13 @@ RSpec.shared_examples 'nested comments controller' do
         end
           .to change(Comment, :count).by(1)
       end
+
+      it 'publish created comment to comment chanel' do
+        expect(ActionCable.server).to receive(:broadcast)
+        post :create, params: { comment: valid_attributes, "#{commenter}": commentable },
+                      format: :json,
+                      session: valid_session
+      end
     end
 
     context 'with invalid attributes' do
@@ -43,13 +50,18 @@ RSpec.shared_examples 'nested comments controller' do
           patch :update, params: { id: comment, comment: new_attributes }, format: :json
         end
 
-        it 'assigns a requested question to @question' do
+        it 'assigns a requested comment to @comment' do
           expect(assigns(:comment)).to eq comment
         end
 
-        it 'changes question body' do
+        it 'changes question comment' do
           comment.reload
           expect(comment.body).to eq new_attributes[:body]
+        end
+
+        it 'publish updated comment to comment chanel' do
+          expect(ActionCable.server).to receive(:broadcast)
+          patch :update, params: { id: comment, comment: new_attributes }, format: :json
         end
       end
 
@@ -58,7 +70,7 @@ RSpec.shared_examples 'nested comments controller' do
           patch :update, params: { id: comment, comment: new_attributes }, format: :json
         end
 
-        it 'do not changes question' do
+        it 'do not changes comment' do
           reloaded_comment = comment.reload
           expect(reloaded_comment).to eq comment
         end
@@ -66,7 +78,7 @@ RSpec.shared_examples 'nested comments controller' do
     end
 
     describe 'not belongs to current user' do
-      it 'not changes question body' do
+      it 'not changes comment body' do
         sign_in_user(create(:user))
         patch :update, params: { id: comment, comment: new_attributes }, format: :json
         comment.reload
@@ -82,16 +94,21 @@ RSpec.shared_examples 'nested comments controller' do
 
     context 'when delete questions comment ' do
       describe 'belongs to current user' do
-        it 'deletes question' do
+        it 'deletes comment' do
           expect do
             delete :destroy, params: { id: comment }, format: :json
           end
             .to change(Comment, :count).by(-1)
         end
+
+        it 'publish deleted comment to comment chanel' do
+          expect(ActionCable.server).to receive(:broadcast)
+          delete :destroy, params: { id: comment }, format: :json
+        end
       end
 
       describe 'not belongs to current user' do
-        it 'has not change answer count' do
+        it 'has not change comment count' do
           sign_in_user(create(:user))
           expect do
             delete :destroy, params: { id: comment }, format: :json

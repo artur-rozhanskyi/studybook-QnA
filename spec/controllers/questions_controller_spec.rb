@@ -2,6 +2,7 @@ RSpec.describe QuestionsController, type: :controller do
   let(:valid_session) { {} }
   let(:user) { create(:user) }
   let(:question) { create(:question, user: user) }
+  let(:serializer) { object_double(QuestionSerializer, as_json: '') }
 
   describe 'GET #index' do
     before { get :index }
@@ -74,6 +75,13 @@ RSpec.describe QuestionsController, type: :controller do
         post :create, params: { question: attributes_for(:question) }
         expect(response).to redirect_to question_path(assigns(:question_form))
       end
+
+      it 'publishes new question to questions chanel' do
+        allow(QuestionSerializer).to receive(:new).and_return(serializer)
+        expect(ActionCable.server).to receive(:broadcast)
+          .with('questions', { 'action' => 'create', 'question' => serializer }.as_json)
+        post :create, params: { question: attributes_for(:question) }
+      end
     end
 
     context 'with invalid attributes' do
@@ -116,6 +124,14 @@ RSpec.describe QuestionsController, type: :controller do
 
         it 'redirect to the updated question' do
           expect(response).to redirect_to question
+        end
+
+        it 'publishes updated question to questions chanel' do
+          allow(QuestionSerializer).to receive(:new).and_return(serializer)
+          expect(ActionCable.server).to receive(:broadcast)
+            .with('questions',
+                  { 'action' => 'update', 'question' => serializer }.as_json)
+          patch :update, params: { id: question, question: new_attributes }
         end
       end
 
@@ -165,6 +181,14 @@ RSpec.describe QuestionsController, type: :controller do
           delete :destroy, params: { id: question }
         end
           .to change(Question, :count).by(-1)
+      end
+
+      it 'publishes updated question to questions chanel' do
+        allow(QuestionSerializer).to receive(:new).and_return(serializer)
+        expect(ActionCable.server).to receive(:broadcast)
+          .with('questions',
+                { 'action' => 'destroy', 'question' => serializer }.as_json)
+        delete :destroy, params: { id: question }
       end
     end
 

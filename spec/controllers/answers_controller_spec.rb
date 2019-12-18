@@ -4,6 +4,7 @@ RSpec.describe AnswersController, type: :controller do
   let(:answer) { create(:answer, user: user, question: question) }
   let(:valid_session) { {} }
   let(:valid_attributes) { attributes_for(:answer) }
+  let(:fake_serializer) { object_double(AnswerSerializer, as_json: '') }
 
   describe 'POST #create' do
     before { sign_in_user(user) }
@@ -16,6 +17,16 @@ RSpec.describe AnswersController, type: :controller do
                         session: valid_session
         end
           .to change(question.answers, :count).by(1)
+      end
+
+      it 'publishes new answer to answer chanel' do
+        allow(AnswerSerializer).to receive(:new).and_return(fake_serializer)
+        expect(ActionCable.server).to receive(:broadcast)
+          .with("question/#{question.id}/answers",
+                { 'action' => 'create', 'answer' => fake_serializer }.as_json)
+        post :create, params: { question_id: question, answer: valid_attributes },
+                      format: :json,
+                      session: valid_session
       end
     end
 
@@ -53,13 +64,24 @@ RSpec.describe AnswersController, type: :controller do
                          format: :json
         end
 
-        it 'assigns a requested question to @question' do
+        it 'assigns a requested answer to @answer' do
           expect(assigns(:answer)).to eq answer
         end
 
-        it 'changes question body' do
+        it 'changes answer body' do
           answer.reload
           expect(answer.body).to eq new_attributes[:body]
+        end
+
+        it 'publishes updated answer to answer chanel' do
+          allow(AnswerSerializer).to receive(:new).and_return(fake_serializer)
+          expect(ActionCable.server).to receive(:broadcast)
+            .with("question/#{answer.question.id}/answers",
+                  { 'action' => 'update', 'answer' => fake_serializer }.as_json)
+          patch :update, params: { id: answer,
+                                   question_id: answer.question.id,
+                                   answer: new_attributes },
+                         format: :json
         end
       end
 
@@ -79,7 +101,7 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     describe 'not belongs to current user' do
-      it 'not changes question body' do
+      it "doesn't changes answer body" do
         sign_in_user(create(:user))
         patch :update, params: { id: answer, question_id: question.id, answer: new_attributes },
                        format: :json
@@ -95,11 +117,19 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     describe 'belongs to current user' do
-      it 'deletes question' do
+      it 'deletes answer' do
         expect do
           delete :destroy, params: { id: answer, question_id: answer.question.id }, format: :json
         end
           .to change(Answer, :count).by(-1)
+      end
+
+      it 'publishes deleted answer to answer chanel' do
+        allow(AnswerSerializer).to receive(:new).and_return(fake_serializer)
+        expect(ActionCable.server).to receive(:broadcast)
+          .with("question/#{answer.question.id}/answers",
+                { 'action' => 'destroy', 'answer' => fake_serializer }.as_json)
+        delete :destroy, params: { id: answer, question_id: answer.question.id }, format: :json
       end
     end
 
