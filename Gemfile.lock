@@ -241,6 +241,7 @@ GEM
     puma (3.12.2)
     pundit (2.1.0)
       activesupport (>= 3.0.0)
+    raabro (1.1.6)
     rack (2.0.8)
     rack-pjax (1.1.0)
       nokogiri (~> 1.5)

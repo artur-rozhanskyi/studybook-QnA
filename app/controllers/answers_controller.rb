@@ -10,6 +10,7 @@ class AnswersController < ApplicationController
     authorize answer_form
     if answer_form.submit(answer_params.merge(user: current_user, question: @question))
       answer_cable answer_form, 'create'
+      QuestionsNewAnswerWorker.perform_async(@question.id)
     end
     respond_with answer_form
   end

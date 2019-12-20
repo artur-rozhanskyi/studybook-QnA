@@ -7,6 +7,7 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'rspec/rails'
 require 'capybara_helper'
 require 'pundit/rspec'
+require 'sidekiq/testing'
 
 Dir[Rails.root.join("spec", "support", "**", "*.rb")].each { |file| require file }
 # Add additional requires below this line. Rails is not loaded until this point!
@@ -70,6 +71,10 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
   config.after do
     FileUtils.rm_rf(Dir[Rails.root.join('spec', 'support', 'uploads')])
+  end
+
+  config.before do
+    Sidekiq::Worker.clear_all
   end
 end
 
