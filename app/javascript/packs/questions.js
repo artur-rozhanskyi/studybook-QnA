@@ -60,6 +60,16 @@ function buttonAdd(e) {
       }
     });
 
+    $(document).on('ajax:success', '.unsubscribe', (e) => {
+      $(e.target).addClass('invisible');
+      $('.subscribe').removeClass('invisible');
+    });
+
+    $(document).on('ajax:success', '.subscribe', (e) => {
+      $(e.target).addClass('invisible');
+      $('.unsubscribe').removeClass('invisible');
+    });
+
     App.cable.subscriptions.create('QuestionsChannel', {
       received(data) {
         const { question, action } = data;

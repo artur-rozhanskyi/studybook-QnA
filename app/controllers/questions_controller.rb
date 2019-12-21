@@ -1,8 +1,9 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :set_question, only: [:show, :edit, :update, :destroy]
+  before_action :set_question, only: [:show, :edit, :update, :destroy, :subscribe, :unsubscribe]
 
   respond_to :html
+  respond_to :json, only: [:subscribe, :unsubscribe]
 
   def index
     @questions = Question.all
@@ -43,6 +44,18 @@ class QuestionsController < ApplicationController
     authorize @question
     @question.destroy
     question_cable @question, 'destroy' if @question.destroyed?
+    respond_with @question
+  end
+
+  def subscribe
+    authorize @question
+    @question.subscribed_users << current_user
+    respond_with @question
+  end
+
+  def unsubscribe
+    authorize @question
+    @question.subscribed_users.delete(current_user)
     respond_with @question
   end
 

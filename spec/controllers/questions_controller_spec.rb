@@ -202,4 +202,29 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
+
+  describe 'POST #subscribe' do
+    before { sign_in_user(user) }
+
+    it 'increases question subscribe' do
+      expect do
+        post :subscribe, params: { id: question, format: :json }
+      end
+        .to change(question.subscribed_users, :count).by(1)
+    end
+  end
+
+  describe 'POST #unsubscribe' do
+    before do
+      question.subscribed_users << user
+      sign_in_user(user)
+    end
+
+    it 'decreases question subscribe' do
+      expect do
+        post :unsubscribe, params: { id: question, format: :json }
+      end
+        .to change(question.subscribed_users, :count).by(-1)
+    end
+  end
 end

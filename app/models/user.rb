@@ -29,6 +29,10 @@ class User < ApplicationRecord
 
   enum role: { user: 0, admin: 1 }
 
+  def question_subscribed?(question)
+    subscribed_questions.include?(question)
+  end
+
   def create_authorization(params)
     authorizations.create(provider: params.provider, uid: params.uid)
   end

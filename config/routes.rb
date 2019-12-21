@@ -13,6 +13,8 @@ Rails.application.routes.draw do
       resources :comments
     end
     resources :comments
+    post :subscribe, on: :member
+    post :unsubscribe, on: :member
   end
 
   resources :users, only: :update do

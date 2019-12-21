@@ -4,4 +4,12 @@ class QuestionPolicy < ApplicationPolicy
       scope.all
     end
   end
+
+  def subscribe?
+    true
+  end
+
+  def unsubscribe?
+    true
+  end
 end
