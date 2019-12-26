@@ -1,5 +1,5 @@
 module AcceptanceHelper
-  def fill_in_question(question)
+  def ask_question(question)
     fill_in 'Title', with: question.title
     fill_in 'Body', with: question.body
     yield if block_given?
@@ -36,9 +36,17 @@ module AcceptanceHelper
     end
   end
 
-  def fill_in_comment(body)
+  def comment_record(body)
     click_on 'Add comment'
     fill_in 'comment[body]', with: body
     click_on 'Comment'
+  end
+
+  def search_query(klass, text)
+    yield if block_given?
+    within ".#{klass}" do
+      fill_in 'text', with: text
+      click_on 'Search'
+    end
   end
 end

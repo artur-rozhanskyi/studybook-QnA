@@ -2,6 +2,7 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
 import '../src/application.scss';
+import '../src/search.scss';
 
 import Rails from 'rails-ujs';
 import Turbolinks from 'turbolinks';
@@ -11,6 +12,7 @@ import './answers';
 import './cable';
 import './comments';
 import './questions';
+import './search';
 
 Rails.start();
 Turbolinks.start();

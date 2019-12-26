@@ -1,4 +1,6 @@
 class Question < ApplicationRecord
+  after_save ThinkingSphinx::RealTime.callback_for(:question)
+
   include Commentable
 
   validates :title, :body, presence: true

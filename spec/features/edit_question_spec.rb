@@ -23,12 +23,12 @@ RSpec.describe 'EditQuestions', type: :feature do
       end
 
       it 'update question title' do
-        fill_in_question(new_attribute)
+        ask_question(new_attribute)
         expect(page).to have_content new_attribute.title
       end
 
       it 'update question body' do
-        fill_in_question(new_attribute)
+        ask_question(new_attribute)
         expect(page).to have_content new_attribute.body
       end
     end

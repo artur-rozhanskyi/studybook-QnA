@@ -9,7 +9,7 @@ RSpec.describe 'UserAttachFiles', type: :feature do
       before do
         sign_in(user)
         visit new_question_path
-        fill_in_question(build(:question)) do
+        ask_question(build(:question)) do
           attach_file 'File', file.path
         end
       end

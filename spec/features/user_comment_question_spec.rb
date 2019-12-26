@@ -25,7 +25,7 @@ RSpec.describe 'UserCommentQuestions', type: :feature do
       it 'adds comment to question' do
         within '.question_comments' do
           expect do
-            fill_in_comment(attributes[:body])
+            comment_record(attributes[:body])
             find('p')
           end
             .to change(Comment, :count).by(1)
@@ -39,7 +39,7 @@ RSpec.describe 'UserCommentQuestions', type: :feature do
           Capybara.using_session 'user' do
             sign_in user
             visit question_path question
-            fill_in_comment attributes[:body]
+            comment_record attributes[:body]
             within '.question' do
               expect(page).to have_content attributes[:body]
             end
@@ -70,7 +70,7 @@ RSpec.describe 'UserCommentQuestions', type: :feature do
         sign_in user
         visit question_path(question)
         within '.question' do
-          fill_in_comment(invalid_comment[:body])
+          comment_record(invalid_comment[:body])
           expect(page).to have_content 'Body can\'t be blank'
         end
       end
