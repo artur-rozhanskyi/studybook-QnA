@@ -12,6 +12,17 @@
                 method: :delete, data: { confirm: "Are you sure?" }
 
 .question{ data: {'question-id': @question.id } }
+  .subscriber
+  - if user_signed_in?
+    -if current_user.question_subscribed?(@question)
+      = button_to "Unsubscribe", unsubscribe_question_path(@question), method: :post, remote: true, form: { "data-type": "json", class: 'unsubscribe' }
+
+      = button_to "Subscribe", subscribe_question_path(@question), method: :post, remote: true, form: { "data-type" => "json", class: "subscribe invisible" }
+    - else
+      = button_to "Unsubscribe", unsubscribe_question_path(@question), method: :post, remote: true, form: { "data-type": "json", class: "unsubscribe invisible" }
+
+      = button_to "Subscribe", subscribe_question_path(@question), method: :post, remote: true, form: { "data-type" => "json", class: "subscribe" }
+
   .field
     %p
       %strong Title:

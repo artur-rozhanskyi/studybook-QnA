@@ -23,27 +23,37 @@ class User < ApplicationRecord
            dependent: :delete_all,
            inverse_of: :users
 
+  has_and_belongs_to_many :subscribed_questions, class_name: 'Question'
+
+  delegate :first_name, to: :profile, allow_nil: true
+
   enum role: { user: 0, admin: 1 }
 
-  def self.find_for_oauth(params)
-    auth = Authorization.find_by(provider: params.provider, uid: params.uid.to_s)
-    return auth.user if auth
-
-    email = params.info[:email]
-    user = User.find_by(email: email)
-    user ? user.create_authorization(params) : user = create_user_by_authorization(params)
-    user
+  def question_subscribed?(question)
+    subscribed_questions.include?(question)
   end
 
   def create_authorization(params)
     authorizations.create(provider: params.provider, uid: params.uid)
   end
 
-  def self.create_user_by_authorization(params)
-    password = Devise.friendly_token[0, 20]
-    user = User.create!(email: params.info[:email], password: password, password_confirmation: password)
-    user.create_authorization params
-    user.create_profile(first_name: params.info[:first_name], last_name: params.info[:last_name])
-    user
+  class << self
+    def create_user_by_authorization(params)
+      password = Devise.friendly_token[0, 20]
+      user = User.create!(email: params.info[:email], password: password, password_confirmation: password)
+      user.create_authorization params
+      user.create_profile(first_name: params.info[:first_name], last_name: params.info[:last_name])
+      user
+    end
+
+    def find_for_oauth(params)
+      auth = Authorization.find_by(provider: params.provider, uid: params.uid.to_s)
+      return auth.user if auth
+
+      email = params.info[:email]
+      user = User.find_by(email: email)
+      user ? user.create_authorization(params) : user = create_user_by_authorization(params)
+      user
+    end
   end
 end

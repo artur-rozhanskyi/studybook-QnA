@@ -1,0 +1,9 @@
+= render 'common/greeting', user: @user
+
+%p We have a daily digest for you!
+
+%p
+  All question, that were created by past day:
+  %ul
+    - @questions.each do |question|
+      %li= link_to question.title, question

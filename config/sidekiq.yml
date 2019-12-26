@@ -1,0 +1,4 @@
+:schedule:
+  daily_digest:
+    cron: '0 */15 * * *'
+    class: DailyDigestWorker
