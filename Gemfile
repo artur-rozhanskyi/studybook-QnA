@@ -42,6 +42,7 @@ gem 'doorkeeper'
 gem 'gon'
 gem 'haml-rails'
 gem 'jquery-rails'
+gem 'mysql2'
 gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-google-oauth2'
@@ -51,6 +52,7 @@ gem 'rails_admin'
 gem 'responders'
 gem 'sidekiq'
 gem 'sidekiq-scheduler'
+gem 'thinking-sphinx'
 gem 'webpacker'
 
 group :development, :test do
@@ -64,6 +66,7 @@ end
 
 group :test do
   gem 'capybara'
+  gem 'database_cleaner'
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'json_spec'
