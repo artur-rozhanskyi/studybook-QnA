@@ -1,12 +1,13 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  use_doorkeeper
+  devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks',
+                                    registrations: 'users/registrations' }
+
   authenticate :user, ->(user) { user.admin? } do
     mount Sidekiq::Web => '/sidekiq'
   end
-
-  use_doorkeeper
-  devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
 
   resources :questions, shallow: true do
     resources :answers do

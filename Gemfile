@@ -39,6 +39,8 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'carrierwave'
 gem 'devise'
 gem 'doorkeeper'
+gem 'dotenv'
+gem 'dotenv-deployment', require: 'dotenv/deployment'
 gem 'gon'
 gem 'haml-rails'
 gem 'jquery-rails'
@@ -48,10 +50,13 @@ gem 'omniauth-facebook'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-twitter'
 gem 'pundit'
+gem 'rails_12factor', group: :production
 gem 'rails_admin'
 gem 'responders'
-gem 'sidekiq'
+gem 'sidekiq', '~> 5.2'
 gem 'sidekiq-scheduler'
+gem 'sinatra', require: nil
+gem 'therubyracer'
 gem 'thinking-sphinx'
 gem 'webpacker'
 
@@ -85,6 +90,15 @@ group :development do
   gem 'letter_opener'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+
+  gem 'capistrano', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-passenger', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-rvm', require: false
+  gem 'capistrano-sidekiq', require: false
+  gem 'capistrano3-nginx', require: false
+  gem 'capistrano3-puma', require: false
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
