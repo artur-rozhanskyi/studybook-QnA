@@ -23,12 +23,12 @@ RSpec.describe 'CreateQuestions', type: :feature do
       end
 
       it 'shows asked question title' do
-        fill_in_question(question)
+        ask_question(question)
         expect(page).to have_content question.title
       end
 
       it 'shows asked question body' do
-        fill_in_question(question)
+        ask_question(question)
         expect(page).to have_content question.body
       end
     end

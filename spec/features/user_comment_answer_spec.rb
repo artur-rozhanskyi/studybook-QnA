@@ -26,7 +26,7 @@ RSpec.describe 'UserCommentAnswers', type: :feature do
       it 'adds comment to answer' do
         within '.answer .new_comment', match: :first do
           expect do
-            fill_in_comment(attributes[:body])
+            comment_record(attributes[:body])
             find('form')
           end
             .to change(Comment, :count).by(1)
@@ -35,7 +35,7 @@ RSpec.describe 'UserCommentAnswers', type: :feature do
 
       it 'adds comment body to answer comment list' do
         within '.answer' do
-          fill_in_comment(attributes[:body])
+          comment_record(attributes[:body])
           expect(page).to have_content attributes[:body]
         end
       end
@@ -46,7 +46,7 @@ RSpec.describe 'UserCommentAnswers', type: :feature do
 
       it 'has message with errors' do
         within '.answer .new_comment', match: :first do
-          fill_in_comment(invalid_comment[:body])
+          comment_record(invalid_comment[:body])
           expect(page).to have_content 'Body can\'t be blank'
         end
       end

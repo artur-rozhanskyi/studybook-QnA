@@ -1,0 +1,4 @@
+- present comment do |comment_presenter|
+  .result
+    %p.comment
+      = link_to comment_presenter.body, question_path(comment_presenter.commenter)

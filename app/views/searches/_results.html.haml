@@ -1,0 +1,6 @@
+.results
+  - %w[question answer comment user].each do |search_in|
+    - if @resulting[search_in]
+      %div{ class: "#{search_in}s" }
+        %h3= search_in.capitalize
+        = render partial: search_in, collection: @resulting[search_in]

@@ -5,6 +5,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :omniauthable,
          omniauth_providers: [:facebook, :twitter, :google_oauth2]
 
+  after_save ThinkingSphinx::RealTime.callback_for(:user)
+
   has_many :questions, dependent: :nullify
   has_many :answers, dependent: :nullify
   has_many :comments, dependent: :nullify
@@ -25,7 +27,7 @@ class User < ApplicationRecord
 
   has_and_belongs_to_many :subscribed_questions, class_name: 'Question'
 
-  delegate :first_name, to: :profile, allow_nil: true
+  delegate :first_name, :last_name, to: :profile, allow_nil: true
 
   enum role: { user: 0, admin: 1 }
 

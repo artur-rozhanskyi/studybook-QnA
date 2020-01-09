@@ -1,0 +1,18 @@
+%h1 Search
+
+.search
+  .simple_search
+    = button_to 'Simple search', nil, form_class: 'simple_search_button'
+    .simple_form
+      = render 'form', search_in: 'all'
+  .advanced_search
+    = button_to 'Advanced search', nil, form_class: 'advanced_search_button'
+    .advanced_forms.invisible
+      - %w[question answer comment user].each do |search_in|
+        %div{ class: "#{search_in}_form" }
+          %p= search_in.capitalize
+          = render 'form', search_in: search_in
+
+- if @resulting.present?
+  %h2 Results
+  = render 'results'
