@@ -13,7 +13,7 @@ AllCops:
  - bin/**/*
  - 'config/environments/**/*'
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 120
 
 Style/Documentation:
@@ -71,3 +71,9 @@ RSpec/DescribeClass:
 
 RSpec/MessageSpies:
   EnforcedStyle: receive
+
+Style/PercentLiteralDelimiters:
+  Enabled: false
+
+Rails/FilePath:
+  EnforcedStyle: arguments
