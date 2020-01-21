@@ -27,7 +27,7 @@ RSpec.describe 'UserCommentAnswers', type: :feature do
         within '.answer .new_comment', match: :first do
           expect do
             comment_record(attributes[:body])
-            find('form')
+            sleep 2
           end
             .to change(Comment, :count).by(1)
         end

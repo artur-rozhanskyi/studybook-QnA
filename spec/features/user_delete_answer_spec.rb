@@ -18,7 +18,7 @@ RSpec.describe 'UserDeleteAnswers', type: :feature do
         it 'has delete answer from database ' do
           expect do
             delete_subject('answer')
-            find('.question')
+            sleep 2
           end
             .to change(Answer, :count).by(-1)
         end

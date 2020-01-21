@@ -6,10 +6,10 @@ class QuestionPolicy < ApplicationPolicy
   end
 
   def subscribe?
-    true
+    true unless user&.question_subscribed?(record)
   end
 
   def unsubscribe?
-    true
+    true if user&.question_subscribed?(record)
   end
 end

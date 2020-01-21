@@ -1,5 +1,5 @@
-- @question_answers.each do |answer|
-  - if answer.persisted?
+- if answer.persisted?
+  - cache answer do
     .answer{ data: { answer_id: answer.id } }
       %p
         = answer.body
@@ -9,18 +9,18 @@
         - if answer.user == current_user
           = link_to "Edit", '', class: 'edit-answer-link'
           = link_to "Delete", answer, method: :delete, data: { confirm: "Are you sure?" }, remote: true
-          = form_for answer, remote: true, format: :json,
-                      html: { id: "edit-answer-#{answer.id}", style: "display: none;" } do |f|
+          = form_for answer, format: :json, remote: true,
+                     html: { multipart: true, class: "edit-answer invisible" } do |f|
             %p.answer-errors
             = f.label :body, "Edit your answer"
-            = f.text_area :body
+            = f.text_area :body, id: "answer_textarea_#{answer.id}"
             = f.button 'Add file', type: :button, class: 'add_file'
             .files
-              = render 'common/file_fields', f: f, resource: answer
+              = render 'common/file_fields', resource: answer
             = f.submit "Save"
         .answer_comments
           .comments
-            = render partial: 'common/comments', collection: answer.comments, as: :comment
+            = render partial: 'common/comments', collection: answer.comments, as: :comment, cached: true
         - if user_signed_in?
           .comment.new_comment
             = render partial: 'answers/new_comment', locals: { commenter: answer }

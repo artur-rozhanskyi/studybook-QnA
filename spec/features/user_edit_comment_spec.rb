@@ -22,7 +22,7 @@ RSpec.describe 'UserEditComments', type: :feature do
         context 'with valid attribute' do
           it 'has update comment' do
             edit_subject(new_comment_body, 'comment')
-            find('.question')
+            sleep 2
             expect(comment.body).to eq new_comment_body
           end
         end

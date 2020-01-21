@@ -21,7 +21,7 @@ RSpec.describe 'UserDeleteComments', type: :feature do
         it 'has delete comment from database ' do
           expect do
             delete_subject('comment')
-            find('.question')
+            sleep 2
           end
             .to change(Comment, :count).by(-1)
         end

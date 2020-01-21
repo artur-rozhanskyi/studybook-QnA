@@ -3,7 +3,7 @@
     %p#ans_body
       %a{ class: 'edit-answer-link', href:""} Edit
       %a{ data: { confirm: "Are you sure?", method: "delete", remote: "true" }, rel: 'nofollow', href: "" } Delete
-    %form.edit_answer{ style: "display: none;", enctype: "multipart/form-data", 'accept-charset': "UTF-8",
+    %form.edit_answer.invisible{ enctype: "multipart/form-data", 'accept-charset': "UTF-8",
                        'data-remote': true, method: "post", format: :json }
       %p.answer-errors
       %input{ name: "utf8", type: 'hidden', value: "✓" }

@@ -2,7 +2,7 @@
 
 = form_for [commenter, commenter.comments.build], remote: true, format: :json,
     html: { class: 'form_comment', id: 'new_comment_question', style: 'display:none;' } do |f|
-  .question-comment-errors
+  .comment-errors
   = f.label :body, "Your comment"
-  = f.text_field :body, id: 'question_comment_body'
+  = f.text_field :body, id: 'comment_body'
   = f.submit 'Comment'
