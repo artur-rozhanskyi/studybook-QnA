@@ -40,7 +40,7 @@ RSpec.describe 'UserAttachFiles', type: :feature do
           expect do
             check 'Remove file'
             click_on 'Ask'
-            sleep 2
+            find('h1')
           end
             .to change(question.attachments, :count).by(-1)
         end
@@ -94,7 +94,7 @@ RSpec.describe 'UserAttachFiles', type: :feature do
             expect do
               check 'Remove file'
               click_on 'Save'
-              sleep 2
+              find('input')
             end
               .to change(Attachment, :count).by(-1)
           end

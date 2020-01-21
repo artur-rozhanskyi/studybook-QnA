@@ -39,28 +39,28 @@
     .question_comments
       = render 'common/comment_template'
       .comments
-        = render partial: 'common/comments', collection: @question.comments, as: :comment
+        = render partial: 'common/comments', collection: @question.comments, as: :comment, cached: true
       - if user_signed_in?
         .comment.new_comment
           = render partial: 'common/new_comment', locals: { commenter: @question }
 
   %h2 Answers
   .answers
-    = render 'answers'
+    = render partial: 'answers', collection: @question_answers, as: :answer, cached: true
     = render 'common/answer_template'
 
-- if user_signed_in?
-  %h2 New Answer
-  = form_for [@question, @new_answer], remote: true, format: :json do |f|
-    = f.label :body, "Your answer"
-    .answer-new-errors
-    = f.text_field :body
-    = f.button 'Add file', type: :button, class: 'add_file'
-    .files
-      = f.fields_for :attachments, f.object.attachments.build do |attachment|
-        .file
-          = attachment.label :file
-          = attachment.file_field :file
-    = f.submit "Answer"
+  - if user_signed_in?
+    %h2 New Answer
+    = form_for [@question, @new_answer], remote: true, format: :json do |f|
+      = f.label :body, "Your answer"
+      .answer-new-errors
+      = f.text_field :body
+      = f.button 'Add file', type: :button, class: 'add_file'
+      .files
+        = f.fields_for :attachments, f.object.attachments.build do |attachment|
+          .file
+            = attachment.label :file
+            = attachment.file_field :file
+      = f.submit "Answer"
 
-= render partial: 'common/new_answer_comment_template'
+  = render partial: 'common/new_answer_comment_template'

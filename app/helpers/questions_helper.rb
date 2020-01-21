@@ -1,6 +1,6 @@
 module QuestionsHelper
   def subscribes_button(user, question)
-    visibility = user.question_subscribed?(question) ? true : false
+    visibility = user.question_subscribed?(question)
 
     button_with_visibility_to('Unsubscribe', unsubscribe_question_path(question), visibility, klass: 'unsubscribe') +
       button_with_visibility_to('Subscribe', subscribe_question_path(question), !visibility, klass: 'subscribe')
