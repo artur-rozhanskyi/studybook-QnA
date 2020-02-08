@@ -1,0 +1,77 @@
+version: '3.1'
+
+volumes:
+  redis:
+  postgres:
+  my-db:
+
+services:
+  db:
+    image: postgres:10
+    expose:
+      - 5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+
+  in_memory_store:
+    image: redis:4-alpine
+    expose:
+      - 6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "-h", "localhost", "ping"]
+
+  server_app_test:
+    build:
+      context: ./
+      dockerfile: docker/test/Dockerfile
+    entrypoint: "./docker/test/docker-entrypoint.sh"
+    tty: true
+    stdin_open: true
+    restart: on-failure
+    volumes:
+      - .:/home/app/qna
+      - /home/app/qna/vendor/bundle
+      - /home/app/
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      SPHINX_HOST: mysql
+      SPHINX_USER_LOGIN: user
+      SPHINX_USER_PASSWORD: password
+      RAILS_ENV: test
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      REDIS_DB: "redis://in_memory_store:6379"
+      CHROME_HOSTNAME: "http://webdriver_chrome:4444/wd/hub"
+    depends_on:
+      - db
+      - in_memory_store
+      - mysql
+      - webdriver_chrome
+    ports:
+      - 3000:3000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+
+  mysql:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    expose:
+      - '3306'
+    volumes:
+      - my-db:/var/lib/mysql
+
+  webdriver_chrome:
+    image: selenium/standalone-chrome
+    ports:
+      - 4444:4444

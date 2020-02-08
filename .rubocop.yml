@@ -12,6 +12,7 @@ AllCops:
  - node_modules/**/*
  - bin/**/*
  - 'config/environments/**/*'
+ - public/**/*
 
 Layout/LineLength:
   Max: 120

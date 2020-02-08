@@ -46,6 +46,8 @@ Rails.application.configure do
 
   config.cache_store = :null_store
 
+  config.relative_url_root = '/'
+
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 end
