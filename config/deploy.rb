@@ -27,7 +27,6 @@ set :stage, :production
 # Default value for :linked_files is []
 append :linked_files, 'config/database.yml',
        'config/master.key',
-       'config/thinking_sphinx.yml',
        'config/sidekiq.yml',
        '.env'
 
