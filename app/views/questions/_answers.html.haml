@@ -1,6 +1,13 @@
 - if answer.persisted?
   - cache answer do
     .answer{ data: { answer_id: answer.id } }
+      .nav_likes
+        - if owner && !@question.best_answer
+          = button_to "Best", best_answer_path(answer), class: "best_answer_button", remote: true,
+                          params: { format: :json, question_id: @question }
+        - if answer == @question.best_answer
+          .best_answer_mark
+            = fa_icon("check", type: :solid)
       %p
         = answer.body
         - answer.attachments.each do |attachment|
@@ -9,6 +16,8 @@
         - if answer.user == current_user
           = link_to "Edit", '', class: 'edit-answer-link'
           = link_to "Delete", answer, method: :delete, data: { confirm: "Are you sure?" }, remote: true
+
+        - if owner
           = form_for answer, format: :json, remote: true,
                      html: { multipart: true, class: "edit-answer invisible" } do |f|
             %p.answer-errors
@@ -18,6 +27,7 @@
             .files
               = render 'common/file_fields', resource: answer
             = f.submit "Save"
+
         .answer_comments
           .comments
             = render partial: 'common/comments', collection: answer.comments, as: :comment, cached: true

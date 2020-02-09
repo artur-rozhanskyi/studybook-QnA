@@ -13,5 +13,9 @@ RSpec.describe Question, type: :model do
 
   it { is_expected.to have_many :attachments }
 
+  it { is_expected.to have_and_belong_to_many(:subscribed_users).class_name('User') }
+
+  it { is_expected.to belong_to(:best_answer).class_name('Answer').optional }
+
   it_behaves_like 'commentable'
 end

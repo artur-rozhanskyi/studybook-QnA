@@ -1,66 +1,68 @@
-%h1 Question
+- present @question do |question|
+  %h1 Question
 
-%nav.navigation
-  %ul
-    %li
-      = link_to "Back", questions_path
-    - if current_user == @question.user
+  %nav.navigation
+    %ul
       %li
-        = link_to "Edit", edit_question_path(@question)
-      %li
-        = link_to "Delete", question_path(@question, question: { user_id: current_user }),
-                method: :delete, data: { confirm: "Are you sure?" }
+        = link_to "Back", questions_path
+      - if question.current_user_owner?(current_user)
+        %li
+          = link_to "Edit", edit_question_path(question)
+        %li
+          = link_to "Delete", question_path(question, question: { user_id: current_user }),
+                  method: :delete, data: { confirm: "Are you sure?" }
 
-- cache @question do
-  .question{ data: {'question-id': @question.id } }
-    .subscriber
-      - if user_signed_in?
-        = subscribes_button(current_user, @question)
+  - cache question do
+    .question{ data: { 'question-id': question.id, 'user-owner-id': question.user.id } }
+      .subscriber
+        - if user_signed_in?
+          = subscribes_button(current_user, question)
 
-    .field
-      %p
-        %strong Title:
-        %p.inline
-          = @question.title
+      .field
+        %p
+          %strong Title:
+          %p.inline
+            = question.title
 
-    .field
-      %p
-        %strong Body:
-        %p.inline
-          = @question.body
+      .field
+        %p
+          %strong Body:
+          %p.inline
+            = question.body
 
-    .field
-      %h2 Attachments
-      %ul
-        - @question.attachments.each do |attachment|
-          %li
-            = link_to attachment.file.identifier, attachment.file.url
+      .field
+        %h2 Attachments
+        %ul
+          - question.attachments.each do |attachment|
+            %li
+              = link_to attachment.file.identifier, attachment.file.url
 
-    .question_comments
-      = render 'common/comment_template'
-      .comments
-        = render partial: 'common/comments', collection: @question.comments, as: :comment, cached: true
-      - if user_signed_in?
-        .comment.new_comment
-          = render partial: 'common/new_comment', locals: { commenter: @question }
+      .question_comments
+        = render 'common/comment_template'
+        .comments
+          = render partial: 'common/comments', collection: question.comments, as: :comment, cached: true
+        - if user_signed_in?
+          .comment.new_comment
+            = render partial: 'common/new_comment', locals: { commenter: question }
 
-  %h2 Answers
-  .answers
-    = render partial: 'answers', collection: @question_answers, as: :answer, cached: true
-    = render 'common/answer_template'
+    %h2 Answers
+    .answers
+      = render partial: 'answers', collection: @question_answers, as: :answer,  locals: { owner: question.current_user_owner?(current_user)} , cached: true
+      = render 'common/answer_template'
+      = render 'common/best_answer_mark_template'
 
-  - if user_signed_in?
-    %h2 New Answer
-    = form_for [@question, @new_answer], remote: true, format: :json do |f|
-      = f.label :body, "Your answer"
-      .answer-new-errors
-      = f.text_field :body
-      = f.button 'Add file', type: :button, class: 'add_file'
-      .files
-        = f.fields_for :attachments, f.object.attachments.build do |attachment|
-          .file
-            = attachment.label :file
-            = attachment.file_field :file
-      = f.submit "Answer"
+    - if user_signed_in?
+      %h2 New Answer
+      = form_for [question, @new_answer], remote: true, format: :json do |f|
+        = f.label :body, "Your answer"
+        .answer-new-errors
+        = f.text_field :body
+        = f.button 'Add file', type: :button, class: 'add_file'
+        .files
+          = f.fields_for :attachments, f.object.attachments.build do |attachment|
+            .file
+              = attachment.label :file
+              = attachment.file_field :file
+        = f.submit "Answer"
 
-  = render partial: 'common/new_answer_comment_template'
+    = render partial: 'common/new_answer_comment_template'

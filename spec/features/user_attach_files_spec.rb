@@ -94,7 +94,7 @@ RSpec.describe 'UserAttachFiles', type: :feature do
             expect do
               check 'Remove file'
               click_on 'Save'
-              find('input')
+              find('input', match: :first).click
             end
               .to change(Attachment, :count).by(-1)
           end

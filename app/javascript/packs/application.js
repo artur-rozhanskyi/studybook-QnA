@@ -4,6 +4,8 @@ import 'regenerator-runtime/runtime';
 import '../src/application.scss';
 import '../src/search.scss';
 
+import '@fortawesome/fontawesome-free/js/all';
+
 import Rails from 'rails-ujs';
 import Turbolinks from 'turbolinks';
 import * as ActiveStorage from 'activestorage';

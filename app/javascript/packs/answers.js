@@ -75,6 +75,7 @@ import errorsStr from './helper';
 
   function answerBlock(answer, block) {
     const link = $(block).find('.edit-answer-link');
+    const userOwnerId = $('.question').data('userOwnerId');
     if (gon.user_id === answer.user_id) {
       link.next().attr('href', `/questions/${answer.question_id}/answers/${answer.id}`);
 
@@ -88,6 +89,10 @@ import errorsStr from './helper';
       link.next().remove();
       link.remove();
       $(block).find('form').remove();
+    }
+
+    if (userOwnerId === gon.user_id) {
+      $(block).find('.best_answer_button').parent().attr('action', `/answers/${answer.id}/best`);
     }
 
     $(block).find('.answer').attr('data-answer-id', answer.id);
@@ -120,6 +125,15 @@ import errorsStr from './helper';
     $('#new_answer .file:not(:first-child)').remove();
   }
 
+  function bestAnswer(answer) {
+    $('.best_answer_mark, .best_answer_button').remove();
+    $(`*[data-answer-id=${answer.id}]`)
+      .find('.nav_likes')
+      .prepend($('<div>')
+        .addClass('best_answer_mark')
+        .append(document.getElementById('best_answer_mark_template').content.cloneNode(true)));
+  }
+
   $(document).on('turbolinks:load', () => {
     const questionId = $('.question').data('questionId');
     $(document).on('click', '.edit-answer-link', (e) => {
@@ -147,6 +161,9 @@ import errorsStr from './helper';
               break;
             case 'destroy':
               destroyAnswer(answer);
+              break;
+            case 'best':
+              bestAnswer(answer);
               break;
             default: break;
           }

@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound, with: :handle_record_not_found
 
   rescue_from Pundit::NotAuthorizedError do |exception|
-    redirect_to root_path, alert: exception.message
+    redirect_to root_path, alert: exception.message, status: :unauthorized
   end
 
   protected

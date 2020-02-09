@@ -139,6 +139,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_17_224853) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.bigint "user_id"
+    t.integer "best_answer_id"
     t.index ["user_id"], name: "index_questions_on_user_id"
   end
 
@@ -167,4 +168,5 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_17_224853) do
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "profiles", "users"
+  add_foreign_key "questions", "answers", column: "best_answer_id"
 end

@@ -198,6 +198,8 @@ GEM
     faraday-rack (1.0.0)
     faraday-retry (1.0.3)
     ffi (1.15.5)
+    font_awesome5_rails (1.0.0)
+      railties (>= 4.2)
     fugit (1.5.2)
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.4)
@@ -563,6 +565,7 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   faker
+  font_awesome5_rails
   gon
   haml-rails
   jbuilder (~> 2.5)

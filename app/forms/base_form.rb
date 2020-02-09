@@ -2,6 +2,7 @@ class BaseForm
   include ActiveModel::Model
   include ActiveModel::Serialization
   include ActiveModel::Conversion
+  include Comparable
 
   attr_accessor :body, :attachments_attributes
 
