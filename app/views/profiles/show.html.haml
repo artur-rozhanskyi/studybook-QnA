@@ -1,26 +1,5 @@
-%h1 Profile
-
 - if @profile.user == current_user
-  = link_to 'Edit', edit_user_profile_path(current_user)
-
-- if @profile.avatar.attached?
-  %div.avatar
-    = image_tag url_for(@profile.avatar)
-
-%div.field
-  %p
-    First name:
-    %span
-      = @profile.first_name
-
-%div.field
-  %p
-    Last name:
-    %span
-      = @profile.last_name
-
-%div.field
-  %p
-    Email:
-    %span
-      = @profile.user.email
+  - cache @profile do
+    = render 'profile'
+- else
+  = render 'profile'

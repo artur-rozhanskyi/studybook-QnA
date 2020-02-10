@@ -3,26 +3,27 @@ import errorsStr from './helper';
 
 
 (($) => {
-  function fileBlock(attachment, index) {
+  function fileBlock(attachment) {
     const div = $('<div>');
     div.append($('<p>').append($('<a>').attr('href', attachment.url).text(attachment.filename)));
     const inputHiddenLabel = $('<input>').attr({
-      name: `answer[attachments_attributes][${index}][_destroy]`,
-      type: 'hidden',
-      value: 0,
-    });
-    const inputHidden = $('<input>').attr({
-      name: `answer[attachments_attributes][${index}][id]`,
+      name: `answer[attachments_attributes][${attachment.id}][_destroy]`,
       type: 'hidden',
       value: attachment.id,
-      id: `answer[attachments_attributes][${index}][id]`,
+    });
+    const inputHidden = $('<input>').attr({
+      name: `answer[attachments_attributes][${attachment.id}][id]`,
+      type: 'hidden',
+      value: attachment.id,
+      id: `answer[attachments_attributes][${attachment.id}][id]`,
     });
     const inputCheckboxLabel = $('<input>').attr({
-      name: `answer[attachments_attributes][${index}][_destroy]`,
+      name: `answer[attachments_attributes][${attachment.id}][_destroy]`,
       type: 'checkbox',
-      id: `answer_attachments_attributes_${index}__destroy`,
+      id: `answer_attachments_attributes_${attachment.id}__destroy`,
+      value: 1,
     });
-    $('<label>').attr('for', `answer_attachments_attributes_${index}__destroy`)
+    $('<label>').attr('for', `answer_attachments_attributes_${attachment.id}__destroy`)
       .text('Remove file')
       .prepend(inputCheckboxLabel)
       .prepend(inputHiddenLabel)
@@ -44,8 +45,8 @@ import errorsStr from './helper';
 
   function attachmentInputs(answer, block, filesBlock) {
     if (typeof answer.attachments !== 'undefined') {
-      answer.attachments.forEach((attachment, index) => {
-        filesBlock.append(fileBlock(attachment, index));
+      answer.attachments.forEach((attachment) => {
+        filesBlock.append(fileBlock(attachment));
       });
       $(block).find('form .files').append(inputBlock(answer.attachments.length));
     }
@@ -58,7 +59,7 @@ import errorsStr from './helper';
     if (typeof (gon.user_id) !== 'undefined') {
       const newComment = document.getElementById('new_comment_form').content.cloneNode(true);
       $(newComment).find('#new_comment_answer')
-        .attr('action', `/questions/${answer.question_id}/answers/${answer.id}/comments`);
+        .attr('action', `/answers/${answer.id}/comments.json`);
       $(block).find('.answer').append($(newComment));
     }
   }
@@ -67,7 +68,7 @@ import errorsStr from './helper';
     if (typeof answer.attachments !== 'undefined') {
       answer.attachments.forEach((attachment) => {
         const linkToFile = $('<a>').attr('href', attachment.url).text(attachment.filename);
-        $(block).find('p:not(.answer-errors)').prepend(linkToFile);
+        $(block).find('p').first().prepend(linkToFile);
       });
     }
   }
@@ -78,10 +79,10 @@ import errorsStr from './helper';
       link.next().attr('href', `/questions/${answer.question_id}/answers/${answer.id}`);
 
       $(block).find('form').attr({
-        id: `edit-answer-${answer.id}`,
+        id: `edit_answer_${answer.id}`,
         action: `/answers/${answer.id}.json`,
       });
-      $(block).find('#answer_body').text(answer.body);
+      $(block).find('textarea').attr({ id: `answer_textarea_${answer.id}` }).text(answer.body);
       attachmentInputs(answer, block, $(block).find('.files'));
     } else {
       link.next().remove();
@@ -97,7 +98,6 @@ import errorsStr from './helper';
 
     return block;
   }
-
 
   function updateAnswer(answer) {
     const prevElem = $(`*[data-answer-id=${answer.id}]`).prev();
@@ -126,7 +126,7 @@ import errorsStr from './helper';
       e.preventDefault();
       $(e.target).hide();
       const answerId = $(e.target).closest('.answer').data('answerId');
-      $(`form#edit-answer-${answerId}`).show();
+      $(`form#edit_answer_${answerId}`).show();
     });
 
     App.cable.subscriptions.create(

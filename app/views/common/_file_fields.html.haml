@@ -8,5 +8,5 @@
         Remove file
 .file
   - name = "#{resource.model_name.to_s.downcase}[attachments_attributes][0][file]"
-  = label_tag name, 'File'
-  = file_field_tag name
+  = label_tag "#{name}_#{resource.id}", 'File'
+  = file_field_tag name, id: "#{name}_#{resource.id}"

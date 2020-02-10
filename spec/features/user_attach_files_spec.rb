@@ -10,7 +10,7 @@ RSpec.describe 'UserAttachFiles', type: :feature do
         sign_in(user)
         visit new_question_path
         ask_question(build(:question)) do
-          attach_file 'File', file.path
+          attach_file nil, file.path
         end
       end
 
@@ -22,7 +22,7 @@ RSpec.describe 'UserAttachFiles', type: :feature do
         expect(page).to have_link File.basename(file.path)
       end
 
-      context 'when edit page' do # !!!!!!!!!!!!!
+      context 'when edit page' do
         before do
           visit question_path(question)
           click_on 'Edit'
@@ -40,6 +40,7 @@ RSpec.describe 'UserAttachFiles', type: :feature do
           expect do
             check 'Remove file'
             click_on 'Ask'
+            find('h1')
           end
             .to change(question.attachments, :count).by(-1)
         end
@@ -49,12 +50,12 @@ RSpec.describe 'UserAttachFiles', type: :feature do
 
   describe 'User attach file to answer', js: true do
     context 'with registered user' do
-      let(:answer) { create(:answer, :with_file, question: create(:question), user: user) }
+      let(:question) { create(:question, :with_file, user: user) }
 
       before do
-        sign_in(answer.user)
-        visit question_path(answer.question)
-        fill_in 'Your answer', with: answer.body
+        sign_in(user)
+        visit question_path(question)
+        fill_in 'Your answer', with: attributes_for(:answer)[:body]
         attach_file 'File', file.path
         click_on 'Answer'
       end
@@ -78,7 +79,7 @@ RSpec.describe 'UserAttachFiles', type: :feature do
 
         it 'has file name in edit question' do
           within '.answer .files', match: :first do
-            expect(page).to have_link File.basename(answer.attachments.first.file.identifier)
+            expect(page).to have_link File.basename(file.path)
           end
         end
 
@@ -91,10 +92,9 @@ RSpec.describe 'UserAttachFiles', type: :feature do
         it 'has remove file' do
           within '.answer', match: :first do
             expect do
-              fill_in 'Edit your answer', with: build(:answer).body
               check 'Remove file'
               click_on 'Save'
-              find('p')
+              find('input')
             end
               .to change(Attachment, :count).by(-1)
           end

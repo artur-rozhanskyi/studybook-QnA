@@ -10,7 +10,7 @@
     %form.form_comment.edit_comment{ style: "display:none;", 'accept-charset': "UTF-8", data: { remote: "true" }, method: "post", format: :json }
       %input{ name: "utf8", type: "hidden", value: "✓" }
       %input{ type: "hidden", name: "_method", value: "patch" }
-      .question-edit-comment-errors //TODO
+      .comment-errors
       %label{ for: "comment_body" } Edit your comment
-      %input#question_comment_body{ type: "text", value: "", name: "comment[body]" }
+      %input#comment_body{ type: "text", value: "", name: "comment[body]" }
       %input{ type: "submit", name: "commit", value: "Comment", data: { 'disable-with': "Comment" } }

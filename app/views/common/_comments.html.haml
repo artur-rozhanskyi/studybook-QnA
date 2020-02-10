@@ -7,8 +7,9 @@
         = button_to 'Edit', {}, class: 'edit_comment_button'
         = button_to 'Delete', { controller: :comments,  action: :destroy, id: comment.id },
                                 method: :delete, remote: true, class: 'del_cmt', data: { confirm: "Are you sure?" }
-        = form_for comment, remote: true, format: :json,  html: { class: 'form_comment edit_comment', style: 'display:none;' } do |f|
-          %div{class: "#{comment.commentable.class.to_s.downcase}-edit-comment-errors"}
-          = f.label :body, 'Edit your comment', for: "#{comment.commentable.class.to_s.downcase}_comment_body"
-          = f.text_field :body, id: "#{comment.commentable.class.to_s.downcase}_comment_body"
+        = form_for comment, remote: true, format: :json,
+                   html: { class: 'form_comment edit_comment invisible', id: comment.to_s } do |f|
+          .comment-errors
+          = f.label :body, 'Edit your comment', for: "comment_body_#{comment.id}"
+          = f.text_field :body, id: "comment_body_#{comment.id}"
           = f.submit 'Save'
