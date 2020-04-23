@@ -2,25 +2,16 @@
   "name": "studybook-QnA",
   "private": true,
   "dependencies": {
-    "@angular/common": "^9.1.1",
-    "@angular/compiler": "^9.1.1",
-    "@angular/core": "^9.1.1",
-    "@angular/platform-browser": "^9.1.1",
-    "@angular/platform-browser-dynamic": "^9.1.1",
     "@rails/webpacker": "^4.2.0",
     "actioncable": "^5.2.3",
     "activestorage": "^5.2.3",
     "babel-plugin-module-resolver": "^3.2.0",
-    "core-js": "^3.6.5",
+    "core-js": "^3.4.1",
     "jquery": "^3.4.1",
     "rails-erb-loader": "^5.5.2",
     "rails-ujs": "^5.2.3",
     "regenerator-runtime": "^0.13.3",
-    "rxjs": "^6.5.5",
-    "ts-loader": "^7.0.0",
-    "turbolinks": "^5.2.0",
-    "typescript": "^3.8.3",
-    "zone.js": "^0.10.3"
+    "turbolinks": "^5.2.0"
   },
   "devDependencies": {
     "eslint": "^6.6.0",
