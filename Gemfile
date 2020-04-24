@@ -50,6 +50,7 @@ gem 'omniauth-facebook'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-twitter'
 gem 'pundit'
+gem 'rack-cors'
 gem 'rails_12factor', group: :production
 gem 'rails_admin'
 gem 'responders'

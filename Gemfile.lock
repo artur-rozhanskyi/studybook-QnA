@@ -283,6 +283,8 @@ GEM
       activesupport (>= 3.0.0)
     raabro (1.1.6)
     rack (2.1.1)
+    rack-cors (1.1.1)
+      rack (>= 2.0.0)
     rack-pjax (1.1.0)
       nokogiri (~> 1.5)
       rack (>= 1.1)
@@ -535,6 +537,7 @@ DEPENDENCIES
   pry-rails
   puma (~> 3.12)
   pundit
+  rack-cors
   rails (~> 5.2.3)
   rails-controller-testing
   rails_12factor
@@ -564,4 +567,4 @@ RUBY VERSION
    ruby 2.6.3p62
 
 BUNDLED WITH
-   2.0.2
+   2.1.4
