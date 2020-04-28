@@ -1,5 +1,5 @@
 class Comment < ApplicationRecord
-  after_save ThinkingSphinx::RealTime.callback_for(:comment)
+  # after_save ThinkingSphinx::RealTime.callback_for(:comment)
 
   belongs_to :commentable, polymorphic: true, touch: true
 

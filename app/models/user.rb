@@ -5,7 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :omniauthable,
          omniauth_providers: [:facebook, :twitter, :google_oauth2]
 
-  after_save ThinkingSphinx::RealTime.callback_for(:user)
+  # after_save ThinkingSphinx::RealTime.callback_for(:user)
 
   has_many :questions, dependent: :nullify
   has_many :answers, dependent: :nullify

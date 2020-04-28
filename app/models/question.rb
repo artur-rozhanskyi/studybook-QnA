@@ -1,5 +1,5 @@
 class Question < ApplicationRecord
-  after_save ThinkingSphinx::RealTime.callback_for(:question)
+  # after_save ThinkingSphinx::RealTime.callback_for(:question)
 
   include Commentable
 
