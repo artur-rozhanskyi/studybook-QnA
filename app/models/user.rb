@@ -57,5 +57,10 @@ class User < ApplicationRecord
       user ? user.create_authorization(params) : user = create_user_by_authorization(params)
       user
     end
+
+    def authenticate(email, password)
+      user = User.find_for_authentication(email: email)
+      user.try(:valid_password?, password) ? user : nil
+    end
   end
 end

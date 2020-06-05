@@ -77,3 +77,7 @@ Style/PercentLiteralDelimiters:
 
 Rails/FilePath:
   EnforcedStyle: arguments
+
+Metrics/AbcSize:
+  Exclude:
+    - 'app/controllers/api/v1/users/*.rb'

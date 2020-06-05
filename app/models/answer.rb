@@ -1,6 +1,4 @@
 class Answer < ApplicationRecord
-  # after_save ThinkingSphinx::RealTime.callback_for(:answer)
-
   include Commentable
 
   belongs_to :question, touch: true
