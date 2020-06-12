@@ -4,10 +4,14 @@ Rails.application.routes.draw do
   use_doorkeeper do
     # No need to register client application
     skip_controllers :applications, :authorized_applications
-    # mount Sidekiq::Web => '/sidekiq'
   end
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks',
                                     registrations: 'users/registrations' }
+
+  authenticate :user, ->(user) { user.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
   resources :questions, shallow: true do
     resources :answers do
       resources :comments
@@ -24,8 +28,9 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       devise_for :users, controllers: {
+        passwords: 'api/v1/users/passwords',
         registrations: 'api/v1/users/registrations'
-      }, skip: [:sessions, :password, :omniauth_callbacks]
+      }, skip: [:sessions, :omniauth_callbacks]
 
       resources :users, only: [:index, :create] do
         get :me, on: :collection
