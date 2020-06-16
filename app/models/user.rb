@@ -5,8 +5,6 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :omniauthable,
          omniauth_providers: [:facebook, :twitter, :google_oauth2]
 
-  after_save ThinkingSphinx::RealTime.callback_for(:user)
-
   has_many :questions, dependent: :nullify
   has_many :answers, dependent: :nullify
   has_many :comments, dependent: :nullify
@@ -56,6 +54,11 @@ class User < ApplicationRecord
       user = User.find_by(email: email)
       user ? user.create_authorization(params) : user = create_user_by_authorization(params)
       user
+    end
+
+    def authenticate(email, password)
+      user = User.find_for_authentication(email: email)
+      user.try(:valid_password?, password) ? user : nil
     end
   end
 end

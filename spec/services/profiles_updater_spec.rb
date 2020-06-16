@@ -5,6 +5,7 @@ RSpec.describe ProfilesUpdater do
     let(:avatar) { Rack::Test::UploadedFile.new(Rails.root + 'spec/fixtures/images/example.png', 'image/png') }
 
     before do
+      new_attributes.delete(:user)
       described_class.call(profile, new_attributes.merge(avatar: avatar))
       profile.reload
     end

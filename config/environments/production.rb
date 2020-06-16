@@ -92,7 +92,17 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  config.action_mailer.default_url_options = { :host => "192.168.56.10" }
+  config.action_mailer.default_url_options = { :host => "https://ancient-castle-42468.herokuapp.com" }
+
+  config.action_mailer.smtp_settings = {
+      port: ENV['SMTP_PORT'],
+      address: ENV['ADDRESS'],
+      user_name: ENV['USER_NAME'],
+      password: ENV['PASSWORD'],
+      domain: ENV['DOMAIN'],
+      enable_starttls_auto: true,
+      authentication: "plain"
+  }
 
   config.action_cable.mount_path = '/cable'
   config.action_cable.url = 'wss://localhost:3000/cable'
