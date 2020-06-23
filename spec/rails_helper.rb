@@ -9,6 +9,7 @@ require 'capybara_helper'
 require 'pundit/rspec'
 require 'sidekiq/testing'
 require 'thinking_sphinx_helper'
+require 'api_helper'
 
 Dir[Rails.root.join("spec", "support", "**", "*.rb")].sort.each { |file| require file }
 # Add additional requires below this line. Rails is not loaded until this point!
@@ -43,6 +44,7 @@ RSpec.configure do |config|
   config.include Devise::Test::IntegrationHelpers, type: :feature
   config.include ControllerMacros, type: :controller
   config.include AcceptanceHelper, type: :feature
+  config.include ApiHelper, type: :api
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 

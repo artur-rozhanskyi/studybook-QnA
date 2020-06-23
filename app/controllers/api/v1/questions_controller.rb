@@ -1,6 +1,9 @@
 module Api
   module V1
     class QuestionsController < ApiController
+      skip_before_action :doorkeeper_authorize!, except: :create
+      before_action :set_question, only: [:update, :destroy]
+
       def index
         respond_with Question.all
       end
@@ -10,14 +13,33 @@ module Api
       end
 
       def create
-        question = Question.create(question_params.merge(user: current_resource_owner))
-        respond_with question
+        @question_form = QuestionForm.new
+        authorize @question_form
+        @question_form.submit(question_params.merge(user: current_resource_owner))
+        respond_with @question_form
+      end
+
+      def update
+        @question_form = QuestionForm.new(@question)
+        authorize @question_form
+        @question_form.submit(question_params.merge(user: current_resource_owner))
+        respond_with @question_form
+      end
+
+      def destroy
+        authorize @question
+        @question.destroy
+        respond_with @question
       end
 
       private
 
+      def set_question
+        @question = Question.find(params[:id])
+      end
+
       def question_params
-        params.require(:question).permit(:title, :body)
+        params.require(:question).permit(:title, :body, attachments_attributes: [:file, :remove_file, :id, :_destroy])
       end
     end
   end
