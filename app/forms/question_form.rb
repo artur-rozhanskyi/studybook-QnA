@@ -3,6 +3,8 @@ class QuestionForm < BaseForm
 
   validates :body, :title, presence: true
 
+  delegate :answers, to: :object
+
   def object
     @object ||= Question.new
   end

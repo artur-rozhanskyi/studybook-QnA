@@ -5,7 +5,7 @@ class BaseForm
 
   attr_accessor :body, :attachments_attributes
 
-  delegate :id, :attachments, :comments, :user, :model_name, :persisted?, to: :object
+  delegate :id, :attachments, :comments, :user, :user_id, :model_name, :persisted?, :to_json, to: :object
 
   DELETE_ATTACHMENT = '1'.freeze
 

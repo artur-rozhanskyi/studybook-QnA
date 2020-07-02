@@ -1,6 +1,7 @@
 module Api
   module V1
     class ApiController < ActionController::API
+      include Pundit
       include ActionController::Cookies
       # Devise code
       before_action :configure_permitted_parameters, if: :devise_controller?
@@ -8,6 +9,10 @@ module Api
       # Doorkeeper code
       before_action :doorkeeper_authorize!
       respond_to :json
+
+      rescue_from Pundit::NotAuthorizedError do |exception|
+        render json: { error: exception.message }, status: :unauthorized
+      end
 
       protected
 
@@ -24,6 +29,10 @@ module Api
       # Doorkeeper methods
       def current_resource_owner
         User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+      end
+
+      def pundit_user
+        current_resource_owner
       end
     end
   end
