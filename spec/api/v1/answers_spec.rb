@@ -1,21 +1,23 @@
 RSpec.describe 'Questions API', type: :api do
   let(:me) { create(:user) }
   let(:question) { create(:question) }
+  let(:valid_attributes) { attributes_for(:answer) }
+  let(:invalid_attributes) { attributes_for(:invalid_answer) }
 
-  describe 'GET #index' do
+  describe 'GET /api/v1/questions/:id/answers' do
     let!(:answers) { create_list(:answer, 5, question: question) }
     let(:first_answer) { answers.first }
 
     context 'when unauthorized' do
       it_behaves_like 'unauthorized_api', :get do
-        let(:path) { "/api/v1/questions/#{question.id}/answers.json" }
+        let(:path) { "/api/v1/questions/#{question.id}/answers" }
       end
     end
 
     context 'when authorized' do
       before do
         sign_in_as_a_valid_user(me)
-        get "/api/v1/questions/#{question.id}/answers.json"
+        get "/api/v1/questions/#{question.id}/answers", format: :json
       end
 
       it 'returns 200 status' do
@@ -34,19 +36,19 @@ RSpec.describe 'Questions API', type: :api do
     end
   end
 
-  describe 'GET #show' do
+  describe 'GET /api/v1/answers/:id' do
     let(:answer) { create(:answer, :with_comment, :with_file, question: question) }
 
     context 'when unauthorized' do
       it_behaves_like 'unauthorized_api', :get do
-        let(:path) { "/api/v1/answers/#{answer.id}.json" }
+        let(:path) { "/api/v1/answers/#{answer.id}" }
       end
     end
 
     context 'when authorized' do
       before do
         sign_in_as_a_valid_user(me)
-        get "/api/v1/answers/#{answer.id}.json"
+        get "/api/v1/answers/#{answer.id}", format: :json
       end
 
       it 'returns 200 status' do
@@ -63,22 +65,18 @@ RSpec.describe 'Questions API', type: :api do
     end
   end
 
-  describe 'POST #create' do
-    let(:valid_attributes) { attributes_for(:answer) }
-    let(:invalid_attributes) { attributes_for(:invalid_answer) }
-
+  describe 'POST /api/v1/questions/:id/answers' do
     context 'when unauthorized' do
       it_behaves_like 'unauthorized_api', :post do
-        let(:path) { "/api/v1/questions/#{question.id}/answers.json" }
+        let(:path) { "/api/v1/questions/#{question.id}/answers" }
       end
     end
 
     context 'when authorized' do
+      before { sign_in_as_a_valid_user(me) }
+
       context 'with valid attributes' do
-        before do
-          sign_in_as_a_valid_user(me)
-          post "/api/v1/questions/#{question.id}/answers.json", answer: valid_attributes, question: question
-        end
+        before { post "/api/v1/questions/#{question.id}/answers", answer: valid_attributes, question: question, format: :json }
 
         it 'returns 201 status' do
           expect(last_response.status).to eq 201
@@ -86,7 +84,7 @@ RSpec.describe 'Questions API', type: :api do
 
         it 'saves valid answer' do
           expect do
-            post "/api/v1/questions/#{question.id}/answers.json", question: valid_attributes, answer: valid_attributes
+            post "/api/v1/questions/#{question.id}/answers", question: valid_attributes, answer: valid_attributes, format: :json
           end.to change(Answer, :count).by(1)
         end
 
@@ -98,7 +96,7 @@ RSpec.describe 'Questions API', type: :api do
       context 'with invalid attributes' do
         before do
           sign_in_as_a_valid_user(me)
-          post "/api/v1/questions/#{question.id}/answers.json", question: question, answer: invalid_attributes
+          post "/api/v1/questions/#{question.id}/answers", question: question, answer: invalid_attributes, format: :json
         end
 
         it 'returns 422 status' do
@@ -107,13 +105,68 @@ RSpec.describe 'Questions API', type: :api do
 
         it 'does not save invalid answer' do
           expect do
-            post "/api/v1/questions/#{question.id}/answers.json", question: question, answer: invalid_attributes
+            post "/api/v1/questions/#{question.id}/answers", question: question, answer: invalid_attributes, format: :json
           end.not_to change(Answer, :count)
         end
 
         it 'contains errors' do
           expect(last_response.body).to have_json_path('errors')
         end
+      end
+    end
+  end
+
+  describe 'PATCH /api/v1/answers/:id' do
+    let!(:answer) { create(:answer, user: me) }
+
+    context 'when unauthorized' do
+      it_behaves_like 'unauthorized_api', :patch do
+        let(:path) { "/api/v1/answers/#{answer.id}" }
+      end
+    end
+
+    context 'when authorized' do
+      before { sign_in_as_a_valid_user(me) }
+
+      context 'when valid attributes' do
+        before do
+          patch "/api/v1/answers/#{answer.id}", format: :json, answer: valid_attributes
+          answer.reload
+        end
+
+        it 'updates body' do
+          expect(answer.body).to eq valid_attributes[:body]
+        end
+      end
+    end
+
+    context 'when invalid attributes' do
+      it 'does not update body' do
+        old_body = answer.body
+        patch "/api/v1/answers/#{answer.id}", format: :json, answer: invalid_attributes
+        answer.reload
+        expect(answer.body).to eq old_body
+      end
+    end
+  end
+
+  describe 'DELETE /api/v1/answers/:id' do
+    let!(:answer) { create(:answer, user: me) }
+
+    context 'when unauthorized' do
+      it_behaves_like 'unauthorized_api', :delete do
+        let(:path) { "/api/v1/answers/#{answer.id}" }
+      end
+    end
+
+    context 'when authorized' do
+      let!(:answer) { create(:answer, user: me) }
+      before { sign_in_as_a_valid_user(me) }
+
+      it 'deletes answer' do
+        expect do
+          delete "/api/v1/answers/#{answer.id}", format: :json
+        end.to change(Answer, :count).by(-1)
       end
     end
   end
