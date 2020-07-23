@@ -15,14 +15,18 @@ module Api
       def create
         @question_form = QuestionForm.new
         authorize @question_form
-        question_cable @question_form, 'create' if @question_form.submit(question_params.merge(user: current_resource_owner))
+        if @question_form.submit(question_params.merge(user: current_resource_owner))
+          question_cable @question_form, 'create'
+        end
         respond_with @question_form
       end
 
       def update
         @question_form = QuestionForm.new(@question)
         authorize @question_form
-        question_cable @question_form, 'update' if @question_form.submit(question_params.merge(user: current_resource_owner))
+        if @question_form.submit(question_params.merge(user: current_resource_owner))
+          question_cable @question_form, 'update'
+        end
         respond_with @question_form
       end
 

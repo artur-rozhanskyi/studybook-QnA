@@ -14,7 +14,9 @@ module Api
 
       def create
         answer_form = AnswerForm.new
-        answer_cable answer_form, 'create' if answer_form.submit(answer_params.merge(user: current_resource_owner, question: @question))
+        if answer_form.submit(answer_params.merge(user: current_resource_owner, question: @question))
+          answer_cable answer_form, 'create'
+        end
         respond_with answer_form
       end
 

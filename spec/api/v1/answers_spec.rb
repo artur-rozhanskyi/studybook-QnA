@@ -73,10 +73,14 @@ RSpec.describe 'Questions API', type: :api do
     end
 
     context 'when authorized' do
+      let(:fake_serializer) { object_double(AnswerSerializer, as_json: '') }
+
       before { sign_in_as_a_valid_user(me) }
 
       context 'with valid attributes' do
-        before { post "/api/v1/questions/#{question.id}/answers", answer: valid_attributes, question: question, format: :json }
+        before do
+          post "/api/v1/questions/#{question.id}/answers", answer: valid_attributes, question: question, format: :json
+        end
 
         it 'returns 201 status' do
           expect(last_response.status).to eq 201
@@ -84,12 +88,22 @@ RSpec.describe 'Questions API', type: :api do
 
         it 'saves valid answer' do
           expect do
-            post "/api/v1/questions/#{question.id}/answers", question: valid_attributes, answer: valid_attributes, format: :json
+            post "/api/v1/questions/#{question.id}/answers",
+                 question: valid_attributes,
+                 answer: valid_attributes,
+                 format: :json
           end.to change(Answer, :count).by(1)
         end
 
         it 'contains body' do
           expect(last_response.body).to be_json_eql(valid_attributes[:body].to_json).at_path('body')
+        end
+
+        it_behaves_like 'action cable broadcast', AnswerSerializer, 'answer', 'create' do
+          let(:request_for) do
+            post "/api/v1/questions/#{question.id}/answers", answer: valid_attributes, question: question, format: :json
+          end
+          let(:channel) { "question/#{question.id}/answers" }
         end
       end
 
@@ -105,7 +119,10 @@ RSpec.describe 'Questions API', type: :api do
 
         it 'does not save invalid answer' do
           expect do
-            post "/api/v1/questions/#{question.id}/answers", question: question, answer: invalid_attributes, format: :json
+            post "/api/v1/questions/#{question.id}/answers",
+                 question: question,
+                 answer: invalid_attributes,
+                 format: :json
           end.not_to change(Answer, :count)
         end
 
@@ -117,7 +134,7 @@ RSpec.describe 'Questions API', type: :api do
   end
 
   describe 'PATCH /api/v1/answers/:id' do
-    let!(:answer) { create(:answer, user: me) }
+    let!(:answer) { create(:answer, user: me, question: question) }
 
     context 'when unauthorized' do
       it_behaves_like 'unauthorized_api', :patch do
@@ -136,6 +153,13 @@ RSpec.describe 'Questions API', type: :api do
 
         it 'updates body' do
           expect(answer.body).to eq valid_attributes[:body]
+        end
+
+        it_behaves_like 'action cable broadcast', AnswerSerializer, 'answer', 'update' do
+          let(:request_for) do
+            patch "/api/v1/answers/#{answer.id}", format: :json, answer: valid_attributes
+          end
+          let(:channel) { "question/#{question.id}/answers" }
         end
       end
     end
@@ -160,13 +184,21 @@ RSpec.describe 'Questions API', type: :api do
     end
 
     context 'when authorized' do
-      let!(:answer) { create(:answer, user: me) }
+      let!(:answer) { create(:answer, user: me, question: question) }
+
       before { sign_in_as_a_valid_user(me) }
 
       it 'deletes answer' do
         expect do
           delete "/api/v1/answers/#{answer.id}", format: :json
         end.to change(Answer, :count).by(-1)
+      end
+
+      it_behaves_like 'action cable broadcast', AnswerSerializer, 'answer', 'destroy' do
+        let(:request_for) do
+          delete "/api/v1/answers/#{answer.id}", format: :json
+        end
+        let(:channel) { "question/#{question.id}/answers" }
       end
     end
   end

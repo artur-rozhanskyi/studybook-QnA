@@ -116,6 +116,13 @@ RSpec.describe 'API Questions', type: :api do
         it 'contains id' do
           expect(last_response.body).to have_json_path('id')
         end
+
+        it_behaves_like 'action cable broadcast', QuestionSerializer, 'question', 'create' do
+          let(:request_for) do
+            post '/api/v1/questions', format: :json, question: valid_attributes
+          end
+          let(:channel) { 'questions' }
+        end
       end
 
       context 'with invalid attributes' do
@@ -160,6 +167,13 @@ RSpec.describe 'API Questions', type: :api do
         it 'returns 204 status' do
           expect(last_response.status).to eq 204
         end
+
+        it_behaves_like 'action cable broadcast', QuestionSerializer, 'question', 'update' do
+          let(:request_for) do
+            patch "/api/v1/questions/#{question.id}", format: :json, question: valid_attributes
+          end
+          let(:channel) { 'questions' }
+        end
       end
 
       context 'with invalid attributes' do
@@ -195,11 +209,19 @@ RSpec.describe 'API Questions', type: :api do
     end
 
     context 'when authorized' do
+      before { sign_in_as_a_valid_user(me) }
+
       it 'deletes question' do
         expect do
-          sign_in_as_a_valid_user(me)
           delete "/api/v1/questions/#{question.id}", format: :json
         end.to change(Question, :count).by(-1)
+      end
+
+      it_behaves_like 'action cable broadcast', QuestionSerializer, 'question', 'destroy' do
+        let(:request_for) do
+          delete "/api/v1/questions/#{question.id}", format: :json
+        end
+        let(:channel) { 'questions' }
       end
     end
   end
