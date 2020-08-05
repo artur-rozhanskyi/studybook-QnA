@@ -1,4 +1,4 @@
-RSpec.describe 'Questions API', type: :api do
+RSpec.describe 'Answers API', type: :api do
   let(:me) { create(:user) }
   let(:question) { create(:question) }
   let(:valid_attributes) { attributes_for(:answer) }

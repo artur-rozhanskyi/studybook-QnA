@@ -39,6 +39,8 @@ Rails.application.routes.draw do
       resources :questions, only: [:index, :show, :create, :update, :destroy], shallow: true do
         resources :answers, only: [:index, :show, :create, :update, :destroy]
       end
+
+      resources :comments, only: [:create, :update, :destroy]
     end
   end
 

@@ -85,3 +85,4 @@ Metrics/AbcSize:
 Rails/HttpPositionalArguments:
   Exclude:
     - 'spec/api/**/*.rb'
+    - 'spec/support/shared_examples/**/*api*.rb'
