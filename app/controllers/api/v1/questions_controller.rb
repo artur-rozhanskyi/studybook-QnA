@@ -1,7 +1,7 @@
 module Api
   module V1
     class QuestionsController < ApiController
-      skip_before_action :doorkeeper_authorize!, except: :create
+      skip_before_action :doorkeeper_authorize!, only: [:index, :show]
       before_action :set_question, only: [:update, :destroy]
 
       def index

@@ -202,4 +202,10 @@ RSpec.describe 'Answers API', type: :api do
       end
     end
   end
+
+  it_behaves_like 'api_attachments', 'answer', '/api/v1/questions' do
+    let(:user) { me }
+    let(:post_path) { "/api/v1/questions/#{question.id}/answers" }
+    let(:patch_path) { '/api/v1/answers' }
+  end
 end

@@ -37,6 +37,7 @@ gem 'redis'
 gem 'active_model_serializers'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'carrierwave'
+gem 'carrierwave-base64'
 gem 'devise'
 gem 'doorkeeper'
 gem 'dotenv'
