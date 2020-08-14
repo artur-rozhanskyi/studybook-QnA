@@ -32,8 +32,9 @@ Rails.application.routes.draw do
         registrations: 'api/v1/users/registrations'
       }, skip: [:sessions, :omniauth_callbacks]
 
-      resources :users, only: [:index, :create] do
+      resources :users, only: [:index, :create, :show] do
         get :me, on: :collection
+        resource :profile, only: [:show, :update]
       end
 
       resources :questions, only: [:index, :show, :create, :update, :destroy], shallow: true do

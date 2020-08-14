@@ -30,6 +30,11 @@ RSpec.describe 'User API', type: :api do
           expect(last_response.body).to be_json_eql(me.public_send(attr.to_sym).to_json).at_path(attr)
         end
       end
+
+      it 'contains avatar path' do
+        expect(last_response.body)
+          .to be_json_eql(rails_blob_path(me.profile.avatar, only_path: true).to_json).at_path('profile/avatar')
+      end
     end
   end
 

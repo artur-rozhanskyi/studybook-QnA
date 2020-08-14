@@ -2,8 +2,12 @@ RSpec.describe ProfilesUpdater do
   describe '#call' do
     let!(:profile) { create(:profile) }
     let(:new_attributes) { attributes_for(:profile) }
+    let(:avatar_image) { File.open(Rails.root.join('spec', 'fixtures', 'images', 'example.png')) }
     let(:avatar) do
-      Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'images', 'example.png'), 'image/png')
+      {
+        data: Base64.encode64(avatar_image.read).prepend('data:image/png;base64,'),
+        filename: 'example.png'
+      }
     end
 
     before do
@@ -21,7 +25,7 @@ RSpec.describe ProfilesUpdater do
     end
 
     it 'updates profile avatar' do
-      expect(profile.avatar.filename).to eq avatar.original_filename
+      expect(profile.avatar.filename).to eq avatar[:filename]
     end
   end
 end
