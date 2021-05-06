@@ -1,0 +1,84 @@
+version: '3.1'
+
+volumes:
+  redis:
+  postgres:
+  my-db:
+
+services:
+  db:
+    image: postgres:10
+    expose:
+      - 5432
+    ports:
+      - 5431:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+
+  in_memory_store:
+    image: redis:4-alpine
+    expose:
+      - 6379
+    volumes:
+      - redis:/var/lib/redis/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-h", "localhost", "ping"]
+
+  server_app_dev: &server_app_dev
+    build:
+      context: ./
+      dockerfile: docker/development/Dockerfile
+    command: "bundle exec rails server -b 0.0.0.0"
+    entrypoint: "./docker/development/server_app_dev/docker-entrypoint.sh"
+    volumes:
+      - .:/home/app/qna
+      - /home/app/qna/vendor/bundle
+      - /home/app/
+    tty: true
+    stdin_open: true
+    restart: on-failure
+    environment:
+      RAILS_ENV: development
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      REDIS_DB: "redis://in_memory_store:6379"
+      CHROME_HOSTNAME: "http://webdriver_chrome:4444/wd/hub"
+    depends_on:
+      - db
+      - in_memory_store
+      - mysql
+    ports:
+      - 3000:3000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+
+  server_worker_app_dev:
+    <<: *server_app_dev
+    environment:
+      REDIS_URL: "redis://in_memory_store:6379"
+    command: "bundle exec sidekiq -C config/sidekiq.yml"
+    entrypoint: ''
+    ports: []
+    depends_on:
+      - db
+      - server_app_dev
+      - in_memory_store
+    healthcheck:
+      test: ["CMD-SHELL", "ps ax | grep -v grep | grep sidekiq || exit 1"]
+  mysql:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    expose:
+      - '3306'
+    volumes:
+      - my-db:/var/lib/mysql

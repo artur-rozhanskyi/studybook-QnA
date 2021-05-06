@@ -1,5 +1,8 @@
 development:
   mysql41: 9306
+  host: <%= ENV.fetch("SPHINX_HOST") { '' } %>
+  user: <%= ENV.fetch("SPHINX_USER_LOGIN") { '' }  %>
+  password: <%= ENV.fetch("SPHINX_USER_PASSWORD") {''} %>
 
 test:
   mysql41: 9307

@@ -95,6 +95,6 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { :host => "192.168.56.10" }
 
   config.action_cable.mount_path = '/cable'
-  config.action_cable.url = 'wss://localhost:3000/cable'
+  config.action_cable.url = 'ws://localhost:3000/cable'
   config.action_cable.allowed_request_origins = [ /http:\/\/localhost:*/ ]
 end

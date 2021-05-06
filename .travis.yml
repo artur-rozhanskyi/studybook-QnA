@@ -1,22 +1,17 @@
+sudo: true
+
 language: ruby
-rvm:
-  - 2.6.3
 
 services:
-  - postgresql
-before_install:
+  - docker
+before_script:
   - cp config/database.sample.yml config/database.yml
-install:
-  - sudo apt-get install sphinxsearch
-  - gem install bundler
-  - bundle install
-  - nvm install node
-  - yarn
-  - bundle exec rails webpacker:binstubs
-  - bundle exec rake db:create
-  - bundle exec rake db:schema:load
-  - ./bin/webpack
+  - docker-compose -f docker-compose.test.yml build
+  - docker-compose -f docker-compose.test.yml run --user='root' --entrypoint chown server_app_test -R app:app .
+  - docker-compose -f docker-compose.test.yml run server_app_test bundle exec rake db:create
+  - docker-compose -f docker-compose.test.yml run server_app_test bundle exec rake db:schema:load
+  - docker-compose -f docker-compose.test.yml run server_app_test bundle exec rails webpacker:binstubs
 script:
-  - npm run es-lint
-  - bundle exec rubocop .
-  - bundle exec rspec
+  - docker-compose -f docker-compose.test.yml run server_app_test yarn run es-lint
+  - docker-compose -f docker-compose.test.yml run server_app_test bundle exec rubocop .
+  - docker-compose -f docker-compose.test.yml run server_app_test bundle exec rspec
