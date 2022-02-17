@@ -11,9 +11,12 @@ Doorkeeper.configure do
   grant_flows %w(password)
   access_token_expires_in 5.days
 
-  skip_authorization do
-    true
-  end
+  skip_client_authentication_for_password_grant true
+  skip_authorization { true }
+end
+
+Rails.application.config.to_prepare do
+  Doorkeeper::OAuth::ErrorResponse.send :prepend, CustomTokenErrorResponse
 end
 
 Doorkeeper::OAuth::ErrorResponse.prepend CustomTokenErrorResponse

@@ -1,7 +1,7 @@
 require 'application_responder'
 
 class ApplicationController < ActionController::Base
-  include Pundit
+  include Pundit::Authorization
   protect_from_forgery
 
   self.responder = ApplicationResponder
