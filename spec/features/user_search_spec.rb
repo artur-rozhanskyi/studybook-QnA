@@ -23,7 +23,7 @@ RSpec.describe 'UserSearch', type: :feature, sphinx: true, js: true do
     let(:query) { 'body' }
 
     context 'when simple search' do
-      it 'finds all ' do
+      it 'finds all' do
         Capybara.using_session 'user' do
           sign_in(user)
           visit search_path

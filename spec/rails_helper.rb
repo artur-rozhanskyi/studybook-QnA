@@ -11,7 +11,7 @@ require 'sidekiq/testing'
 require 'thinking_sphinx_helper'
 require 'api_helper'
 
-Dir[Rails.root.join("spec", "support", "**", "*.rb")].sort.each { |file| require file }
+Dir[Rails.root.join("spec", "support", "**", "*.rb")].each { |file| require file }
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in

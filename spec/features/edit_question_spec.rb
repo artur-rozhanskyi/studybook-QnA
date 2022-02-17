@@ -14,7 +14,7 @@ RSpec.describe 'EditQuestions', type: :feature do
         expect(page).to have_content('Edit Question')
       end
 
-      it 'shows edit field with question title ' do
+      it 'shows edit field with question title' do
         expect(page).to have_field 'Title', with: question.title
       end
 

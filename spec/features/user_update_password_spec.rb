@@ -16,7 +16,7 @@ RSpec.describe 'UserUpdatePassword', type: :feature do
       end
     end
 
-    context 'with valid password' do
+    context 'with invalid password' do
       it 'has flash failure notice' do
         update_password wrong_password
         expect(page).to have_content 'Password was not updated'
