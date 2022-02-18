@@ -28,7 +28,7 @@ module Devise
     end
   end
 
-  Mailer.class_eval do
+  Mailers.class_eval do
     # extract data from options and set it as instance variable
     def reset_password_instructions(record, token, opts = {})
       @token = token

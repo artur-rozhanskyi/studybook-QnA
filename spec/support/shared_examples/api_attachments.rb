@@ -1,9 +1,11 @@
 RSpec.shared_examples_for 'api_attachments' do |object_string|
   let(:params) { attributes_for(object_string) }
   let(:file_param) do
-    { attachments_attributes: {
-      '0' => { file: Base64.encode64(File.read(Rails.root + 'spec/fixtures/images/example.png')) }
-    } }
+    {
+      attachments_attributes: {
+        '0' => { file: Base64.encode64(File.read(Rails.root.join('spec', 'fixtures', 'images', 'example.png'))) }
+      }
+    }
   end
 
   describe "POST #{object_string}" do

@@ -21,7 +21,9 @@ RSpec.describe 'UserEditProfile', type: :feature do
 
     context 'with valid attribute' do
       let(:new_profile) { attributes_for(:profile) }
-      let(:avatar) { Rack::Test::UploadedFile.new(Rails.root + 'spec/fixtures/images/example.png', 'image/png') }
+      let(:avatar) do
+        Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'images', 'example.png'), 'image/png')
+      end
 
       before { update_profile(new_profile.merge(avatar: avatar)) }
 

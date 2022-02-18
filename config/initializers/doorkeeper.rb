@@ -16,7 +16,9 @@ Doorkeeper.configure do
 end
 
 Rails.application.config.to_prepare do
-  Doorkeeper::OAuth::ErrorResponse.send :prepend, CustomTokenErrorResponse
+  Doorkeeper::OAuth::ErrorResponse.prepend CustomTokenErrorResponse
 end
 
-Doorkeeper::OAuth::ErrorResponse.prepend CustomTokenErrorResponse
+Rails.application.config.to_prepare do
+  Doorkeeper::OAuth::ErrorResponse.prepend CustomTokenErrorResponse
+end
