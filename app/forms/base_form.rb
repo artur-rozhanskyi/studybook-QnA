@@ -29,7 +29,7 @@ class BaseForm
   private
 
   def save_attachments
-    attachments_attributes.values.each do |attachment_param|
+    attachments_attributes.each_value do |attachment_param|
       if attachment_param['_destroy'] == DELETE_ATTACHMENT
         Attachment.find(attachment_param['id']).destroy
       elsif attachment_param['file'].present?

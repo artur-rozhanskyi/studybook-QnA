@@ -5,7 +5,7 @@ RSpec.describe 'UserViewProfile', type: :feature do
   describe 'Registered user view profiles' do
     before { sign_in profile.user }
 
-    context 'when user is profiles owner ' do
+    context 'when user is profiles owner' do
       before { visit user_profile_path profile.user }
 
       it 'shows user first name' do
@@ -25,7 +25,7 @@ RSpec.describe 'UserViewProfile', type: :feature do
       end
     end
 
-    context 'when user is not profiles owner ' do
+    context 'when user is not profiles owner' do
       before { visit user_profile_path another_profile.user }
 
       it 'shows user first name' do

@@ -15,7 +15,7 @@ module QuestionsHelper
               url,
               method: :post,
               remote: true,
-              form: { "data-type": 'json',
+              form: { 'data-type': 'json',
                       class: "#{klass} #{invisible_class}" })
   end
 end

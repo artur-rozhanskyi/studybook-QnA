@@ -1,7 +1,7 @@
 module Api
   module V1
     class ApiController < ActionController::API
-      include Pundit
+      include Pundit::Authorization
       include ActionController::Cookies
       # Devise code
       before_action :configure_permitted_parameters, if: :devise_controller?

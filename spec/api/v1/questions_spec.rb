@@ -1,7 +1,7 @@
 RSpec.describe 'API Questions', type: :api do
   let(:me) { create(:user) }
   let(:attachment) { build(:attachment) }
-  let(:valid_attributes) { attributes_for(:question).merge(attachments_attributes: { "0": { file: attachment.file } }) }
+  let(:valid_attributes) { attributes_for(:question).merge(attachments_attributes: { '0': { file: attachment.file } }) }
   let(:invalid_attributes) { attributes_for(:question_invalid) }
 
   describe 'GET /api/v1/questions' do

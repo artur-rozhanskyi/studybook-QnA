@@ -2,7 +2,9 @@ RSpec.describe ProfilesUpdater do
   describe '#call' do
     let!(:profile) { create(:profile) }
     let(:new_attributes) { attributes_for(:profile) }
-    let(:avatar) { Rack::Test::UploadedFile.new(Rails.root + 'spec/fixtures/images/example.png', 'image/png') }
+    let(:avatar) do
+      Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'images', 'example.png'), 'image/png')
+    end
 
     before do
       new_attributes.delete(:user)
