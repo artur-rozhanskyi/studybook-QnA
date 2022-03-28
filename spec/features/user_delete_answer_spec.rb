@@ -15,7 +15,7 @@ RSpec.describe 'UserDeleteAnswers', type: :feature do
           expect(page).to have_link 'Delete'
         end
 
-        it 'has delete answer from database ' do
+        it 'has delete answer from database' do
           expect do
             delete_subject('answer')
             find('h1', match: :first).click
@@ -52,7 +52,7 @@ RSpec.describe 'UserDeleteAnswers', type: :feature do
           end
         end
 
-        it 'has not Edit link ' do
+        it 'has not Edit link' do
           Capybara.using_session 'another_user' do
             expect(page).not_to have_link 'Edit'
           end

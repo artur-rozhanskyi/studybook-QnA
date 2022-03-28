@@ -71,16 +71,16 @@ RSpec.describe QuestionsController, type: :controller do
           .to change(Question, :count).by(1)
       end
 
-      it 'redirects to show view ' do
+      it 'redirects to show view' do
         post :create, params: { question: attributes_for(:question) }
         expect(response).to redirect_to question_path(assigns(:question_form))
       end
 
-      it 'publishes new question to questions chanel' do
-        allow(QuestionSerializer).to receive(:new).and_return(serializer)
-        expect(ActionCable.server).to receive(:broadcast)
-          .with('questions', { 'action' => 'create', 'question' => serializer }.as_json)
-        post :create, params: { question: attributes_for(:question) }
+      it_behaves_like 'action cable broadcast', QuestionSerializer, 'question', 'create' do
+        let(:request_for) do
+          post :create, params: { question: attributes_for(:question) }
+        end
+        let(:channel) { 'questions' }
       end
     end
 
@@ -126,12 +126,11 @@ RSpec.describe QuestionsController, type: :controller do
           expect(response).to redirect_to question
         end
 
-        it 'publishes updated question to questions chanel' do
-          allow(QuestionSerializer).to receive(:new).and_return(serializer)
-          expect(ActionCable.server).to receive(:broadcast)
-            .with('questions',
-                  { 'action' => 'update', 'question' => serializer }.as_json)
-          patch :update, params: { id: question, question: new_attributes }
+        it_behaves_like 'action cable broadcast', QuestionSerializer, 'question', 'update' do
+          let(:request_for) do
+            patch :update, params: { id: question, question: new_attributes }
+          end
+          let(:channel) { 'questions' }
         end
       end
 
@@ -183,12 +182,11 @@ RSpec.describe QuestionsController, type: :controller do
           .to change(Question, :count).by(-1)
       end
 
-      it 'publishes updated question to questions chanel' do
-        allow(QuestionSerializer).to receive(:new).and_return(serializer)
-        expect(ActionCable.server).to receive(:broadcast)
-          .with('questions',
-                { 'action' => 'destroy', 'question' => serializer }.as_json)
-        delete :destroy, params: { id: question }
+      it_behaves_like 'action cable broadcast', QuestionSerializer, 'question', 'destroy' do
+        let(:request_for) do
+          delete :destroy, params: { id: question }
+        end
+        let(:channel) { 'questions' }
       end
     end
 

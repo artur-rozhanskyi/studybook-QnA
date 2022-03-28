@@ -1,11 +1,11 @@
 class AttachmentSerializer < ActiveModel::Serializer
-  attributes :id, :url, :filename
+  attributes :id, :url, :filename, :content_type
 
-  def url
-    object.file.url
-  end
+  delegate :file, to: :object
+
+  delegate :content_type, :url, to: :file
 
   def filename
-    object.file.identifier
+    file.identifier
   end
 end

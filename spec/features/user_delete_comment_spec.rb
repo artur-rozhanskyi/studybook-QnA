@@ -18,7 +18,7 @@ RSpec.describe 'UserDeleteComments', type: :feature do
           end
         end
 
-        it 'has delete comment from database ' do
+        it 'has delete comment from database' do
           expect do
             delete_subject('comment')
             find('h1').click

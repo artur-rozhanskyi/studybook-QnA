@@ -9,8 +9,9 @@ require 'capybara_helper'
 require 'pundit/rspec'
 require 'sidekiq/testing'
 require 'thinking_sphinx_helper'
+require 'api_helper'
 
-Dir[Rails.root.join("spec", "support", "**", "*.rb")].sort.each { |file| require file }
+Dir[Rails.root.join("spec", "support", "**", "*.rb")].each { |file| require file }
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -43,6 +44,7 @@ RSpec.configure do |config|
   config.include Devise::Test::IntegrationHelpers, type: :feature
   config.include ControllerMacros, type: :controller
   config.include AcceptanceHelper, type: :feature
+  config.include ApiHelper, type: :api
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
@@ -50,6 +52,7 @@ RSpec.configure do |config|
   # examples within a transaction, remove the following line or assign false
   # instead of true.
   config.use_transactional_fixtures = false
+  config.exclude_pattern = "**/*search*_spec.rb"
 
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and

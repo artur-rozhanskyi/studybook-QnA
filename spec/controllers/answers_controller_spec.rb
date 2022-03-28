@@ -19,14 +19,13 @@ RSpec.describe AnswersController, type: :controller do
           .to change(question.answers, :count).by(1)
       end
 
-      it 'publishes new answer to answer chanel' do
-        allow(AnswerSerializer).to receive(:new).and_return(fake_serializer)
-        expect(ActionCable.server).to receive(:broadcast)
-          .with("question/#{question.id}/answers",
-                { 'action' => 'create', 'answer' => fake_serializer }.as_json)
-        post :create, params: { question_id: question, answer: valid_attributes },
-                      format: :json,
-                      session: valid_session
+      it_behaves_like 'action cable broadcast', AnswerSerializer, 'answer', 'create' do
+        let(:request_for) do
+          post :create, params: { question_id: question, answer: valid_attributes },
+                        format: :json,
+                        session: valid_session
+        end
+        let(:channel) { "question/#{question.id}/answers" }
       end
     end
 
@@ -73,15 +72,14 @@ RSpec.describe AnswersController, type: :controller do
           expect(answer.body).to eq new_attributes[:body]
         end
 
-        it 'publishes updated answer to answer chanel' do
-          allow(AnswerSerializer).to receive(:new).and_return(fake_serializer)
-          expect(ActionCable.server).to receive(:broadcast)
-            .with("question/#{answer.question.id}/answers",
-                  { 'action' => 'update', 'answer' => fake_serializer }.as_json)
-          patch :update, params: { id: answer,
-                                   question_id: answer.question.id,
-                                   answer: new_attributes },
-                         format: :json
+        it_behaves_like 'action cable broadcast', AnswerSerializer, 'answer', 'update' do
+          let(:request_for) do
+            patch :update, params: { id: answer,
+                                     question: answer.question,
+                                     answer: new_attributes },
+                           format: :json
+          end
+          let(:channel) { "question/#{question.id}/answers" }
         end
       end
 
@@ -112,9 +110,7 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    before do
-      sign_in_user(answer.user)
-    end
+    before { sign_in_user(answer.user) }
 
     describe 'belongs to current user' do
       it 'deletes answer' do
@@ -124,12 +120,11 @@ RSpec.describe AnswersController, type: :controller do
           .to change(Answer, :count).by(-1)
       end
 
-      it 'publishes deleted answer to answer chanel' do
-        allow(AnswerSerializer).to receive(:new).and_return(fake_serializer)
-        expect(ActionCable.server).to receive(:broadcast)
-          .with("question/#{answer.question.id}/answers",
-                { 'action' => 'destroy', 'answer' => fake_serializer }.as_json)
-        delete :destroy, params: { id: answer, question_id: answer.question.id }, format: :json
+      it_behaves_like 'action cable broadcast', AnswerSerializer, 'answer', 'destroy' do
+        let(:request_for) do
+          delete :destroy, params: { id: answer, question_id: answer.question.id }, format: :json
+        end
+        let(:channel) { "question/#{question.id}/answers" }
       end
     end
 

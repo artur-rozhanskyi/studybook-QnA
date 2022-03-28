@@ -5,7 +5,7 @@ class BaseForm
 
   attr_accessor :body, :attachments_attributes
 
-  delegate :id, :attachments, :comments, :user, :model_name, :persisted?, to: :object
+  delegate :id, :attachments, :comments, :user, :user_id, :model_name, :persisted?, :to_json, to: :object
 
   DELETE_ATTACHMENT = '1'.freeze
 
@@ -29,7 +29,7 @@ class BaseForm
   private
 
   def save_attachments
-    attachments_attributes.values.each do |attachment_param|
+    attachments_attributes.each_value do |attachment_param|
       if attachment_param['_destroy'] == DELETE_ATTACHMENT
         Attachment.find(attachment_param['id']).destroy
       elsif attachment_param['file'].present?
