@@ -6,7 +6,7 @@
     "activestorage": "^5.2.3",
     "babel-plugin-module-resolver": "^3.2.0",
     "core-js": "^3.4.1",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "rails-erb-loader": "^5.5.2",
     "rails-ujs": "^5.2.3",
     "regenerator-runtime": "^0.13.3",
