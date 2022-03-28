@@ -9,6 +9,10 @@ module Api
       def me
         respond_with current_resource_owner
       end
+
+      def show
+        respond_with User.find(params[:id])
+      end
     end
   end
 end

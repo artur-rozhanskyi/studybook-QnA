@@ -54,7 +54,6 @@ gem 'omniauth-twitter'
 gem 'pundit'
 gem 'rack-cors'
 gem 'rails_12factor', group: :production
-gem 'rails_admin'
 gem 'responders'
 gem 'sidekiq', '~> 5.2'
 gem 'sidekiq-scheduler'

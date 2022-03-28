@@ -10,6 +10,7 @@ module Api
           resource.save
           if resource.persisted?
             resource.active_for_authentication? ? sign_up(resource_name, resource) : expire_data_after_sign_in!
+            resource.create_profile
             render json: resource
           else
             clean_up_passwords resource
