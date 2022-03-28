@@ -34,7 +34,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v1
         with:
-          node-version: 12.0.0
+          node-version: 14.0.0
       - name: Install dependencies
         run: |
           sudo apt-get -yqq install libpq-dev build-essential libcurl4-openssl-dev
@@ -53,6 +53,15 @@ jobs:
           bundle exec rails db:create db:migrate
       - name: Run Rubocop
         run: bundle exec rubocop
+      - name: Assets
+        run: bundle exec rake assets:precompile
+        env:
+          PGHOST: localhost
+          POSTGRES_DB: rails_github_actions_test
+          POSTGRES_USER: rails_github_actions
+          POSTGRES_PASSWORD: postgres
+          PGPORT: ${{ job.services.postgres.ports[5432] }}
+          RAILS_ENV: test
       - name: Run Rspec
         env:
           PGHOST: localhost
