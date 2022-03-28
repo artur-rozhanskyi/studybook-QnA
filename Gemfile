@@ -45,6 +45,7 @@ gem 'dotenv-rails'
 gem 'gon'
 gem 'haml-rails'
 gem 'jquery-rails'
+gem 'jsbundling-rails'
 gem 'mysql2'
 gem 'omniauth'
 gem 'omniauth-facebook'
@@ -58,10 +59,8 @@ gem 'responders'
 gem 'sidekiq', '~> 5.2'
 gem 'sidekiq-scheduler'
 gem 'sinatra', require: nil
-gem 'sprockets-rails'
 gem 'therubyracer'
 gem 'thinking-sphinx'
-gem 'webpacker'
 
 group :development, :test do
   gem 'pry-rails'
