@@ -14,11 +14,14 @@ Rails.application.routes.draw do
 
   resources :questions, shallow: true do
     resources :answers do
+      post :best, on: :member
       resources :comments
     end
     resources :comments
-    post :subscribe, on: :member
-    post :unsubscribe, on: :member
+    member do
+      post :subscribe
+      post :unsubscribe
+    end
   end
 
   resources :users, only: :update do

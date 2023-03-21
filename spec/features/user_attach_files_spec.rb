@@ -55,8 +55,10 @@ RSpec.describe 'UserAttachFiles', type: :feature do
       before do
         sign_in(user)
         visit question_path(question)
-        fill_in 'Your answer', with: attributes_for(:answer)[:body]
-        attach_file 'File', file.path
+        within '.new_answer' do
+          fill_in 'Your answer', with: attributes_for(:answer)[:body]
+          attach_file 'answer[attachments_attributes][0][file]_', file.path
+        end
         click_on 'Answer'
       end
 
@@ -94,7 +96,7 @@ RSpec.describe 'UserAttachFiles', type: :feature do
             expect do
               check 'Remove file'
               click_on 'Save'
-              find('input')
+              find('input', match: :first).click
             end
               .to change(Attachment, :count).by(-1)
           end

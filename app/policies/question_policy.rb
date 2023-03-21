@@ -12,4 +12,8 @@ class QuestionPolicy < ApplicationPolicy
   def unsubscribe?
     true if user&.question_subscribed?(record)
   end
+
+  def best?
+    owner?
+  end
 end

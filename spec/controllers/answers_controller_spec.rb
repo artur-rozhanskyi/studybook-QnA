@@ -1,6 +1,6 @@
 RSpec.describe AnswersController, type: :controller do
-  let!(:question) { create(:question) }
   let(:user) { create(:user) }
+  let!(:question) { create(:question, user: user) }
   let(:answer) { create(:answer, user: user, question: question) }
   let(:valid_session) { {} }
   let(:valid_attributes) { attributes_for(:answer) }
@@ -91,14 +91,14 @@ RSpec.describe AnswersController, type: :controller do
                          format: :json
         end
 
-        it 'do not changes question' do
+        it 'does not change question' do
           reloaded_answer = answer.reload
           expect(reloaded_answer).to eq answer
         end
       end
     end
 
-    describe 'not belongs to current user' do
+    describe 'does not belong to current user' do
       it "doesn't changes answer body" do
         sign_in_user(create(:user))
         patch :update, params: { id: answer, question_id: question.id, answer: new_attributes },
@@ -112,7 +112,7 @@ RSpec.describe AnswersController, type: :controller do
   describe 'DELETE #destroy' do
     before { sign_in_user(answer.user) }
 
-    describe 'belongs to current user' do
+    context 'when belongs to current user' do
       it 'deletes answer' do
         expect do
           delete :destroy, params: { id: answer, question_id: answer.question.id }, format: :json
@@ -128,13 +128,47 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    describe 'not belongs to current user' do
+    context 'when does not belong to current user' do
       it 'has not change answer count' do
         sign_in_user(create(:user))
         expect do
           delete :destroy, params: { id: answer, question_id: answer.question.id }, format: :json
         end
           .not_to change(Answer, :count)
+      end
+    end
+  end
+
+  describe 'POST #best' do
+    context 'when question belongs to user' do
+      before { sign_in_user(user) }
+
+      it 'returns 201 status' do
+        post :best, params: { id: answer, question_id: question, format: :json }
+        expect(response.status).to eq 201
+      end
+
+      it 'updates best answer' do
+        post :best, params: { id: answer, question_id: question, format: :json }
+        question.reload
+        expect(question.best_answer).to eq answer
+      end
+    end
+
+    context 'when question does not belong to user' do
+      let(:another_user) { create(:user) }
+
+      before { sign_in_user(another_user) }
+
+      it 'returns 401 unauthorized status' do
+        post :best, params: { id: answer, question_id: question, format: :json }
+        expect(response.status).to eq 401
+      end
+
+      it 'does not update best answer' do
+        expect do
+          post :best, params: { id: answer, question_id: question, format: :json }
+        end.not_to change(question, :best_answer)
       end
     end
   end

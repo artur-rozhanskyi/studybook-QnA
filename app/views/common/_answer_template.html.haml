@@ -1,5 +1,11 @@
 %template#tmpl
   .answer
+    .nav_likes
+      - if @question.user == current_user && !@question.best_answer
+        %form.button_to{ method: "post", action: "/answers/2/best", data: { remote: "true"} }
+          %input.best_answer_button{ type: "submit", value: "Best" }
+          %input{type: "hidden", name: "format", value: "json" }
+          %input{type: "hidden", name: "question_id", value: "#{@question.id}" }
     %p#ans_body
       %a{ class: 'edit-answer-link', href:""} Edit
       %a{ data: { confirm: "Are you sure?", method: "delete", remote: "true" }, rel: 'nofollow', href: "" } Delete

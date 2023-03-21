@@ -2,7 +2,7 @@ RSpec.describe 'UserEditAnswers', type: :feature do
   describe 'User edit answer' do
     let(:user) { create(:user) }
     let(:another_user) { create(:user) }
-    let!(:answer) { create(:answer, question: create(:question), user: user) }
+    let!(:answer) { create(:answer, question: create(:question, user: user), user: user) }
     let(:new_answer_body) { Faker::Lorem.sentence }
 
     context 'when user open question page' do

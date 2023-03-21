@@ -25,6 +25,7 @@ Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
     - 'config/routes.rb'
+    - 'public/**/*'
 
 # Offense count: 29
 # Cop supports --auto-correct.
