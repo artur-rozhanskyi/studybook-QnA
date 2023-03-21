@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :set_question, only: [:show, :edit, :update, :destroy, :subscribe, :unsubscribe]
+  before_action :set_question, except: [:index, :new, :create]
 
   respond_to :html
   respond_to :json, only: [:subscribe, :unsubscribe]
@@ -66,7 +66,12 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body, attachments_attributes: [:file, :remove_file, :id, :_destroy])
+    params.require(:question).permit(
+      :title,
+      :body,
+      :best_answer,
+      attachments_attributes: [:file, :remove_file, :id, :_destroy]
+    )
   end
 
   def question_cable(question_form, action)

@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_question, only: :create
-  before_action :set_answer, only: [:update, :destroy]
+  before_action :set_question, only: [:create, :best]
+  before_action :set_answer, only: [:update, :destroy, :best]
 
   respond_to :json, :js
 
@@ -30,6 +30,13 @@ class AnswersController < ApplicationController
   end
 
   def show; end
+
+  def best
+    authorize @question
+    @question.update(best_answer: @answer)
+    answer_cable @answer, 'best'
+    respond_with @answer
+  end
 
   private
 
