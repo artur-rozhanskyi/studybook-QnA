@@ -37,7 +37,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_17_224853) do
   end
 
   create_table "active_storage_variant_records", force: :cascade do |t|
-    t.bigint "blob_id", null: false
+    t.integer "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
@@ -78,7 +78,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_17_224853) do
     t.bigint "user_id"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable_type_and_commentable_id"
+    t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable"
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 

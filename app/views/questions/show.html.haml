@@ -53,16 +53,13 @@
 
     - if user_signed_in?
       %h2 New Answer
-      = form_for [question, @new_answer], remote: true, format: :json do |f|
+      = form_for [question, @new_answer], remote: true, format: :json, html: { multipart: true }  do |f|
         = f.label :body, "Your answer"
         .answer-new-errors
         = f.text_field :body
         = f.button 'Add file', type: :button, class: 'add_file'
         .files
-          = f.fields_for :attachments, f.object.attachments.build do |attachment|
-            .file
-              = attachment.label :file
-              = attachment.file_field :file
+          = render 'common/file_fields', f: f, resource: @new_answer
         = f.submit "Answer"
 
     = render partial: 'common/new_answer_comment_template'

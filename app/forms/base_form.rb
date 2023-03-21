@@ -1,26 +1,20 @@
-class BaseForm
-  include ActiveModel::Model
+class BaseForm < SimpleDelegator
+  include ActiveModel::Validations
   include ActiveModel::Serialization
   include ActiveModel::Conversion
   include Comparable
 
-  attr_accessor :body, :attachments_attributes
-
-  delegate :id, :attachments, :comments, :user, :user_id, :model_name, :persisted?, :to_json, to: :object
-
   DELETE_ATTACHMENT = '1'.freeze
 
   def initialize(object = nil)
-    @object = object
+    super(object || self.class.to_s.gsub(/Form/i, '').constantize.new)
   end
 
-  def submit(attributes)
-    self.attachments_attributes = attributes.delete(:attachments_attributes)
-    self.body = attributes[:body]
+  def submit(new_attributes)
+    assign_attributes(new_attributes.except(:attachments_attributes))
     if valid?
-      object.assign_attributes(attributes)
-      object.save.tap do |save_result|
-        save_attachments if attachments_attributes.present? && save_result
+      save.tap do |save_result|
+        save_attachments(new_attributes.delete(:attachments_attributes)) if save_result
       end
     else
       false
@@ -29,13 +23,19 @@ class BaseForm
 
   private
 
-  def save_attachments
+  def save_attachments(attachments_attributes)
+    return if attachments_attributes.blank?
+
     attachments_attributes.each_value do |attachment_param|
       if attachment_param['_destroy'] == DELETE_ATTACHMENT
         Attachment.find(attachment_param['id']).destroy
       elsif attachment_param['file'].present?
-        Attachment.create(attachment_param.merge(attachmentable: object))
+        Attachment.create(attachment_param.merge(attachmentable: __getobj__))
       end
     end
+  end
+
+  def model_name
+    __getobj__.model_name
   end
 end
