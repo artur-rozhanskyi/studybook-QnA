@@ -61,6 +61,7 @@ gem 'sidekiq-scheduler'
 gem 'sinatra', require: nil
 gem 'therubyracer'
 gem 'thinking-sphinx'
+gem 'turbo-rails'
 
 group :development, :test do
   gem 'pry-rails'
