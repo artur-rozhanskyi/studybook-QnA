@@ -97,9 +97,10 @@ GEM
     capistrano-rvm (0.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
-    capistrano-sidekiq (1.0.3)
+    capistrano-sidekiq (2.3.0)
       capistrano (>= 3.9.0)
-      sidekiq (>= 3.4, < 6.0)
+      capistrano-bundler
+      sidekiq (>= 6.0)
     capistrano3-nginx (3.0.4)
       capistrano (~> 3.0)
     capistrano3-puma (5.2.0)
@@ -139,7 +140,7 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.2.2)
-    connection_pool (2.2.5)
+    connection_pool (2.4.0)
     crass (1.0.6)
     database_cleaner (2.0.1)
       database_cleaner-active_record (~> 2.0.0)
@@ -389,6 +390,8 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     redis (4.5.1)
+    redis-client (0.14.1)
+      connection_pool
     ref (2.0.0)
     regexp_parser (2.2.1)
     request_store (1.5.1)
@@ -462,11 +465,11 @@ GEM
     sexp_processor (4.16.0)
     shoulda-matchers (5.1.0)
       activesupport (>= 5.2.0)
-    sidekiq (5.2.10)
-      connection_pool (~> 2.2, >= 2.2.2)
-      rack (~> 2.0)
-      rack-protection (>= 1.5.0)
-      redis (~> 4.5, < 4.6.0)
+    sidekiq (7.0.8)
+      concurrent-ruby (< 2)
+      connection_pool (>= 2.3.0)
+      rack (>= 2.2.4)
+      redis-client (>= 0.11.0)
     sidekiq-scheduler (3.1.1)
       e2mmap
       redis (>= 3, < 5)
@@ -593,7 +596,7 @@ DEPENDENCIES
   rubocop-rspec
   sass-rails (~> 6.0)
   shoulda-matchers
-  sidekiq (~> 5.2)
+  sidekiq (~> 7.0)
   sidekiq-scheduler
   sinatra
   spring
