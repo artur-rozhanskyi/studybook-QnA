@@ -2,7 +2,6 @@ require 'sidekiq'
 require 'sidekiq/web'
 require 'sidekiq-scheduler'
 
-Sidekiq::Web.set :sessions, false
 Sidekiq.configure_server do |config|
   config.redis = { url: ENV['REDIS_URL'] }
   config.on(:startup) do

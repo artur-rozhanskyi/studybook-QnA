@@ -51,7 +51,7 @@ gem 'pundit'
 gem 'rack-cors'
 gem 'rails_12factor', group: :production
 gem 'responders'
-gem 'sidekiq', '~> 5.2'
+gem 'sidekiq', '~> 7.0'
 gem 'sidekiq-scheduler'
 gem 'thinking-sphinx'
 gem 'turbo-rails'
