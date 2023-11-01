@@ -3,6 +3,7 @@
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.12.1",
+    "@hotwired/turbo-rails": "^7.3.0",
     "actioncable": "^5.2.3",
     "activestorage": "^5.2.3",
     "babel-plugin-module-resolver": "^3.2.0",
