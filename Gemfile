@@ -42,7 +42,6 @@ gem 'gon'
 gem 'haml-rails'
 gem 'jquery-rails'
 gem 'jsbundling-rails'
-gem 'mysql2'
 gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-google-oauth2'
@@ -53,7 +52,6 @@ gem 'rails_12factor', group: :production
 gem 'responders'
 gem 'sidekiq', '~> 7.0'
 gem 'sidekiq-scheduler'
-gem 'thinking-sphinx'
 gem 'turbo-rails'
 
 group :development, :test do
