@@ -8,8 +8,8 @@ require 'rspec/rails'
 require 'capybara_helper'
 require 'pundit/rspec'
 require 'sidekiq/testing'
-require 'thinking_sphinx_helper'
 require 'api_helper'
+require 'database_cleaner/active_record'
 
 Dir[Rails.root.join("spec", "support", "**", "*.rb")].each { |file| require file }
 # Add additional requires below this line. Rails is not loaded until this point!
@@ -78,9 +78,16 @@ RSpec.configure do |config|
     FileUtils.rm_rf(Dir[Rails.root.join('spec', 'support', 'uploads')])
   end
 
-  config.before do
+  config.before do |example|
     Sidekiq::Worker.clear_all
+    DatabaseCleaner.strategy = example.metadata[:js] ? :truncation : :transaction
   end
+
+  config.before(:suite) { DatabaseCleaner.clean_with(:deletion) }
+
+  config.before { DatabaseCleaner.start }
+
+  config.append_after { DatabaseCleaner.clean }
 end
 
 Shoulda::Matchers.configure do |config|
