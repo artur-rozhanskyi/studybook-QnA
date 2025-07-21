@@ -12,7 +12,7 @@ RSpec.describe 'API Questions', type: :api do
       before { get '/api/v1/questions', format: :json }
 
       it 'returns 200 status' do
-        expect(last_response.status).to eq 200
+        expect(last_response).to have_http_status :ok
       end
 
       it 'returns all questions' do
@@ -27,7 +27,7 @@ RSpec.describe 'API Questions', type: :api do
       end
 
       it 'returns 200 status' do
-        expect(last_response.status).to eq 200
+        expect(last_response).to have_http_status :ok
       end
 
       it 'returns all questions' do
@@ -49,7 +49,7 @@ RSpec.describe 'API Questions', type: :api do
       before { get "/api/v1/questions/#{question.id}", format: :json }
 
       it 'returns 200 status' do
-        expect(last_response.status).to eq 200
+        expect(last_response).to have_http_status :ok
       end
     end
 
@@ -60,7 +60,7 @@ RSpec.describe 'API Questions', type: :api do
       end
 
       it 'returns 200 status' do
-        expect(last_response.status).to eq 200
+        expect(last_response).to have_http_status :ok
       end
 
       %w[id title body].each do |attr|
@@ -92,7 +92,7 @@ RSpec.describe 'API Questions', type: :api do
         end
 
         it 'returns 201 status' do
-          expect(last_response.status).to eq 201
+          expect(last_response).to have_http_status :created
         end
 
         it 'saves valid question' do
@@ -132,7 +132,7 @@ RSpec.describe 'API Questions', type: :api do
         end
 
         it 'returns 422 status' do
-          expect(last_response.status).to eq 422
+          expect(last_response).to have_http_status :unprocessable_entity
         end
 
         it 'does not save valid question' do
@@ -165,7 +165,7 @@ RSpec.describe 'API Questions', type: :api do
         end
 
         it 'returns 204 status' do
-          expect(last_response.status).to eq 204
+          expect(last_response).to have_http_status :no_content
         end
 
         it_behaves_like 'action cable broadcast', QuestionSerializer, 'question', 'update' do
@@ -183,7 +183,7 @@ RSpec.describe 'API Questions', type: :api do
         end
 
         it 'returns 422 status' do
-          expect(last_response.status).to eq 422
+          expect(last_response).to have_http_status :unprocessable_entity
         end
 
         %w[title body].each do |attr|

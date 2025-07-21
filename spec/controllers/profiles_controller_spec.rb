@@ -1,4 +1,4 @@
-RSpec.describe ProfilesController, type: :controller do
+RSpec.describe ProfilesController do
   let(:profile) { create(:profile) }
 
   describe 'PATCH #update' do

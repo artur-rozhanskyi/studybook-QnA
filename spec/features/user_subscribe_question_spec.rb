@@ -1,9 +1,9 @@
-RSpec.describe 'UserSubscribeQuestion', type: :feature do
+RSpec.describe 'UserSubscribeQuestion' do
   describe 'User Subscribe on question' do
     let(:user) { create(:user) }
     let(:question) { create(:question, user: user) }
 
-    context 'when registered user', js: true do
+    context 'when registered user', :js do
       before do
         sign_in(user)
         visit question_path(question)
@@ -14,7 +14,7 @@ RSpec.describe 'UserSubscribeQuestion', type: :feature do
       end
     end
 
-    context 'when multiply session', js: true do
+    context 'when multiply session', :js do
       it 'subscribes user to question' do
         Capybara.using_session 'user' do
           sign_in(user)
@@ -32,7 +32,7 @@ RSpec.describe 'UserSubscribeQuestion', type: :feature do
 
         Capybara.using_session 'guest' do
           visit question_path(question)
-          expect(page).not_to have_button 'Subscribe'
+          expect(page).to have_no_button 'Subscribe'
         end
       end
     end

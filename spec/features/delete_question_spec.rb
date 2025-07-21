@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'DeleteQuestions', type: :feature do
+RSpec.describe 'DeleteQuestions' do
   describe 'User deletes question' do
     let(:user) { create(:user) }
     let(:questions) { create_list(:question, 5, user: user) }
@@ -18,7 +18,7 @@ RSpec.describe 'DeleteQuestions', type: :feature do
 
       it 'deletes question form list of questions' do
         click_on 'Delete'
-        expect(page).not_to have_content question_to_delete.title
+        expect(page).to have_no_content question_to_delete.title
       end
 
       context 'when not owned question' do
@@ -26,7 +26,7 @@ RSpec.describe 'DeleteQuestions', type: :feature do
           click_on 'Log out'
           sign_in(create(:user))
           visit question_path(question_to_delete)
-          expect(page).not_to have_link 'Delete'
+          expect(page).to have_no_link 'Delete'
         end
       end
     end
@@ -34,7 +34,7 @@ RSpec.describe 'DeleteQuestions', type: :feature do
     context 'when non-registered user' do
       it 'has not button to delete question' do
         visit question_path(question_to_delete)
-        expect(page).not_to have_content('Delete')
+        expect(page).to have_no_content('Delete')
       end
     end
   end

@@ -1,4 +1,4 @@
-RSpec.describe DailyMailer, type: :mailer do
+RSpec.describe DailyMailer do
   describe 'digest' do
     let(:user) { create(:user) }
     let!(:questions) { create_list(:question, 2) }

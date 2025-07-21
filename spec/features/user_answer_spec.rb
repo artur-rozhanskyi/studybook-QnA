@@ -1,5 +1,5 @@
-RSpec.describe 'UserAnswers', type: :feature do
-  describe 'User create answer', js: true do
+RSpec.describe 'UserAnswers' do
+  describe 'User create answer', :js do
     context 'with registered user' do
       let(:user) { create(:user) }
       let(:another_user) { create(:user) }
@@ -49,13 +49,13 @@ RSpec.describe 'UserAnswers', type: :feature do
     context 'with non-registered user' do
       it 'has not answer form' do
         Capybara.using_session 'guest' do
-          expect(page).not_to have_field 'Your answer'
+          expect(page).to have_no_field 'Your answer'
         end
       end
     end
   end
 
-  describe 'User create invalid answer', js: true do
+  describe 'User create invalid answer', :js do
     context 'with registered user' do
       let(:user) { create(:user) }
       let(:invalid_answer) { build(:invalid_answer, question: create(:question)) }

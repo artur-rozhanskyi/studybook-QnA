@@ -1,4 +1,4 @@
-RSpec.describe AnswersController, type: :controller do
+RSpec.describe AnswersController do
   let(:user) { create(:user) }
   let!(:question) { create(:question, user: user) }
   let(:answer) { create(:answer, user: user, question: question) }
@@ -145,7 +145,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'returns 201 status' do
         post :best, params: { id: answer, question_id: question, format: :json }
-        expect(response.status).to eq 201
+        expect(response).to have_http_status :created
       end
 
       it 'updates best answer' do
@@ -162,7 +162,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'returns 401 unauthorized status' do
         post :best, params: { id: answer, question_id: question, format: :json }
-        expect(response.status).to eq 401
+        expect(response).to have_http_status :unauthorized
       end
 
       it 'does not update best answer' do

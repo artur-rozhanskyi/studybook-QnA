@@ -1,4 +1,4 @@
-RSpec.describe 'UserEditProfile', type: :feature do
+RSpec.describe 'UserEditProfile' do
   let(:profile) { create(:profile) }
 
   describe 'Registered user edit profiles' do

@@ -1,4 +1,4 @@
-RSpec.describe 'UserAttachFiles', type: :feature do
+RSpec.describe 'UserAttachFiles' do
   let(:file) { Tempfile.new('foo') }
   let(:user) { create(:user) }
 
@@ -48,7 +48,7 @@ RSpec.describe 'UserAttachFiles', type: :feature do
     end
   end
 
-  describe 'User attach file to answer', js: true do
+  describe 'User attach file to answer', :js do
     context 'with registered user' do
       let(:question) { create(:question, :with_file, user: user) }
 
@@ -96,7 +96,7 @@ RSpec.describe 'UserAttachFiles', type: :feature do
             expect do
               check 'Remove file'
               click_on 'Save'
-              find('input', match: :first).click
+              find('p')
             end
               .to change(Attachment, :count).by(-1)
           end

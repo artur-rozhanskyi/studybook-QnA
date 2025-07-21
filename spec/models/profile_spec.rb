@@ -1,4 +1,4 @@
-RSpec.describe Profile, type: :model do
+RSpec.describe Profile do
   let(:profile) { create(:profile) }
 
   it { is_expected.to belong_to :user }

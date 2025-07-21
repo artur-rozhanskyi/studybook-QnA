@@ -1,4 +1,4 @@
-RSpec.describe 'UserViewProfile', type: :feature do
+RSpec.describe 'UserViewProfile' do
   let(:profile) { create(:profile) }
   let(:another_profile) { create(:profile) }
 
@@ -41,7 +41,7 @@ RSpec.describe 'UserViewProfile', type: :feature do
       end
 
       it 'has not link "Edit"' do
-        expect(page).not_to have_link 'Edit'
+        expect(page).to have_no_link 'Edit'
       end
     end
   end

@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   self.responder = ApplicationResponder
   respond_to :html
 
-  rescue_from ActiveRecord::RecordNotFound, with: :handle_record_not_found
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
   rescue_from Pundit::NotAuthorizedError do |exception|
     redirect_to root_path, alert: exception.message, status: :unauthorized
@@ -15,8 +15,7 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  def handle_record_not_found
-    render file: Rails.root.join('public', '404'), layout: false, status: :not_found
-    false
+  def record_not_found
+    render file: Rails.public_path.join('404'), layout: false, status: :not_found
   end
 end
