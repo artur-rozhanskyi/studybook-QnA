@@ -1,4 +1,4 @@
-RSpec.describe 'UserSearch', type: :feature, sphinx: true, js: true do
+RSpec.describe 'UserSearch', :js, :sphinx do
   let(:user) { create(:user) }
 
   describe 'User visit search page' do
@@ -28,18 +28,18 @@ RSpec.describe 'UserSearch', type: :feature, sphinx: true, js: true do
           sign_in(user)
           visit search_path
           search_query('simple_form', query)
-          expect(page).to have_selector('.question', count: questions.count)
-          expect(page).to have_selector('.answer', count: answers.count)
-          expect(page).to have_selector('.comment', count: comments.count)
+          expect(page).to have_css('.question', count: questions.count)
+          expect(page).to have_css('.answer', count: answers.count)
+          expect(page).to have_css('.comment', count: comments.count)
           questions.each { |question| expect(page).to have_content(question.title) }
         end
 
         Capybara.using_session 'guest' do
           visit search_path
           search_query('simple_form', query)
-          expect(page).to have_selector('.question', count: questions.count)
-          expect(page).to have_selector('.answer', count: answers.count)
-          expect(page).to have_selector('.comment', count: comments.count)
+          expect(page).to have_css('.question', count: questions.count)
+          expect(page).to have_css('.answer', count: answers.count)
+          expect(page).to have_css('.comment', count: comments.count)
           questions.each { |question| expect(page).to have_content(question.title) }
         end
       end
@@ -52,18 +52,18 @@ RSpec.describe 'UserSearch', type: :feature, sphinx: true, js: true do
             sign_in(user)
             visit search_path
             search_query('question_form', query) { click_on 'Advanced search' }
-            expect(page).to have_selector('.question', count: questions.count)
-            expect(page).not_to have_selector('.answer')
-            expect(page).not_to have_selector('.comment')
+            expect(page).to have_css('.question', count: questions.count)
+            expect(page).to have_no_css('.answer')
+            expect(page).to have_no_css('.comment')
             questions.each { |question| expect(page).to have_content(question.title) }
           end
 
           Capybara.using_session 'guest' do
             visit search_path
             search_query('question_form', query) { click_on 'Advanced search' }
-            expect(page).to have_selector('.question', count: questions.count)
-            expect(page).not_to have_selector('.answer')
-            expect(page).not_to have_selector('.comment')
+            expect(page).to have_css('.question', count: questions.count)
+            expect(page).to have_no_css('.answer')
+            expect(page).to have_no_css('.comment')
             questions.each { |question| expect(page).to have_content(question.title) }
           end
         end
@@ -75,18 +75,18 @@ RSpec.describe 'UserSearch', type: :feature, sphinx: true, js: true do
             sign_in(user)
             visit search_path
             search_query('answer_form', query) { click_on 'Advanced search' }
-            expect(page).to have_selector('.answer', count: answers.count)
-            expect(page).not_to have_selector('.question')
-            expect(page).not_to have_selector('.comment')
+            expect(page).to have_css('.answer', count: answers.count)
+            expect(page).to have_no_css('.question')
+            expect(page).to have_no_css('.comment')
             answers.each { |answer| expect(page).to have_content(answer.body) }
           end
 
           Capybara.using_session 'guest' do
             visit search_path
             search_query('answer_form', query) { click_on 'Advanced search' }
-            expect(page).to have_selector('.answer', count: answers.count)
-            expect(page).not_to have_selector('.question')
-            expect(page).not_to have_selector('.comment')
+            expect(page).to have_css('.answer', count: answers.count)
+            expect(page).to have_no_css('.question')
+            expect(page).to have_no_css('.comment')
             answers.each { |answer| expect(page).to have_content(answer.body) }
           end
         end
@@ -98,18 +98,18 @@ RSpec.describe 'UserSearch', type: :feature, sphinx: true, js: true do
             sign_in(user)
             visit search_path
             search_query('comment_form', query) { click_on 'Advanced search' }
-            expect(page).to have_selector('.comment', count: comments.count)
-            expect(page).not_to have_selector('.question')
-            expect(page).not_to have_selector('.answer')
+            expect(page).to have_css('.comment', count: comments.count)
+            expect(page).to have_no_css('.question')
+            expect(page).to have_no_css('.answer')
             comments.each { |comment| expect(page).to have_content(comment.body) }
           end
 
           Capybara.using_session 'guest' do
             visit search_path
             search_query('comment_form', query) { click_on 'Advanced search' }
-            expect(page).to have_selector('.comment', count: comments.count)
-            expect(page).not_to have_selector('.question')
-            expect(page).not_to have_selector('.answer')
+            expect(page).to have_css('.comment', count: comments.count)
+            expect(page).to have_no_css('.question')
+            expect(page).to have_no_css('.answer')
             comments.each { |comment| expect(page).to have_content(comment.body) }
           end
         end
@@ -122,18 +122,18 @@ RSpec.describe 'UserSearch', type: :feature, sphinx: true, js: true do
             visit search_path
             search_query('user_form', user.email) { click_on 'Advanced search' }
             expect(page).to have_content(user_full_name(user))
-            expect(page).not_to have_selector('.questions')
-            expect(page).not_to have_selector('.answers')
-            expect(page).not_to have_selector('.comments')
+            expect(page).to have_no_css('.questions')
+            expect(page).to have_no_css('.answers')
+            expect(page).to have_no_css('.comments')
           end
 
           Capybara.using_session 'guest' do
             visit search_path
             search_query('user_form', user.email) { click_on 'Advanced search' }
             expect(page).to have_content(user_full_name(user))
-            expect(page).not_to have_selector('.questions')
-            expect(page).not_to have_selector('.answers')
-            expect(page).not_to have_selector('.comments')
+            expect(page).to have_no_css('.questions')
+            expect(page).to have_no_css('.answers')
+            expect(page).to have_no_css('.comments')
           end
         end
       end

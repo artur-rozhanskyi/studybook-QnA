@@ -15,7 +15,7 @@ RSpec.describe 'User API', type: :api do
       end
 
       it 'returns 200 status' do
-        expect(last_response.status).to eq 200
+        expect(last_response).to have_http_status :ok
       end
 
       %w[id first_name last_name].each do |attr|
@@ -55,7 +55,7 @@ RSpec.describe 'User API', type: :api do
       end
 
       it 'returns 200 status' do
-        expect(last_response.status).to eq 200
+        expect(last_response).to have_http_status :ok
       end
 
       it 'returns all profiles except me' do

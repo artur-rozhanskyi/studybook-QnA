@@ -1,6 +1,6 @@
-RSpec.describe 'UserDeleteComments', type: :feature do
+RSpec.describe 'UserDeleteComments' do
   describe 'User delete answer' do
-    context 'when registered user', js: true do
+    context 'when registered user', :js do
       let(:user) { create(:user) }
       let(:another_user) { create(:user) }
       let(:question) { create(:question) }
@@ -34,7 +34,7 @@ RSpec.describe 'UserDeleteComments', type: :feature do
             visit question_path(question)
             delete_subject('comment')
             within '.question' do
-              expect(page).not_to have_content comment.body
+              expect(page).to have_no_content comment.body
             end
           end
 
@@ -42,13 +42,13 @@ RSpec.describe 'UserDeleteComments', type: :feature do
             sign_in another_user, scope: :user
             visit question_path(question)
             within '.question' do
-              expect(page).not_to have_content comment.body
+              expect(page).to have_no_content comment.body
             end
           end
           Capybara.using_session 'guest' do
             visit question_path(question)
             within '.question' do
-              expect(page).not_to have_content comment.body
+              expect(page).to have_no_content comment.body
             end
           end
         end

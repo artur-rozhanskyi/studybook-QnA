@@ -1,4 +1,4 @@
-RSpec.describe UsersController, type: :controller do
+RSpec.describe UsersController do
   describe '#update' do
     let(:user) { create(:user) }
     let(:new_password) { { password: '123321', password_confirmation: '123321' } }

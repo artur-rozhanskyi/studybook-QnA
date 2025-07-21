@@ -1,4 +1,4 @@
-RSpec.describe 'UserChooseBestAnswer', js: true do
+RSpec.describe 'UserChooseBestAnswer', :js do
   describe 'User choose best answer' do
     let(:user) { create(:user) }
     let(:another_user) { create(:user) }
@@ -20,12 +20,12 @@ RSpec.describe 'UserChooseBestAnswer', js: true do
       Capybara.using_session 'another_user' do
         sign_in(another_user)
         visit question_path(question)
-        expect(page).not_to have_button 'Best'
+        expect(page).to have_no_button 'Best'
       end
 
       Capybara.using_session 'guest' do
         visit question_path(question)
-        expect(page).not_to have_button 'Best'
+        expect(page).to have_no_button 'Best'
       end
     end
 

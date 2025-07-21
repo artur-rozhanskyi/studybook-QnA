@@ -7,11 +7,11 @@ FactoryBot.define do
     end
 
     trait :for_question do
-      association :commentable, factory: :question
+      commentable factory: [:question]
     end
 
     trait :for_answer do
-      association :commentable, factory: :answer
+      commentable factory: [:answer]
     end
   end
 end
