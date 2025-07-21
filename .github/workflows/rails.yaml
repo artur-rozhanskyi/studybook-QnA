@@ -1,9 +1,65 @@
-name: Rails
-on: ["push", "pull_request"]
+name: Rails CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
 
 jobs:
-  verify:
-    name: Build
+  dependencies:
+    name: Setup and Cache
+    runs-on: ubuntu-latest
+    outputs:
+      node-key: ${{ steps.node-cache-key.outputs.key }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.4.1
+          bundler-cache: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 14.0.0
+
+      - name: Generate Yarn cache key
+        id: node-cache-key
+        run: echo "key=${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}" >> $GITHUB_OUTPUT
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ steps.node-cache-key.outputs.key }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install Node dependencies
+        run: yarn install
+
+  rubocop:
+    name: Run RuboCop
+    needs: dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.4.1
+          bundler-cache: true
+
+      - name: Run RuboCop
+        run: bundle exec rubocop
+
+  rspec:
+    name: Run RSpec
+    needs: dependencies
     runs-on: ubuntu-latest
 
     services:
@@ -12,64 +68,65 @@ jobs:
         env:
           POSTGRES_USER: rails_github_actions
           POSTGRES_DB: rails_github_actions_test
-          POSTGRES_PASSWORD: postgres
-        ports: ["5432:5432"]
+          POSTGRES_PASSWORD: ${{ secrets.PG_PASSWORD }}
+        ports: [ "5432:5432" ]
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
       redis:
         image: redis
-        ports:
-          - 6379:6379
+        ports: ["6379:6379"]
         options: --entrypoint redis-server
 
+    env:
+      RAILS_ENV: test
+      PGHOST: localhost
+      POSTGRES_DB: rails_github_actions_test
+      POSTGRES_USER: rails_github_actions
+      POSTGRES_PASSWORD: ${{ secrets.PG_PASSWORD }}
+
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.0.3'
-      - name: Set up Node
-        uses: actions/setup-node@v1
+          ruby-version: 3.4.1
+          bundler-cache: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 14.0.0
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get upgrade
-          sudo apt-get -yqq install libpq-dev build-essential libcurl4-openssl-dev
-          gem install bundler
-          bundle install --jobs 4 --retry 3
-          yarn install
+
+      - name: Restore node_modules cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ needs.dependencies.outputs.node-key }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install Node dependencies
+        run: yarn install
+
+      - name: Configure database.yml
+        run: cp config/database.ci.yml config/database.yml
+
       - name: Setup test database
-        env:
-          RAILS_ENV: test
-          PGHOST: localhost
-          POSTGRES_DB: rails_github_actions_test
-          POSTGRES_USER: rails_github_actions
-          POSTGRES_PASSWORD: postgres
-        run: |
-          cp config/database.ci.yml config/database.yml
-          bundle exec rails db:create db:migrate
-      - name: Run Rubocop
-        run: bundle exec rubocop
-      - name: Assets
+        run: bundle exec rails db:create db:migrate
+
+      - name: Precompile assets
         run: bundle exec rake assets:precompile
-        env:
-          PGHOST: localhost
-          POSTGRES_DB: rails_github_actions_test
-          POSTGRES_USER: rails_github_actions
-          POSTGRES_PASSWORD: postgres
-          PGPORT: ${{ job.services.postgres.ports[5432] }}
-          RAILS_ENV: test
-      - name: Run Rspec
-        env:
-          PGHOST: localhost
-          POSTGRES_DB: rails_github_actions_test
-          POSTGRES_USER: rails_github_actions
-          POSTGRES_PASSWORD: postgres
-          PGPORT: ${{ job.services.postgres.ports[5432] }}
-          RAILS_ENV: test
+
+      - name: Run tests
         run: bundle exec rspec
+
+      - name: Clean up temp, logs, assets
+        if: always()
+        run: |
+          echo "Cleaning up..."
+          rm -rf tmp/* log/* public/assets/*

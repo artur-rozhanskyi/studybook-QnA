@@ -7,13 +7,14 @@ Style/FrozenStringLiteralComment:
 
 AllCops:
  NewCops: enable
- TargetRubyVersion: 3.0.3
+ TargetRubyVersion: 3.4
  Exclude:
  - db/schema.rb
  - db/migrate/**/*
  - node_modules/**/*
  - bin/**/*
  - 'config/environments/**/*'
+ - 'vendor/**/*'
 
 Layout/LineLength:
   Max: 120
