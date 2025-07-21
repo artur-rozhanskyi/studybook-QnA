@@ -1,4 +1,4 @@
-RSpec.describe 'EditQuestions', type: :feature do
+RSpec.describe 'EditQuestions' do
   describe 'User edits question' do
     let(:user) { create(:user) }
     let!(:question) { create(:question, user: user) }

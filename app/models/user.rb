@@ -27,7 +27,7 @@ class User < ApplicationRecord
 
   delegate :first_name, :last_name, to: :profile, allow_nil: true
 
-  enum role: { user: 0, admin: 1 }
+  enum :role, user: 0, admin: 1
 
   def question_subscribed?(question)
     subscribed_question_ids.include?(question.id)

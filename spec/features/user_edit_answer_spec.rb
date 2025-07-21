@@ -1,4 +1,4 @@
-RSpec.describe 'UserEditAnswers', type: :feature do
+RSpec.describe 'UserEditAnswers' do
   describe 'User edit answer' do
     let(:user) { create(:user) }
     let(:another_user) { create(:user) }
@@ -18,7 +18,7 @@ RSpec.describe 'UserEditAnswers', type: :feature do
       end
     end
 
-    context 'with multiple session', js: true do
+    context 'with multiple session', :js do
       before do
         Capybara.using_session 'another_user' do
           sign_in another_user
@@ -52,15 +52,15 @@ RSpec.describe 'UserEditAnswers', type: :feature do
 
       it 'has not old answer body' do
         Capybara.using_session 'user' do
-          expect(page).not_to have_content(answer.body)
+          expect(page).to have_no_content(answer.body)
         end
 
         Capybara.using_session 'another_user' do
-          expect(page).not_to have_content(answer.body)
+          expect(page).to have_no_content(answer.body)
         end
 
         Capybara.using_session 'guest' do
-          expect(page).not_to have_content(answer.body)
+          expect(page).to have_no_content(answer.body)
         end
       end
     end

@@ -1,4 +1,4 @@
-RSpec.describe 'UserUnsubscribeQuestion', type: :feature do
+RSpec.describe 'UserUnsubscribeQuestion' do
   describe 'User unsubscribe from question' do
     let(:user) { create(:user) }
     let(:question) { create(:question, user: user) }
@@ -6,7 +6,7 @@ RSpec.describe 'UserUnsubscribeQuestion', type: :feature do
 
     before { question.subscribed_users << [user, another_user] }
 
-    context 'when registered user', js: true do
+    context 'when registered user', :js do
       before do
         sign_in(user)
         visit question_path(question)
@@ -17,7 +17,7 @@ RSpec.describe 'UserUnsubscribeQuestion', type: :feature do
       end
     end
 
-    context 'when multiply session', js: true do
+    context 'when multiply session', :js do
       it 'subscribes user to question' do
         Capybara.using_session 'user' do
           sign_in(user)
@@ -35,7 +35,7 @@ RSpec.describe 'UserUnsubscribeQuestion', type: :feature do
 
         Capybara.using_session 'guest' do
           visit question_path(question)
-          expect(page).not_to have_button 'Unsubscribe'
+          expect(page).to have_no_button 'Unsubscribe'
         end
       end
     end

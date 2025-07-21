@@ -5,6 +5,8 @@ class AnswersController < ApplicationController
 
   respond_to :json, :js
 
+  def show; end
+
   def create
     answer_form = AnswerForm.new
     authorize answer_form
@@ -28,8 +30,6 @@ class AnswersController < ApplicationController
     answer_cable @answer, 'destroy' if @answer.destroyed?
     respond_with @answer
   end
-
-  def show; end
 
   def best
     authorize @question

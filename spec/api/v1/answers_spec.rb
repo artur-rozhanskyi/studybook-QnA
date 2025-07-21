@@ -21,7 +21,7 @@ RSpec.describe 'Answers API', type: :api do
       end
 
       it 'returns 200 status' do
-        expect(last_response.status).to eq 200
+        expect(last_response).to have_http_status :ok
       end
 
       it 'returns all questions' do
@@ -52,7 +52,7 @@ RSpec.describe 'Answers API', type: :api do
       end
 
       it 'returns 200 status' do
-        expect(last_response.status).to eq 200
+        expect(last_response).to have_http_status :ok
       end
 
       it_behaves_like 'comments' do
@@ -83,7 +83,7 @@ RSpec.describe 'Answers API', type: :api do
         end
 
         it 'returns 201 status' do
-          expect(last_response.status).to eq 201
+          expect(last_response).to have_http_status :created
         end
 
         it 'saves valid answer' do
@@ -114,7 +114,7 @@ RSpec.describe 'Answers API', type: :api do
         end
 
         it 'returns 422 status' do
-          expect(last_response.status).to eq 422
+          expect(last_response).to have_http_status :unprocessable_entity
         end
 
         it 'does not save invalid answer' do

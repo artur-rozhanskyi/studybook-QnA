@@ -1,6 +1,6 @@
-RSpec.describe 'UserDeleteAnswers', type: :feature do
+RSpec.describe 'UserDeleteAnswers' do
   describe 'User delete answer' do
-    context 'when registered user', js: true do
+    context 'when registered user', :js do
       let(:user) { create(:user) }
       let(:another_user) { create(:user) }
       let(:answer) { create(:answer, user: user, question: create(:question)) }
@@ -18,7 +18,7 @@ RSpec.describe 'UserDeleteAnswers', type: :feature do
         it 'has delete answer from database' do
           expect do
             delete_subject('answer')
-            find('h1', match: :first).click
+            first('h1').click
           end
             .to change(Answer, :count).by(-1)
         end
@@ -42,25 +42,25 @@ RSpec.describe 'UserDeleteAnswers', type: :feature do
 
         it 'has delete current answer' do
           Capybara.using_session 'another_user' do
-            expect(page).not_to have_content answer.body
+            expect(page).to have_no_content answer.body
           end
           Capybara.using_session 'guest' do
-            expect(page).not_to have_content answer.body
+            expect(page).to have_no_content answer.body
           end
           Capybara.using_session 'user' do
-            expect(page).not_to have_content answer.body
+            expect(page).to have_no_content answer.body
           end
         end
 
         it 'has not Edit link' do
           Capybara.using_session 'another_user' do
-            expect(page).not_to have_link 'Edit'
+            expect(page).to have_no_link 'Edit'
           end
           Capybara.using_session 'guest' do
-            expect(page).not_to have_link 'Edit'
+            expect(page).to have_no_link 'Edit'
           end
           Capybara.using_session 'user' do
-            expect(page).not_to have_link 'Edit'
+            expect(page).to have_no_link 'Edit'
           end
         end
       end

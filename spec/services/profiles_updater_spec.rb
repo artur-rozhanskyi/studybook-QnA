@@ -2,7 +2,7 @@ RSpec.describe ProfilesUpdater do
   describe '#call' do
     let!(:profile) { create(:profile) }
     let(:new_attributes) { attributes_for(:profile) }
-    let(:avatar_image) { File.open(Rails.root.join('spec', 'fixtures', 'images', 'example.png')) }
+    let(:avatar_image) { Rails.root.join('spec', 'fixtures', 'images', 'example.png').open }
     let(:avatar) do
       {
         data: Base64.encode64(avatar_image.read).prepend('data:image/png;base64,'),

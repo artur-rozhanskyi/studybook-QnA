@@ -1,4 +1,4 @@
-RSpec.describe QuestionsController, type: :controller do
+RSpec.describe QuestionsController do
   let(:valid_session) { {} }
   let(:user) { create(:user) }
   let(:question) { create(:question, user: user) }

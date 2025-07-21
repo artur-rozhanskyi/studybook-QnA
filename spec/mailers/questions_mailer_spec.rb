@@ -1,4 +1,4 @@
-RSpec.describe QuestionsMailer, type: :mailer do
+RSpec.describe QuestionsMailer do
   let(:user) { create(:user) }
   let(:question) { create(:question, user: user) }
   let(:answer) { create(:answer, question: question) }

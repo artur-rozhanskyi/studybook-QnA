@@ -1,4 +1,4 @@
-RSpec.describe 'CreateQuestions', type: :feature do
+RSpec.describe 'CreateQuestions' do
   describe 'User creates question' do
     let(:user) { create(:user) }
     let(:question) { create(:question, user: user) }
@@ -36,7 +36,7 @@ RSpec.describe 'CreateQuestions', type: :feature do
     context 'when non-registered user' do
       it 'has not button to create question' do
         visit questions_path
-        expect(page).not_to have_content('Create question')
+        expect(page).to have_no_content('Create question')
       end
     end
   end
