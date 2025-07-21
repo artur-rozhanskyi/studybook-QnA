@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :oauth_application, class: 'Doorkeeper::Application' do
-    name { 'Test' }
+    sequence(:name)  { |n| "App#{n}" }
+    sequence(:uid)   { |n| "uid#{n}" }
+    sequence(:secret) { |n| "secret#{n}" }
     redirect_uri { 'urn:ietf:wg:oauth:2.0:oob' }
-    uid { '123456789' }
-    secret { '987654321' }
   end
 end

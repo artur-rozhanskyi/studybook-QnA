@@ -1,4 +1,4 @@
-RSpec.describe SearchService, sphinx: true do
+RSpec.describe SearchService, :sphinx do
   describe '#call' do
     let(:users) { create_list(:user, 5) }
     let!(:questions) { create_list(:question, 5, user: users[rand(0...4)], body: 'body') }

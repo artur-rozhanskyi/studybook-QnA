@@ -1,11 +1,11 @@
-RSpec.describe 'UserEditComments', type: :feature do
+RSpec.describe 'UserEditComments' do
   let(:user) { create(:user) }
   let(:another_user) { create(:user) }
   let!(:question) { create(:question, :with_comment, user: user) }
   let(:comment) { question.comments.first }
   let(:new_comment_body) { Faker::Lorem.sentence }
 
-  describe 'Registered user edit comment', js: true do
+  describe 'Registered user edit comment', :js do
     context 'when comment belong to user' do
       context 'when visit question page' do
         before do
@@ -58,13 +58,13 @@ RSpec.describe 'UserEditComments', type: :feature do
 
         it 'has not old comment body' do
           Capybara.using_session 'another_user' do
-            expect(page).not_to have_content old_body
+            expect(page).to have_no_content old_body
           end
           Capybara.using_session 'guest' do
-            expect(page).not_to have_content old_body
+            expect(page).to have_no_content old_body
           end
           Capybara.using_session 'user' do
-            expect(page).not_to have_content old_body
+            expect(page).to have_no_content old_body
           end
         end
 
@@ -87,7 +87,7 @@ RSpec.describe 'UserEditComments', type: :feature do
         sign_in(create(:user))
         visit question_path(question)
         within '.comment', match: :first do
-          expect(page).not_to have_button 'Edit'
+          expect(page).to have_no_button 'Edit'
         end
       end
     end

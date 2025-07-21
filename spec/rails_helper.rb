@@ -8,10 +8,10 @@ require 'rspec/rails'
 require 'capybara_helper'
 require 'pundit/rspec'
 require 'sidekiq/testing'
-require 'thinking_sphinx_helper'
 require 'api_helper'
+require 'database_cleaner/active_record'
 
-Dir[Rails.root.join("spec", "support", "**", "*.rb")].each { |file| require file }
+Rails.root.glob('spec/support/**/*.rb').each { |file| require file }
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -46,7 +46,7 @@ RSpec.configure do |config|
   config.include AcceptanceHelper, type: :feature
   config.include ApiHelper, type: :api
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.fixture_paths = Rails.root.join('spec', 'fixtures', 'fixtures').to_s
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -75,12 +75,19 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
   config.after do
-    FileUtils.rm_rf(Dir[Rails.root.join('spec', 'support', 'uploads')])
+    FileUtils.rm_rf(Dir[Rails.root.glob('spec/support/uploads').to_s])
   end
 
-  config.before do
+  config.before do |example|
     Sidekiq::Worker.clear_all
+    DatabaseCleaner.strategy = example.metadata[:js] ? :truncation : :transaction
   end
+
+  config.before(:suite) { DatabaseCleaner.clean_with(:deletion) }
+
+  config.before { DatabaseCleaner.start }
+
+  config.append_after { DatabaseCleaner.clean }
 end
 
 Shoulda::Matchers.configure do |config|

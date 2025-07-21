@@ -1,9 +1,9 @@
-RSpec.describe 'UserCommentAnswers', type: :feature do
+RSpec.describe 'UserCommentAnswers' do
   let(:user) { create(:user) }
   let!(:answer) { create(:answer, question: create(:question), user: user) }
   let(:attributes) { attributes_for(:comment) }
 
-  describe 'Registered user create comment a answer', js: true do
+  describe 'Registered user create comment a answer', :js do
     before do
       sign_in(user)
       visit question_path(answer.question)
@@ -27,7 +27,7 @@ RSpec.describe 'UserCommentAnswers', type: :feature do
         within '.answer .new_comment', match: :first do
           expect do
             comment_record(attributes[:body])
-            find('form', match: :first).click
+            first('form').click
           end
             .to change(Comment, :count).by(1)
         end
@@ -53,11 +53,11 @@ RSpec.describe 'UserCommentAnswers', type: :feature do
     end
   end
 
-  describe 'Non-registered user to create comment a answer', js: true do
+  describe 'Non-registered user to create comment a answer', :js do
     it 'has not "Add comment" button' do
       visit question_path(answer.question)
       within '.question' do
-        expect(page).not_to have_button('Add comment')
+        expect(page).to have_no_button('Add comment')
       end
     end
   end

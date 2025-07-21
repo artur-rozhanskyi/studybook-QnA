@@ -1,4 +1,4 @@
-RSpec.describe 'UserUpdatePassword', type: :feature do
+RSpec.describe 'UserUpdatePassword' do
   describe 'Registed user update password' do
     let(:profile) { create(:profile) }
     let(:new_password) { { password: '123321', password_confirmation: '123321' } }

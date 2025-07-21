@@ -1,4 +1,4 @@
-RSpec.describe Answer, type: :model do
+RSpec.describe Answer do
   let(:answer) { create(:answer) }
 
   it 'is valid with valid attributes' do

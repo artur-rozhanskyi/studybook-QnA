@@ -1,10 +1,10 @@
-RSpec.describe 'UserCommentQuestions', type: :feature do
+RSpec.describe 'UserCommentQuestions' do
   let(:user) { create(:user) }
   let(:another_user) { create(:user) }
   let(:question) { create(:question) }
   let(:attributes) { attributes_for(:comment) }
 
-  describe 'Registered user create comment a question', js: true do
+  describe 'Registered user create comment a question', :js do
     context 'when visit question path' do
       before do
         sign_in user
@@ -77,11 +77,11 @@ RSpec.describe 'UserCommentQuestions', type: :feature do
     end
   end
 
-  describe 'Non-registered user to create comment a question', js: true do
+  describe 'Non-registered user to create comment a question', :js do
     it 'has not "Add comment" button' do
       visit question_path(question)
       within '.question' do
-        expect(page).not_to have_button('Add comment')
+        expect(page).to have_no_button('Add comment')
       end
     end
   end
