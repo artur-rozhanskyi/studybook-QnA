@@ -66,11 +66,11 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(
-      :title,
-      :body,
-      :best_answer,
-      attachments_attributes: [:file, :remove_file, :id, :_destroy]
+    params.expect(
+      question: [:title,
+                 :body,
+                 :best_answer,
+                 { attachments_attributes: [:file, :remove_file, :id, :_destroy] }]
     )
   end
 

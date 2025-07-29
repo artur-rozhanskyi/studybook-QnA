@@ -41,7 +41,7 @@ class CommentsController < ApplicationController
   end
 
   def comments_params
-    params.require(:comment).permit(:body).merge(user: current_user)
+    params.expect(comment: [:body]).merge(user: current_user)
   end
 
   def comment_cable(comment, action)

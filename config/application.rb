@@ -16,5 +16,6 @@ module StudybookQna
     config.generators.javascript_engine = :js
     config.active_job.queue_adapter = :sidekiq
     config.autoload_lib(ignore: %w(assets tasks))
+    config.active_support.to_time_preserves_timezone = :zone
   end
 end

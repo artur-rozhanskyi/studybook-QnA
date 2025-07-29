@@ -45,7 +45,7 @@ module Api
       end
 
       def answer_params
-        params.require(:answer).permit(:body, attachments_attributes: [:id, :file, :_destroy, :remove_file])
+        params.expect(answer: [:body, { attachments_attributes: [:id, :file, :_destroy, :remove_file] }])
       end
 
       def answer_cable(answer, action)
