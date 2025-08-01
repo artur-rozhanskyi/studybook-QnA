@@ -12,7 +12,7 @@ module Api
         private
 
         def resource_params
-          params.expect(user: [:email, :password, :password_confirmation, :reset_password_token, { data: [:host] }])
+          params.expect(user: [:email, :password, :password_confirmation, :reset_password_token, { data: [[:host]] }])
         end
       end
     end

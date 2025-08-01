@@ -70,7 +70,7 @@ class QuestionsController < ApplicationController
       question: [:title,
                  :body,
                  :best_answer,
-                 { attachments_attributes: [:file, :remove_file, :id, :_destroy] }]
+                 { attachments_attributes: [[:file, :remove_file, :id, :_destroy]] }]
     )
   end
 

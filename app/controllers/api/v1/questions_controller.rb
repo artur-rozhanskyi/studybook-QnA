@@ -44,7 +44,7 @@ module Api
       end
 
       def question_params
-        params.expect(question: [:title, :body, { attachments_attributes: [:file, :remove_file, :id, :_destroy] }])
+        params.expect(question: [:title, :body, { attachments_attributes: [[:file, :remove_file, :id, :_destroy]] }])
       end
 
       def question_cable(question_form, action)
