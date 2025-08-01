@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.4.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 7.2.0'
+gem 'rails', '~> 8.0.0'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
@@ -31,7 +31,7 @@ gem 'active_model_serializers'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'carrierwave'
 gem 'carrierwave-base64'
-gem 'devise', '~> 4.9'
+gem 'devise', '~> 4.9', '>= 4.9.4'
 gem 'doorkeeper'
 gem 'dotenv'
 gem 'dotenv-deployment', require: 'dotenv/deployment'
@@ -65,7 +65,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'capybara'
+  gem 'capybara', '~> 3.40'
   gem 'database_cleaner', '~> 2.1'
   gem 'factory_bot_rails'
   gem 'faker'
@@ -74,7 +74,7 @@ group :test do
   gem 'observer'
   gem 'rails-controller-testing'
   gem 'rspec', '~> 3.13'
-  gem 'rspec-rails', '~> 7.0.0'
+  gem 'rspec-rails', '~> 8.0.0'
   gem 'shoulda-matchers'
   gem 'webdrivers'
 end

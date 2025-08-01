@@ -23,7 +23,7 @@ module Api
       end
 
       def profile_params
-        params.require(:profile).permit(:first_name, :last_name, avatar: [:data, :filename, :type])
+        params.expect(profile: [:first_name, :last_name, { avatar: [[:data, :filename, :type]] }])
       end
     end
   end
