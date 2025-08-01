@@ -4,12 +4,13 @@ ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../config/environment', __dir__)
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
-require 'rspec/rails'
-require 'capybara_helper'
-require 'pundit/rspec'
-require 'sidekiq/testing'
-require 'api_helper'
+
 require 'database_cleaner/active_record'
+require 'rspec/rails'
+require 'sidekiq/testing'
+require 'pundit/rspec'
+require 'capybara_helper'
+require 'api_helper'
 
 Rails.root.glob('spec/support/**/*.rb').each { |file| require file }
 # Add additional requires below this line. Rails is not loaded until this point!
