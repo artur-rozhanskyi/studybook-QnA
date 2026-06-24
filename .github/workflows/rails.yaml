@@ -6,11 +6,10 @@ on:
   pull_request:
 
 jobs:
-  dependencies:
+  setup:
     name: Setup and Cache
     runs-on: ubuntu-latest
-    outputs:
-      node-key: ${{ steps.node-cache-key.outputs.key }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -24,26 +23,20 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 14.0.0
-
-      - name: Generate Yarn cache key
-        id: node-cache-key
-        run: echo "key=${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}" >> $GITHUB_OUTPUT
+          node-version: 24
 
       - name: Cache node_modules
-        uses: actions/cache@v3
+        uses: actions/cache@v6
         with:
           path: node_modules
-          key: ${{ steps.node-cache-key.outputs.key }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install Node dependencies
-        run: yarn install
+        run: yarn install --frozen-lockfile
 
   rubocop:
     name: Run RuboCop
-    needs: dependencies
+    needs: setup
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -59,17 +52,17 @@ jobs:
 
   rspec:
     name: Run RSpec
-    needs: dependencies
+    needs: setup
     runs-on: ubuntu-latest
 
     services:
       postgres:
-        image: postgres:11
+        image: postgres:15
         env:
           POSTGRES_USER: rails_github_actions
           POSTGRES_DB: rails_github_actions_test
           POSTGRES_PASSWORD: ${{ secrets.PG_PASSWORD }}
-        ports: [ "5432:5432" ]
+        ports: ["5432:5432"]
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -77,9 +70,8 @@ jobs:
           --health-retries 5
 
       redis:
-        image: redis
+        image: redis:7
         ports: ["6379:6379"]
-        options: --entrypoint redis-server
 
     env:
       RAILS_ENV: test
@@ -100,18 +92,18 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 14.0.0
+          node-version: 24
 
       - name: Restore node_modules cache
-        uses: actions/cache@v3
+        uses: actions/cache@v6
         with:
           path: node_modules
-          key: ${{ needs.dependencies.outputs.node-key }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
       - name: Install Node dependencies
-        run: yarn install
+        run: yarn install --frozen-lockfile
 
       - name: Configure database.yml
         run: cp config/database.ci.yml config/database.yml

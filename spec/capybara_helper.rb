@@ -10,3 +10,5 @@ end
 
 Capybara.javascript_driver = :chrome
 Capybara.default_max_wait_time = 10
+Capybara.match = :smart
+Capybara.ignore_hidden_elements = true
