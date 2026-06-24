@@ -19,8 +19,8 @@ module.exports = {
       maxChunks: 1,
     }),
     new webpack.ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery",
+      $: ["jquery", "default"],
+      jQuery: ["jquery", "default"],
     }),
   ],
   module: {

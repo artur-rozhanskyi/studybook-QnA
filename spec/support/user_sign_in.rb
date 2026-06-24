@@ -9,6 +9,10 @@ module AcceptanceHelper
   def edit_subject(body, subject)
     within ".#{subject}", match: :first do
       click_on 'Edit'
+    end
+
+    within ".#{subject}", match: :first do
+      expect(page).to have_field("#{subject}[body]", wait: 10)
       fill_in "#{subject}[body]", with: body
       click_on 'Save'
     end
