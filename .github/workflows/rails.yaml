@@ -6,60 +6,28 @@ on:
   pull_request:
 
 jobs:
-  setup:
-    name: Setup and Cache
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 4.0.2
-          bundler-cache: true
-          cache-version: 1
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-
-      - name: Cache node_modules
-        uses: actions/cache@v6
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-
-      - name: Install Node dependencies
-        run: yarn install --frozen-lockfile
-
   rubocop:
     name: Run RuboCop
-    needs: setup
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 4.0.2
+          ruby-version: '4.0.2'
           bundler-cache: true
-          cache-version: 1
 
       - name: Run RuboCop
         run: bundle exec rubocop
 
   rspec:
     name: Run RSpec
-    needs: setup
     runs-on: ubuntu-latest
 
     services:
       postgres:
-        image: postgres:15
+        image: postgres:18
         env:
           POSTGRES_USER: rails_github_actions
           POSTGRES_DB: rails_github_actions_test
@@ -83,27 +51,19 @@ jobs:
       POSTGRES_PASSWORD: ${{ secrets.PG_PASSWORD }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 4.0.2
+          ruby-version: '4.0.2'
           bundler-cache: true
-          cache-version: 1
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
-
-      - name: Restore node_modules cache
-        uses: actions/cache@v6
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          node-version: '24'
+          cache: 'yarn'
 
       - name: Install Node dependencies
         run: yarn install --frozen-lockfile
@@ -119,9 +79,3 @@ jobs:
 
       - name: Run tests
         run: bundle exec rspec
-
-      - name: Clean up temp, logs, assets
-        if: always()
-        run: |
-          echo "Cleaning up..."
-          rm -rf tmp/* log/* public/assets/*
