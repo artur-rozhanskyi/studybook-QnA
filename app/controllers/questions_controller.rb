@@ -62,7 +62,7 @@ class QuestionsController < ApplicationController
   private
 
   def set_question
-    @question = Question.find(params[:id])
+    @question = Question.find(params.expect(:id))
   end
 
   def question_params

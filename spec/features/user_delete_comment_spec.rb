@@ -34,7 +34,7 @@ RSpec.describe 'UserDeleteComments' do
             visit question_path(question)
             delete_subject('comment')
             within '.question' do
-              expect(page).to have_no_content comment.body
+              expect(page).to have_no_text comment.body
             end
           end
 
@@ -42,13 +42,13 @@ RSpec.describe 'UserDeleteComments' do
             sign_in another_user, scope: :user
             visit question_path(question)
             within '.question' do
-              expect(page).to have_no_content comment.body
+              expect(page).to have_no_text comment.body
             end
           end
           Capybara.using_session 'guest' do
             visit question_path(question)
             within '.question' do
-              expect(page).to have_no_content comment.body
+              expect(page).to have_no_text comment.body
             end
           end
         end

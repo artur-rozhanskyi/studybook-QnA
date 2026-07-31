@@ -114,7 +114,7 @@ RSpec.describe 'Answers API', type: :api do
         end
 
         it 'returns 422 status' do
-          expect(last_response).to have_http_status :unprocessable_entity
+          expect(last_response).to have_http_status :unprocessable_content
         end
 
         it 'does not save invalid answer' do

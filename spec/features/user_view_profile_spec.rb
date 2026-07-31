@@ -9,15 +9,15 @@ RSpec.describe 'UserViewProfile' do
       before { visit user_profile_path profile.user }
 
       it 'shows user first name' do
-        expect(page).to have_content profile.first_name
+        expect(page).to have_text profile.first_name
       end
 
       it 'shows user last name' do
-        expect(page).to have_content profile.last_name
+        expect(page).to have_text profile.last_name
       end
 
       it 'shows user email' do
-        expect(page).to have_content profile.user.email
+        expect(page).to have_text profile.user.email
       end
 
       it 'has link "Edit"' do
@@ -29,15 +29,15 @@ RSpec.describe 'UserViewProfile' do
       before { visit user_profile_path another_profile.user }
 
       it 'shows user first name' do
-        expect(page).to have_content another_profile.first_name
+        expect(page).to have_text another_profile.first_name
       end
 
       it 'shows user last name' do
-        expect(page).to have_content another_profile.last_name
+        expect(page).to have_text another_profile.last_name
       end
 
       it 'shows user email' do
-        expect(page).to have_content another_profile.user.email
+        expect(page).to have_text another_profile.user.email
       end
 
       it 'has not link "Edit"' do
@@ -49,7 +49,7 @@ RSpec.describe 'UserViewProfile' do
   describe 'Non-registered user view profiles' do
     it 'has not permission' do
       visit user_profile_path profile.user
-      expect(page).to have_content 'You need to sign in or sign up before continuing.'
+      expect(page).to have_text 'You need to sign in or sign up before continuing.'
     end
   end
 end

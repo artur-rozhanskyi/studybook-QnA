@@ -11,11 +11,11 @@ RSpec.describe 'SignIns' do
       end
 
       it 'log in succusesfull' do
-        expect(page).to have_content 'Signed in successfully'
+        expect(page).to have_text 'Signed in successfully'
       end
 
       it 'have a possibility to log out' do
-        expect(page).to have_content 'Log out'
+        expect(page).to have_text 'Log out'
       end
     end
 
@@ -28,7 +28,7 @@ RSpec.describe 'SignIns' do
       end
 
       it 'show error message' do
-        expect(page).to have_content(/Invalid email or password/i)
+        expect(page).to have_text(/Invalid email or password/i)
       end
     end
   end

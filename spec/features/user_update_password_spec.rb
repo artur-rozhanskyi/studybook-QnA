@@ -12,14 +12,14 @@ RSpec.describe 'UserUpdatePassword' do
     context 'with valid password' do
       it 'has flash successful notice' do
         update_password new_password
-        expect(page).to have_content 'Password was successfully updated'
+        expect(page).to have_text 'Password was successfully updated'
       end
     end
 
     context 'with invalid password' do
       it 'has flash failure notice' do
         update_password wrong_password
-        expect(page).to have_content 'Password was not updated'
+        expect(page).to have_text 'Password was not updated'
       end
     end
   end

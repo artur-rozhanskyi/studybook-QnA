@@ -11,7 +11,7 @@ RSpec.describe 'CreateQuestions' do
       end
 
       it 'has button to create question' do
-        expect(page).to have_content('New Question')
+        expect(page).to have_text('New Question')
       end
 
       it 'has field title' do
@@ -24,19 +24,19 @@ RSpec.describe 'CreateQuestions' do
 
       it 'shows asked question title' do
         ask_question(question)
-        expect(page).to have_content question.title
+        expect(page).to have_text question.title
       end
 
       it 'shows asked question body' do
         ask_question(question)
-        expect(page).to have_content question.body
+        expect(page).to have_text question.body
       end
     end
 
     context 'when non-registered user' do
       it 'has not button to create question' do
         visit questions_path
-        expect(page).to have_no_content('Create question')
+        expect(page).to have_no_text('Create question')
       end
     end
   end
