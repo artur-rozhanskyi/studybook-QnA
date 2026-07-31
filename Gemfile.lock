@@ -116,10 +116,10 @@ GEM
       sidekiq (>= 6.0)
     capistrano3-nginx (3.0.4)
       capistrano (~> 3.0)
-    capistrano3-puma (6.2.0)
+    capistrano3-puma (8.1.0)
       capistrano (~> 3.7)
       capistrano-bundler
-      puma (>= 5.1, < 7.0)
+      puma (>= 6.1, < 9.0)
     capybara (3.40.0)
       addressable
       matrix
@@ -364,7 +364,7 @@ GEM
       date
       stringio
     public_suffix (6.0.2)
-    puma (6.6.0)
+    puma (7.2.1)
       nio4r (~> 2.0)
     pundit (2.2.0)
       activesupport (>= 3.0.0)
@@ -635,7 +635,7 @@ DEPENDENCIES
   openssl (~> 3.3.2)
   pg (>= 0.18, < 2.0)
   pry-rails
-  puma (~> 6.6)
+  puma (~> 7.2)
   pundit
   rack-cors
   rails (~> 8.0.2)
