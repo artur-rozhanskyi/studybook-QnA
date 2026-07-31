@@ -41,7 +41,7 @@ RSpec.describe 'UserCommentQuestions' do
             visit question_path question
             comment_record attributes[:body]
             within '.question' do
-              expect(page).to have_content attributes[:body]
+              expect(page).to have_text attributes[:body]
             end
           end
 
@@ -49,14 +49,14 @@ RSpec.describe 'UserCommentQuestions' do
             sign_in another_user
             visit question_path question
             within '.question' do
-              expect(page).to have_content attributes[:body]
+              expect(page).to have_text attributes[:body]
             end
           end
 
           Capybara.using_session 'guest' do
             visit question_path question
             within '.question' do
-              expect(page).to have_content attributes[:body]
+              expect(page).to have_text attributes[:body]
             end
           end
         end
@@ -71,7 +71,7 @@ RSpec.describe 'UserCommentQuestions' do
         visit question_path(question)
         within '.question' do
           comment_record(invalid_comment[:body])
-          expect(page).to have_content 'Body can\'t be blank'
+          expect(page).to have_text 'Body can\'t be blank'
         end
       end
     end

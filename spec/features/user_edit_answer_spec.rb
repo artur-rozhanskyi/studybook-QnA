@@ -38,29 +38,29 @@ RSpec.describe 'UserEditAnswers' do
 
       it 'has update answer' do
         Capybara.using_session 'user' do
-          expect(page).to have_content new_answer_body
+          expect(page).to have_text new_answer_body
         end
 
         Capybara.using_session 'another_user' do
-          expect(page).to have_content new_answer_body
+          expect(page).to have_text new_answer_body
         end
 
         Capybara.using_session 'guest' do
-          expect(page).to have_content new_answer_body
+          expect(page).to have_text new_answer_body
         end
       end
 
       it 'has not old answer body' do
         Capybara.using_session 'user' do
-          expect(page).to have_no_content(answer.body)
+          expect(page).to have_no_text(answer.body)
         end
 
         Capybara.using_session 'another_user' do
-          expect(page).to have_no_content(answer.body)
+          expect(page).to have_no_text(answer.body)
         end
 
         Capybara.using_session 'guest' do
-          expect(page).to have_no_content(answer.body)
+          expect(page).to have_no_text(answer.body)
         end
       end
     end

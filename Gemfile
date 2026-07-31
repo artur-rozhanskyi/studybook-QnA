@@ -8,7 +8,7 @@ gem 'rails', '~> 8.0.2'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
-gem 'puma', '~> 6.6'
+gem 'puma', '~> 8.0'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 6.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -29,9 +29,9 @@ gem 'redis'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'active_model_serializers'
 gem 'bootsnap', '>= 1.1.0', require: false
-gem 'carrierwave'
+gem 'carrierwave', '~> 3.1.3'
 gem 'carrierwave-base64'
-gem 'devise', '~> 4.9', '>= 4.9.4'
+gem 'devise', '~> 5.0'
 gem 'doorkeeper'
 gem 'dotenv'
 gem 'dotenv-deployment', require: 'dotenv/deployment'
@@ -45,6 +45,7 @@ gem 'omniauth-facebook'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-twitter'
 gem 'openssl', '~> 3.3.2'
+gem 'ostruct'
 gem 'pundit'
 gem 'rack-cors'
 gem 'rails_12factor', group: :production
@@ -62,7 +63,7 @@ group :development, :test do
   gem 'rubocop-rspec_rails'
 
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'byebug', platforms: [:mri]
 end
 
 group :test do
@@ -76,8 +77,8 @@ group :test do
   gem 'rails-controller-testing'
   gem 'rspec', '~> 3.13'
   gem 'rspec-rails', '~> 8.0.0'
+  gem 'selenium-webdriver'
   gem 'shoulda-matchers'
-  gem 'webdrivers'
 end
 
 group :development do
@@ -97,4 +98,4 @@ group :development do
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'tzinfo-data', platforms: [:jruby]

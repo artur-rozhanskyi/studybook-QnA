@@ -32,11 +32,11 @@ module Api
         klass = [Answer, Question].detect { |c| params["#{c.name.underscore}_id"] }
         raise CommentableTypeError if klass.nil?
 
-        @commenter = klass.find(params["#{klass.name.underscore}_id"])
+        @commenter = klass.find(params.expect("#{klass.name.underscore}_id"))
       end
 
       def set_comment
-        @comment = Comment.find(params[:id])
+        @comment = Comment.find(params.expect(:id))
       end
 
       def comments_params

@@ -28,11 +28,11 @@ RSpec.describe 'UserEditProfile' do
       before { update_profile(new_profile.merge(avatar: avatar)) }
 
       it 'has new first name' do
-        expect(page).to have_content new_profile[:first_name]
+        expect(page).to have_text new_profile[:first_name]
       end
 
       it 'has new last name' do
-        expect(page).to have_content new_profile[:last_name]
+        expect(page).to have_text new_profile[:last_name]
       end
 
       it 'has avatar' do
@@ -44,7 +44,7 @@ RSpec.describe 'UserEditProfile' do
   describe 'Non-registered user edit profiles' do
     it 'has not permission' do
       visit edit_user_profile_path(profile.user)
-      expect(page).to have_content 'You need to sign in or sign up before continuing.'
+      expect(page).to have_text 'You need to sign in or sign up before continuing.'
     end
   end
 end
