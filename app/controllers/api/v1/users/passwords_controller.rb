@@ -5,7 +5,7 @@ module Api
         respond_to :json
 
         def create
-          params[:user][:data] = { host: request.origin }
+          params.expect(:user)[:data] = { host: request.origin }
           super
         end
 

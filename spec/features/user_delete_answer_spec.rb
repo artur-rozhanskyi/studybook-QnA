@@ -42,13 +42,13 @@ RSpec.describe 'UserDeleteAnswers' do
 
         it 'has delete current answer' do
           Capybara.using_session 'another_user' do
-            expect(page).to have_no_content answer.body
+            expect(page).to have_no_text answer.body
           end
           Capybara.using_session 'guest' do
-            expect(page).to have_no_content answer.body
+            expect(page).to have_no_text answer.body
           end
           Capybara.using_session 'user' do
-            expect(page).to have_no_content answer.body
+            expect(page).to have_no_text answer.body
           end
         end
 

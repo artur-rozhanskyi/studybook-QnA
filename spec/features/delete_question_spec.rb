@@ -18,7 +18,7 @@ RSpec.describe 'DeleteQuestions' do
 
       it 'deletes question form list of questions' do
         click_on 'Delete'
-        expect(page).to have_no_content question_to_delete.title
+        expect(page).to have_no_text question_to_delete.title
       end
 
       context 'when not owned question' do
@@ -34,7 +34,7 @@ RSpec.describe 'DeleteQuestions' do
     context 'when non-registered user' do
       it 'has not button to delete question' do
         visit question_path(question_to_delete)
-        expect(page).to have_no_content('Delete')
+        expect(page).to have_no_text('Delete')
       end
     end
   end

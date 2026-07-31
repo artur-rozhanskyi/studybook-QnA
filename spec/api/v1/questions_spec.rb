@@ -132,7 +132,7 @@ RSpec.describe 'API Questions', type: :api do
         end
 
         it 'returns 422 status' do
-          expect(last_response).to have_http_status :unprocessable_entity
+          expect(last_response).to have_http_status :unprocessable_content
         end
 
         it 'does not save valid question' do
@@ -183,7 +183,7 @@ RSpec.describe 'API Questions', type: :api do
         end
 
         it 'returns 422 status' do
-          expect(last_response).to have_http_status :unprocessable_entity
+          expect(last_response).to have_http_status :unprocessable_content
         end
 
         %w[title body].each do |attr|

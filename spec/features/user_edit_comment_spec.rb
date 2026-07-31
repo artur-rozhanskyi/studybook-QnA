@@ -58,25 +58,25 @@ RSpec.describe 'UserEditComments' do
 
         it 'has not old comment body' do
           Capybara.using_session 'another_user' do
-            expect(page).to have_no_content old_body
+            expect(page).to have_no_text old_body
           end
           Capybara.using_session 'guest' do
-            expect(page).to have_no_content old_body
+            expect(page).to have_no_text old_body
           end
           Capybara.using_session 'user' do
-            expect(page).to have_no_content old_body
+            expect(page).to have_no_text old_body
           end
         end
 
         it 'has new comment body' do
           Capybara.using_session 'another_user' do
-            expect(page).to have_content new_comment_body
+            expect(page).to have_text new_comment_body
           end
           Capybara.using_session 'guest' do
-            expect(page).to have_content new_comment_body
+            expect(page).to have_text new_comment_body
           end
           Capybara.using_session 'user' do
-            expect(page).to have_content new_comment_body
+            expect(page).to have_text new_comment_body
           end
         end
       end

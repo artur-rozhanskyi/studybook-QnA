@@ -29,18 +29,18 @@ RSpec.describe 'UserAnswers' do
             fill_in 'Your answer', with: answer_body
             click_on 'Answer'
             expect(page).to have_current_path(question_path(question))
-            expect(page).to have_content(answer_body)
+            expect(page).to have_text(answer_body)
           end
 
           Capybara.using_session 'another_user' do
             sign_in another_user, scope: :user
             visit question_path(question)
-            expect(page).to have_content(answer_body)
+            expect(page).to have_text(answer_body)
           end
 
           Capybara.using_session 'guest' do
             visit question_path(question)
-            expect(page).to have_content(answer_body)
+            expect(page).to have_text(answer_body)
           end
         end
       end
@@ -65,7 +65,7 @@ RSpec.describe 'UserAnswers' do
         visit question_path(invalid_answer.question)
         fill_in 'Your answer', with: invalid_answer.body
         click_on 'Answer'
-        expect(page).to have_content 'Body can\'t be blank'
+        expect(page).to have_text 'Body can\'t be blank'
       end
     end
   end
