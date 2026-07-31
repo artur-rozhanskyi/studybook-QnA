@@ -31,7 +31,7 @@ gem 'active_model_serializers'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'carrierwave'
 gem 'carrierwave-base64'
-gem 'devise', '~> 4.9', '>= 4.9.4'
+gem 'devise', '~> 5.0'
 gem 'doorkeeper'
 gem 'dotenv'
 gem 'dotenv-deployment', require: 'dotenv/deployment'
