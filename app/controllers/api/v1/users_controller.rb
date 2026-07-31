@@ -11,7 +11,7 @@ module Api
       end
 
       def show
-        respond_with User.find(params[:id])
+        respond_with User.find(params.expect(:id))
       end
     end
   end

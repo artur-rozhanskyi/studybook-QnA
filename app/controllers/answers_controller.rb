@@ -41,11 +41,11 @@ class AnswersController < ApplicationController
   private
 
   def set_answer
-    @answer = Answer.find(params[:id])
+    @answer = Answer.find(params.expect(:id))
   end
 
   def set_question
-    @question = Question.find(params[:question_id])
+    @question = Question.find(params.expect(:question_id))
   end
 
   def answer_params

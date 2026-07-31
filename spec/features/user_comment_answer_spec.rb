@@ -36,7 +36,7 @@ RSpec.describe 'UserCommentAnswers' do
       it 'adds comment body to answer comment list' do
         within '.answer' do
           comment_record(attributes[:body])
-          expect(page).to have_content attributes[:body]
+          expect(page).to have_text attributes[:body]
         end
       end
     end
@@ -47,7 +47,7 @@ RSpec.describe 'UserCommentAnswers' do
       it 'has message with errors' do
         within '.answer .new_comment', match: :first do
           comment_record(invalid_comment[:body])
-          expect(page).to have_content 'Body can\'t be blank'
+          expect(page).to have_text 'Body can\'t be blank'
         end
       end
     end

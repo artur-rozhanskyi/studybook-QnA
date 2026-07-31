@@ -31,7 +31,7 @@ RSpec.describe 'UserSearch', :js, :sphinx do
           expect(page).to have_css('.question', count: questions.count)
           expect(page).to have_css('.answer', count: answers.count)
           expect(page).to have_css('.comment', count: comments.count)
-          questions.each { |question| expect(page).to have_content(question.title) }
+          questions.each { |question| expect(page).to have_text(question.title) }
         end
 
         Capybara.using_session 'guest' do
@@ -40,7 +40,7 @@ RSpec.describe 'UserSearch', :js, :sphinx do
           expect(page).to have_css('.question', count: questions.count)
           expect(page).to have_css('.answer', count: answers.count)
           expect(page).to have_css('.comment', count: comments.count)
-          questions.each { |question| expect(page).to have_content(question.title) }
+          questions.each { |question| expect(page).to have_text(question.title) }
         end
       end
     end
@@ -55,7 +55,7 @@ RSpec.describe 'UserSearch', :js, :sphinx do
             expect(page).to have_css('.question', count: questions.count)
             expect(page).to have_no_css('.answer')
             expect(page).to have_no_css('.comment')
-            questions.each { |question| expect(page).to have_content(question.title) }
+            questions.each { |question| expect(page).to have_text(question.title) }
           end
 
           Capybara.using_session 'guest' do
@@ -64,7 +64,7 @@ RSpec.describe 'UserSearch', :js, :sphinx do
             expect(page).to have_css('.question', count: questions.count)
             expect(page).to have_no_css('.answer')
             expect(page).to have_no_css('.comment')
-            questions.each { |question| expect(page).to have_content(question.title) }
+            questions.each { |question| expect(page).to have_text(question.title) }
           end
         end
       end
@@ -78,7 +78,7 @@ RSpec.describe 'UserSearch', :js, :sphinx do
             expect(page).to have_css('.answer', count: answers.count)
             expect(page).to have_no_css('.question')
             expect(page).to have_no_css('.comment')
-            answers.each { |answer| expect(page).to have_content(answer.body) }
+            answers.each { |answer| expect(page).to have_text(answer.body) }
           end
 
           Capybara.using_session 'guest' do
@@ -87,7 +87,7 @@ RSpec.describe 'UserSearch', :js, :sphinx do
             expect(page).to have_css('.answer', count: answers.count)
             expect(page).to have_no_css('.question')
             expect(page).to have_no_css('.comment')
-            answers.each { |answer| expect(page).to have_content(answer.body) }
+            answers.each { |answer| expect(page).to have_text(answer.body) }
           end
         end
       end
@@ -101,7 +101,7 @@ RSpec.describe 'UserSearch', :js, :sphinx do
             expect(page).to have_css('.comment', count: comments.count)
             expect(page).to have_no_css('.question')
             expect(page).to have_no_css('.answer')
-            comments.each { |comment| expect(page).to have_content(comment.body) }
+            comments.each { |comment| expect(page).to have_text(comment.body) }
           end
 
           Capybara.using_session 'guest' do
@@ -110,7 +110,7 @@ RSpec.describe 'UserSearch', :js, :sphinx do
             expect(page).to have_css('.comment', count: comments.count)
             expect(page).to have_no_css('.question')
             expect(page).to have_no_css('.answer')
-            comments.each { |comment| expect(page).to have_content(comment.body) }
+            comments.each { |comment| expect(page).to have_text(comment.body) }
           end
         end
       end
@@ -121,7 +121,7 @@ RSpec.describe 'UserSearch', :js, :sphinx do
             sign_in(user)
             visit search_path
             search_query('user_form', user.email) { click_on 'Advanced search' }
-            expect(page).to have_content(user_full_name(user))
+            expect(page).to have_text(user_full_name(user))
             expect(page).to have_no_css('.questions')
             expect(page).to have_no_css('.answers')
             expect(page).to have_no_css('.comments')
@@ -130,7 +130,7 @@ RSpec.describe 'UserSearch', :js, :sphinx do
           Capybara.using_session 'guest' do
             visit search_path
             search_query('user_form', user.email) { click_on 'Advanced search' }
-            expect(page).to have_content(user_full_name(user))
+            expect(page).to have_text(user_full_name(user))
             expect(page).to have_no_css('.questions')
             expect(page).to have_no_css('.answers')
             expect(page).to have_no_css('.comments')

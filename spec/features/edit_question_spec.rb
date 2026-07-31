@@ -11,7 +11,7 @@ RSpec.describe 'EditQuestions' do
       end
 
       it 'has button to create question' do
-        expect(page).to have_content('Edit Question')
+        expect(page).to have_text('Edit Question')
       end
 
       it 'shows edit field with question title' do
@@ -24,19 +24,19 @@ RSpec.describe 'EditQuestions' do
 
       it 'update question title' do
         ask_question(new_attribute)
-        expect(page).to have_content new_attribute.title
+        expect(page).to have_text new_attribute.title
       end
 
       it 'update question body' do
         ask_question(new_attribute)
-        expect(page).to have_content new_attribute.body
+        expect(page).to have_text new_attribute.body
       end
     end
 
     context 'when non-registered user' do
       it 'has not button to create question' do
         visit edit_question_path(question)
-        expect(page).to have_content 'You need to sign in or sign up before continuing.'
+        expect(page).to have_text 'You need to sign in or sign up before continuing.'
       end
     end
   end

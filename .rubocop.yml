@@ -262,7 +262,7 @@ RSpec/RepeatedDescription:
   Enabled: false
 
 
-Capybara/NegationMatcherAfterVisit:
+Capybara/RSpec/NegationMatcherAfterVisit:
   Enabled: false
 
 Rails/I18nLocaleTexts:
