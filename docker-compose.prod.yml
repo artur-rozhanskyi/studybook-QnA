@@ -1,0 +1,85 @@
+version: '3.1'
+
+volumes:
+  redis:
+  postgres:
+  my-db:
+
+services:
+  db:
+    image: postgres:10
+    expose:
+      - 5432
+    ports:
+      - 5431:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+
+  in_memory_store:
+    image: redis:4-alpine
+    expose:
+      - 6379
+    volumes:
+      - redis:/var/lib/redis/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-h", "localhost", "ping"]
+
+  server_app_prod: &server_app_prod
+    build:
+      context: ./
+      dockerfile: docker/production/Dockerfile
+    command:  "bundle exec rails server -b 0.0.0.0"
+    entrypoint: "./docker/production/server_app_prod/docker-entrypoint.sh"
+    tty: true
+    stdin_open: true
+    restart: on-failure
+    environment:
+      RAILS_ENV: production
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      REDIS_DB: "redis://in_memory_store:6379"
+    depends_on:
+      - db
+      - in_memory_store
+      - mysql
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+
+  server_worker_app_prod:
+    <<: *server_app_prod
+    environment:
+      REDIS_URL: "redis://in_memory_store:6379"
+      RAILS_ENV: production
+    command: ["sh", "-c", "rm -f /tmp/pids/sidekiq.pid && bundle exec sidekiq -C config/sidekiq.yml"]
+    entrypoint: ''
+    ports: []
+    restart: "no"
+    healthcheck:
+      test: ["CMD-SHELL", "ps ax | grep -v grep | grep sidekiq || exit 1"]
+
+  mysql:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    expose:
+      - '9312'
+    volumes:
+      - my-db:/var/lib/mysql
+
+  web:
+    build:
+      context: ./
+      dockerfile: docker/production/web/Dockerfile
+    depends_on:
+      - server_app_prod
+    ports:
+      - 80:80
