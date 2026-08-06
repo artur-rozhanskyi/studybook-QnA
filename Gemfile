@@ -23,9 +23,6 @@ gem 'redis'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
 # Reduces boot times through caching; required in config/boot.rb
 gem 'active_model_serializers'
 gem 'bootsnap', '>= 1.1.0', require: false
@@ -36,7 +33,6 @@ gem 'doorkeeper'
 gem 'dotenv'
 gem 'dotenv-deployment', require: 'dotenv/deployment'
 gem 'font_awesome5_rails'
-gem 'gon'
 gem 'haml-rails'
 gem 'jquery-rails', '>= 4.5.0'
 gem 'jsbundling-rails'
