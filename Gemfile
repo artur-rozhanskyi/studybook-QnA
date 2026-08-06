@@ -82,15 +82,6 @@ group :development do
   gem 'letter_opener'
   gem 'listen', '~> 3.9'
   gem 'web-console', '>= 3.3.0'
-
-  gem 'capistrano', require: false
-  gem 'capistrano3-nginx', require: false
-  gem 'capistrano3-puma', require: false
-  gem 'capistrano-bundler', require: false
-  gem 'capistrano-passenger', require: false
-  gem 'capistrano-rails', require: false
-  gem 'capistrano-rvm', require: false
-  gem 'capistrano-sidekiq', require: false
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
