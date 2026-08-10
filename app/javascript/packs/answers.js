@@ -1,5 +1,6 @@
 import commentBlock from './comments';
 import errorsStr from './helper';
+import { getCurrentUserId } from './utils';
 
 
 (($) => {
@@ -56,7 +57,8 @@ import errorsStr from './helper';
     answer.comments.forEach((comment) => {
       $(block).find('.comments').append(commentBlock(comment));
     });
-    if (typeof (gon.user_id) !== 'undefined') {
+    const currentUserId = getCurrentUserId();
+    if (typeof (currentUserId) !== 'undefined') {
       const newComment = document.getElementById('new_comment_form').content.cloneNode(true);
       $(newComment).find('#new_comment_answer')
         .attr('action', `/answers/${answer.id}/comments.json`);
@@ -76,7 +78,8 @@ import errorsStr from './helper';
   function answerBlock(answer, block) {
     const link = $(block).find('.edit-answer-link');
     const userOwnerId = $('.question').data('userOwnerId');
-    if (gon.user_id === answer.user_id) {
+    const currentUserId = getCurrentUserId();
+    if (currentUserId === answer.user_id) {
       link.next().attr('href', `/questions/${answer.question_id}/answers/${answer.id}`);
 
       $(block).find('form').attr({
@@ -91,7 +94,7 @@ import errorsStr from './helper';
       $(block).find('form').remove();
     }
 
-    if (userOwnerId === gon.user_id) {
+    if (userOwnerId === currentUserId) {
       $(block).find('.best_answer_button').parent().attr('action', `/answers/${answer.id}/best`);
     }
 
