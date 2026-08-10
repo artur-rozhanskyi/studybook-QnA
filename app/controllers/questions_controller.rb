@@ -11,7 +11,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    gon.user_id = current_user.id if current_user
+    # gon.user_id = current_user.id if current_user
     @new_answer = AnswerForm.new Answer.new
     @question_answers = @question.answers.map { |answer| AnswerForm.new answer }
     respond_with @question

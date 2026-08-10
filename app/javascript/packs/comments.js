@@ -1,8 +1,10 @@
 import errorsStr from './helper';
+import { getCurrentUserId } from './utils';
 
 function commentFormBlock(comment) {
   const block = document.getElementById('comment_form').content.cloneNode(true);
-  if (gon.user_id !== 'undefined' && gon.user_id === comment.user_id) {
+  const currentUserId = getCurrentUserId();
+  if (currentUserId !== 'undefined' && currentUserId === comment.user_id) {
     $(block).find('.edit_comment').attr({
       id: `edit_comment_${comment.id}`,
       action: `/comments/${comment.id}.json`,
