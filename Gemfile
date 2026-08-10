@@ -28,6 +28,7 @@ gem 'active_model_serializers'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'carrierwave', '~> 3.1.3'
 gem 'carrierwave-base64'
+gem 'connection_pool', '~> 2.4'
 gem 'devise', '~> 5.0'
 gem 'doorkeeper'
 gem 'dotenv'
