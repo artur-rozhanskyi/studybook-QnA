@@ -50,6 +50,8 @@ Rails.application.routes.draw do
 
   resource :search, only: :show
 
+  get 'up' => 'rails/health#show', as: :rails_health_check
+
   root 'questions#index'
 
   mount ActionCable.server => '/cable'

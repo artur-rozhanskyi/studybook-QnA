@@ -11,24 +11,24 @@ volumes:
   redis_data:
 
 services:
-  # Uncomment if using in-container Postgres
-  # db:
-  #   image: postgres:16-alpine
-  #   ports:
-  #     - "5432:5432"
-  #   environment:
-  #     POSTGRES_USER: ${POSTGRES_USER:-postgres}
-  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
-  #     POSTGRES_DB: ${POSTGRES_DB:-studybook_development}
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
-  #     interval: 5s
-  #     timeout: 5s
-  #     retries: 10
-  #   networks:
-  #     - app-net
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-studybook-QnA_development}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-postgres} -d \"$${POSTGRES_DB:-studybook-QnA_development}\""]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - app-net
 
   redis:
     image: redis:8-alpine
@@ -83,7 +83,7 @@ services:
       web:
         condition: service_started
     healthcheck:
-      test: ["CMD-SHELL", "pgrep -f sidekiq || exit 1"]
+      test: ["CMD", "ruby", "-e", "cmdline = File.read('/proc/1/cmdline'); exit(cmdline.include?('sidekiq') ? 0 : 1)"]
       interval: 10s
       timeout: 5s
       retries: 5
