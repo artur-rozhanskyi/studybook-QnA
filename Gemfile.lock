@@ -312,6 +312,9 @@ GEM
       cgi
       omniauth-oauth (~> 1.2)
       rack
+    opensearch-ruby (3.4.0)
+      faraday (>= 1.0, < 3)
+      multi_json (>= 1.0)
     openssl (3.3.2)
     orm_adapter (0.5.0)
     ostruct (0.6.3)
@@ -592,6 +595,7 @@ DEPENDENCIES
   omniauth-facebook
   omniauth-google-oauth2
   omniauth-twitter
+  opensearch-ruby (>= 3.4)
   openssl (~> 3.3.2)
   ostruct
   pg (>= 0.18, < 2.0)
