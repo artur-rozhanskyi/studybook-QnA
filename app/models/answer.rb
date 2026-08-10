@@ -1,4 +1,5 @@
 class Answer < ApplicationRecord
+  include Searchable
   include Commentable
 
   belongs_to :question, touch: true

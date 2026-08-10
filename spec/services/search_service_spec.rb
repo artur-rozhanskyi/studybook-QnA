@@ -1,4 +1,4 @@
-RSpec.describe SearchService, :sphinx do
+RSpec.describe SearchService do
   describe '#call' do
     let(:users) { create_list(:user, 5) }
     let!(:questions) { create_list(:question, 5, user: users[rand(0...4)], body: 'body') }
@@ -70,6 +70,26 @@ RSpec.describe SearchService, :sphinx do
 
       it 'does not find comments' do
         expect(described_class.call(search_params)['question']).to be_nil
+      end
+    end
+
+    context 'when user scope' do
+      let(:search_params) { { 'text' => users.first.email, 'search_in' => 'user' } }
+
+      it 'finds matching users' do
+        expect(described_class.call(search_params)['user']).to contain_exactly(users.first)
+      end
+
+      it 'does not find questions' do
+        expect(described_class.call(search_params)['question']).to be_nil
+      end
+
+      it 'does not find answers' do
+        expect(described_class.call(search_params)['answer']).to be_nil
+      end
+
+      it 'does not find comments' do
+        expect(described_class.call(search_params)['comment']).to be_nil
       end
     end
   end
