@@ -5,10 +5,10 @@
     %title StudybookQna
     = csrf_meta_tags
     = csp_meta_tag
-    %script
+
     = tag.meta name: "current-user-id", content: current_user&.id
-    -# = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
-    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+    = stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
     = action_cable_meta_tag
   %body
     = render "common/header"
