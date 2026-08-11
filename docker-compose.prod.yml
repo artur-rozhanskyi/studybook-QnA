@@ -4,6 +4,7 @@ volumes:
   redis:
   postgres:
   my-db:
+  opensearch:
 
 services:
   db:
@@ -29,6 +30,17 @@ services:
     healthcheck:
       test: ["CMD", "redis-cli", "-h", "localhost", "ping"]
 
+  opensearch:
+    image: opensearchproject/opensearch:2
+    environment:
+      discovery.type: single-node
+      plugins.security.disabled: "true"
+      OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
+    expose:
+      - 9200
+    volumes:
+      - opensearch:/usr/share/opensearch/data
+
   server_app_prod: &server_app_prod
     build:
       context: ./
@@ -43,9 +55,11 @@ services:
       MYSQL_USER: 'user'
       MYSQL_PASSWORD: 'password'
       REDIS_DB: "redis://in_memory_store:6379"
+      OPENSEARCH_URL: "http://opensearch:9200"
     depends_on:
       - db
       - in_memory_store
+      - opensearch
       - mysql
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000"]
@@ -53,8 +67,12 @@ services:
   server_worker_app_prod:
     <<: *server_app_prod
     environment:
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      REDIS_DB: "redis://in_memory_store:6379"
       REDIS_URL: "redis://in_memory_store:6379"
       RAILS_ENV: production
+      OPENSEARCH_URL: "http://opensearch:9200"
     command: ["sh", "-c", "rm -f /tmp/pids/sidekiq.pid && bundle exec sidekiq -C config/sidekiq.yml"]
     entrypoint: ''
     ports: []

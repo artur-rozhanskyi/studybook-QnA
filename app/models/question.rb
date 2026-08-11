@@ -1,4 +1,5 @@
 class Question < ApplicationRecord
+  include Searchable
   include Commentable
 
   validates :title, :body, presence: true

@@ -1,4 +1,4 @@
-RSpec.describe 'UserSearch', :js, :sphinx do
+RSpec.describe 'UserSearch', :js do
   let(:user) { create(:user) }
 
   describe 'User visit search page' do

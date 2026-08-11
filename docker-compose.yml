@@ -3,12 +3,14 @@ x-app-environment: &app_environment
   DATABASE_URL: ${DATABASE_URL}
   REDIS_URL: ${REDIS_URL:-redis://redis:6379/1}
   CHROME_HOSTNAME: ${CHROME_HOSTNAME}
+  OPENSEARCH_URL: ${OPENSEARCH_URL:-http://opensearch:9200}
 
 volumes:
   bundle_cache:
   node_modules:
   postgres_data:
   redis_data:
+  opensearch_data:
 
 services:
   db:
@@ -42,6 +44,19 @@ services:
     networks:
       - app-net
 
+  opensearch:
+    image: opensearchproject/opensearch:2
+    environment:
+      discovery.type: single-node
+      plugins.security.disabled: "true"
+      OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
+    volumes:
+      - opensearch_data:/usr/share/opensearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - app-net
+
   web: &rails_app
     build:
       context: .
@@ -63,6 +78,8 @@ services:
     depends_on:
       redis:
         condition: service_healthy
+      opensearch:
+        condition: service_started
     ports:
       - "3000:3000"
     networks:
@@ -80,6 +97,8 @@ services:
     depends_on:
       redis:
         condition: service_healthy
+      opensearch:
+        condition: service_started
       web:
         condition: service_started
     healthcheck:
